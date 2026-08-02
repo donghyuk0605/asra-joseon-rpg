@@ -1,0 +1,339 @@
+import type { RegionId } from './regions';
+import { JURCHEN_REGION_IDS } from './jurchenCampaign';
+import {
+  FAMOUS_JOSEON_TOWN_REGION_IDS,
+  HANSEONG_REGION_IDS,
+} from './joseonTowns';
+
+export type WorldMapNodeKind = 'stronghold' | 'settlement';
+export type WorldMapNode = {
+  id: string;
+  label: string;
+  hanja: string;
+  subtitle: string;
+  kind?: WorldMapNodeKind;
+  landmarkFrame?: number;
+  routeLabel: string;
+  travelDays: number;
+  destination: RegionId;
+  regions: readonly RegionId[];
+  mapX: number;
+  mapY: number;
+  arrivalY: number;
+};
+
+export type WorldMapTravelResult = 'traveled' | 'locked' | 'combat' | 'dungeon' | 'same';
+
+export type TravelAtlasGroup = {
+  id: string;
+  label: string;
+  hanja: string;
+  regions: readonly RegionId[];
+};
+
+export const WORLD_MAP_NODES = [
+  {
+    id: 'jurchen',
+    label: '여진 부락',
+    hanja: '女眞',
+    subtitle: '장백산 남녘',
+    kind: 'stronghold',
+    landmarkFrame: 0,
+    routeLabel: '장백산 북로',
+    travelDays: 6,
+    destination: 'jurchenvillage',
+    regions: JURCHEN_REGION_IDS,
+    mapX: 23,
+    mapY: 18,
+    arrivalY: 760,
+  },
+  {
+    id: 'yalu',
+    label: '압록 전선',
+    hanja: '鴨綠',
+    subtitle: '북방 국경',
+    kind: 'stronghold',
+    landmarkFrame: 1,
+    routeLabel: '압록 북로',
+    travelDays: 5,
+    destination: 'manchufrontier',
+    regions: ['manchufrontier'],
+    mapX: 36,
+    mapY: 29,
+    arrivalY: 790,
+  },
+  {
+    id: 'pyongyang',
+    label: '평양성',
+    hanja: '平壤',
+    subtitle: '대동강 성곽',
+    kind: 'stronghold',
+    landmarkFrame: 2,
+    routeLabel: '서북 대로',
+    travelDays: 4,
+    destination: 'pyongyangouter',
+    regions: ['pyongyangouter', 'pyongyanggate', 'pyongyanginner'],
+    mapX: 43,
+    mapY: 40,
+    arrivalY: 820,
+  },
+  {
+    id: 'hanseong',
+    label: '한성',
+    hanja: '漢城',
+    subtitle: '숭례문·운종가·궁궐',
+    kind: 'settlement',
+    landmarkFrame: 3,
+    routeLabel: '한양 대로',
+    travelDays: 2,
+    destination: 'hanseongsouth',
+    regions: [
+      ...HANSEONG_REGION_IDS,
+      'gyeongbokgate',
+      'gyeongbokcourt',
+      'gyeongbokinner',
+    ],
+    mapX: 47,
+    mapY: 53,
+    arrivalY: 820,
+  },
+  {
+    id: 'gaeseong',
+    label: '개성',
+    hanja: '開城',
+    subtitle: '송도 장시',
+    kind: 'settlement',
+    routeLabel: '송도 역로',
+    travelDays: 2,
+    destination: 'gaeseong',
+    regions: ['gaeseong'],
+    mapX: 43,
+    mapY: 47,
+    arrivalY: 820,
+  },
+  {
+    id: 'yeongwol',
+    label: '영월',
+    hanja: '寧越',
+    subtitle: '강원 산길',
+    kind: 'stronghold',
+    landmarkFrame: 4,
+    routeLabel: '강원 산길',
+    travelDays: 2,
+    destination: 'yeongwol',
+    regions: ['mistwood', 'yeongwol', 'yeongwolhq'],
+    mapX: 53,
+    mapY: 59,
+    arrivalY: 820,
+  },
+  {
+    id: 'jeonju',
+    label: '전주성',
+    hanja: '全州',
+    subtitle: '전라도 감영',
+    kind: 'stronghold',
+    landmarkFrame: 5,
+    routeLabel: '호남 대로',
+    travelDays: 3,
+    destination: 'jeonju',
+    regions: ['jeonjufield', 'jeonjugate', 'jeonju'],
+    mapX: 42,
+    mapY: 69,
+    arrivalY: 820,
+  },
+  {
+    id: 'busan',
+    label: '부산포',
+    hanja: '釜山',
+    subtitle: '남해 출병항',
+    kind: 'stronghold',
+    landmarkFrame: 6,
+    routeLabel: '영남 대로',
+    travelDays: 4,
+    destination: 'busanjin',
+    regions: ['busanjin', 'tangeumdae'],
+    mapX: 54,
+    mapY: 76,
+    arrivalY: 820,
+  },
+  {
+    id: 'ulleung',
+    label: '울릉도',
+    hanja: '鬱陵',
+    subtitle: '동해 외딴섬',
+    kind: 'stronghold',
+    landmarkFrame: 7,
+    routeLabel: '동해 뱃길',
+    travelDays: 3,
+    destination: 'ulleungcoast',
+    regions: ['ulleungdo', 'ulleungcoast', 'ulleungmeadow', 'ulleunghunt', 'ulleungridge', 'ulleungvillage'],
+    mapX: 67,
+    mapY: 58,
+    arrivalY: 690,
+  },
+  {
+    id: 'osaka',
+    label: '오사카',
+    hanja: '大坂',
+    subtitle: '셋쓰에서 대마도까지',
+    kind: 'stronghold',
+    landmarkFrame: 8,
+    routeLabel: '왜국 원정 해로',
+    travelDays: 7,
+    destination: 'osaka',
+    regions: [
+      'osaka',
+      'settsuvillage',
+      'yamazakihunt',
+      'osakacastle',
+      'shogunkeep',
+      'sakaicity',
+      'izumihunt',
+      'awajicoast',
+      'ikiport',
+      'tsushimahunt',
+      'izuhara',
+    ],
+    mapX: 82,
+    mapY: 76,
+    arrivalY: 850,
+  },
+  {
+    id: 'suwon',
+    label: '수원',
+    hanja: '水原',
+    subtitle: '읍치 장터',
+    kind: 'settlement',
+    routeLabel: '수원 역로',
+    travelDays: 1,
+    destination: 'suwon',
+    regions: ['suwon'],
+    mapX: 47,
+    mapY: 60,
+    arrivalY: 820,
+  },
+  {
+    id: 'chungju',
+    label: '충주',
+    hanja: '忠州',
+    subtitle: '목계나루',
+    kind: 'settlement',
+    routeLabel: '남한강 뱃길',
+    travelDays: 2,
+    destination: 'chungju',
+    regions: ['chungju'],
+    mapX: 53,
+    mapY: 65,
+    arrivalY: 820,
+  },
+  {
+    id: 'andong',
+    label: '안동',
+    hanja: '安東',
+    subtitle: '서원길',
+    kind: 'settlement',
+    routeLabel: '영남 내륙로',
+    travelDays: 3,
+    destination: 'andong',
+    regions: ['andong'],
+    mapX: 61,
+    mapY: 67,
+    arrivalY: 820,
+  },
+] as const satisfies readonly WorldMapNode[];
+
+export const TRAVEL_ATLAS_GROUPS = [
+  {
+    id: 'japan',
+    label: '일본 원정로',
+    hanja: '日本',
+    regions: [
+      'osaka',
+      'settsuvillage',
+      'yamazakihunt',
+      'osakacastle',
+      'shogunkeep',
+      'sakaicity',
+      'izumihunt',
+      'awajicoast',
+      'ikiport',
+      'tsushimahunt',
+      'izuhara',
+    ],
+  },
+  {
+    id: 'south',
+    label: '남부 전선',
+    hanja: '南路',
+    regions: ['busanjin', 'tangeumdae', 'jeonjufield', 'jeonjugate', 'jeonju'],
+  },
+  {
+    id: 'capital',
+    label: '한성과 왕궁',
+    hanja: '王都',
+    regions: [
+      ...HANSEONG_REGION_IDS,
+      'gyeongbokgate',
+      'gyeongbokcourt',
+      'gyeongbokinner',
+      'namhansanseong',
+      'ganghwado',
+    ],
+  },
+  {
+    id: 'joseon-settlements',
+    label: '조선 명읍',
+    hanja: '名邑',
+    regions: FAMOUS_JOSEON_TOWN_REGION_IDS,
+  },
+  {
+    id: 'jurchen-unification',
+    label: '여진 통합로',
+    hanja: '女眞',
+    regions: JURCHEN_REGION_IDS,
+  },
+  {
+    id: 'north',
+    label: '서북 변경',
+    hanja: '西北',
+    regions: ['pyongyangouter', 'pyongyanggate', 'pyongyanginner', 'manchufrontier'],
+  },
+  {
+    id: 'central',
+    label: '강원 내륙',
+    hanja: '江原',
+    regions: ['solgogae', 'village', 'mistwood', 'yeongwol', 'yeongwolhq', 'minepass', 'moonfield'],
+  },
+  {
+    id: 'ulleung',
+    label: '울릉 전역',
+    hanja: '鬱陵',
+    regions: ['ulleungcoast', 'ulleungmeadow', 'ulleunghunt', 'ulleungridge', 'ulleungdo', 'ulleungvillage'],
+  },
+] as const satisfies readonly TravelAtlasGroup[];
+
+export const TRAVEL_ATLAS_REGION_IDS = TRAVEL_ATLAS_GROUPS
+  .flatMap((group) => [...group.regions]) as RegionId[];
+
+export const isTravelAtlasRegion = (region: RegionId): boolean =>
+  TRAVEL_ATLAS_REGION_IDS.includes(region);
+
+export const travelAtlasArrivalY = (region: RegionId): number => {
+  if (region === 'ulleungvillage') return 180;
+  if (region === 'ulleunghunt') return 620;
+  if (region.startsWith('ulleung')) return 690;
+  if (region === 'solgogae' || region === 'village' || region === 'mistwood'
+    || region === 'minepass' || region === 'moonfield') return 680;
+  return 820;
+};
+
+export const worldMapNodeKind = (node: WorldMapNode): WorldMapNodeKind =>
+  node.kind ?? 'stronghold';
+
+export const worldMapNodeForRegion = (region: RegionId): WorldMapNode | null =>
+  WORLD_MAP_NODES.find((node) => (node.regions as readonly RegionId[]).includes(region)) ?? null;
+
+export const isWorldMapNodeDiscovered = (
+  node: WorldMapNode,
+  visitedRegions: ReadonlySet<RegionId>,
+): boolean => node.regions.some((region) => visitedRegions.has(region));

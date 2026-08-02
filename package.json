@@ -1,0 +1,21 @@
+{
+  "name": "asra-joseon-rpg",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "postbuild": "node scripts/prune_dist_assets.mjs && node scripts/build_guide_host.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "firebase": "^12.15.0",
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.4"
+  }
+}

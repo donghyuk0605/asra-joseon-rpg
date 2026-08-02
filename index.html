@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#17140f" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="아스라" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/assets/ui/pwa-icon-180.png" />
+    <title>아스라 — 조선 다크 판타지</title>
+    <style>
+      html,body{width:100%;height:100%;margin:0;background:#171a14;overflow:hidden}
+      #boot-loader{position:fixed;inset:0;box-sizing:border-box;width:100%;height:100dvh;min-height:100svh;z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:0 22px max(34px,6vh);color:#e8ddc1;background:radial-gradient(circle at 50% 42%,transparent 24%,rgba(5,8,7,.18) 68%,rgba(4,6,5,.74) 100%),linear-gradient(180deg,rgba(5,7,6,.06) 42%,rgba(6,8,7,.68) 82%,rgba(5,7,6,.92)),url('/assets/ui/asra-title-keyart-v1.webp') center/cover no-repeat,#12150f;transition:opacity .52s ease,visibility .52s ease}
+      #boot-loader::before{content:"";position:absolute;inset:0;background:linear-gradient(112deg,transparent 12%,rgba(218,194,137,.05) 45%,transparent 70%),repeating-linear-gradient(0deg,rgba(255,255,255,.01) 0 1px,transparent 1px 4px);box-shadow:inset 0 0 90px rgba(0,0,0,.5);pointer-events:none}
+      #boot-loader.is-ready{opacity:0;visibility:hidden}
+      .boot-card{position:relative;box-sizing:border-box;width:min(640px,calc(100vw - 44px));min-height:182px;padding:25px 72px 30px;text-align:center;background-color:rgba(10,13,10,.9);background-image:url('/assets/ui/wolyeongrok-loading-frame-v1.webp');background-position:center;background-size:100% 100%;background-repeat:no-repeat;border:1px solid rgba(194,154,76,.24);filter:drop-shadow(0 18px 28px rgba(0,0,0,.72))}
+      .boot-title-logo{display:block;margin:-2px auto 5px;color:#eee1c3;font:900 clamp(38px,7vw,66px)/1 "Nanum Myeongjo","AppleMyungjo",serif;letter-spacing:.18em;text-shadow:0 4px 5px #000,0 0 18px rgba(203,157,73,.32)}
+      .boot-title-logo::after{content:"ASRA";display:block;margin-top:5px;color:#b79459;font:600 9px/1 sans-serif;letter-spacing:.62em}
+      .boot-track{box-sizing:content-box;height:8px;margin:0 0 8px;padding:2px;border:1px solid rgba(206,168,89,.72);background:#080a08;box-shadow:inset 0 0 0 1px rgba(0,0,0,.82),0 0 14px rgba(197,153,68,.14)}.boot-track i{display:block;width:4%;min-width:24px;height:100%;background:linear-gradient(90deg,#6e251f,#b7803d,#f0d890);box-shadow:0 0 12px rgba(221,181,91,.58);transition:width .18s ease}
+      .boot-meta{display:flex;justify-content:space-between;gap:14px;color:#b9af99;font:11px sans-serif;text-shadow:0 2px 3px #000}.boot-meta strong{color:#ebcd7f;font-weight:700}
+      @media(max-width:600px){#boot-loader{padding:0 10px max(26px,calc(env(safe-area-inset-bottom) + 18px));background-image:radial-gradient(circle at 50% 34%,transparent 22%,rgba(5,8,7,.18) 62%,rgba(4,6,5,.76) 100%),linear-gradient(180deg,rgba(5,7,6,.03) 38%,rgba(6,8,7,.58) 67%,rgba(5,7,6,.96)),url('/assets/ui/asra-title-keyart-mobile-v1.webp');background-position:center;background-size:cover}.boot-card{width:100%;min-height:140px;padding:17px 32px 22px}.boot-title-logo{margin:-4px auto 7px;font-size:38px}.boot-meta{font-size:10px}.boot-track{height:10px;margin-bottom:8px}}
+      @media(prefers-reduced-motion:reduce){#boot-loader,.boot-track i{transition:none}}
+    </style>
+  </head>
+  <body>
+    <main id="game-shell">
+      <div id="boot-loader" role="progressbar" aria-label="아스라 게임 자원 불러오기" aria-valuemin="0" aria-valuemax="100" aria-valuenow="4">
+        <section class="boot-card">
+          <strong class="boot-title-logo">아스라</strong>
+          <div class="boot-track" aria-hidden="true"><i id="boot-progress-fill"></i></div>
+          <div class="boot-meta"><span id="boot-status">그래픽 엔진을 깨우는 중</span><strong id="boot-progress-value">4%</strong></div>
+        </section>
+      </div>
+      <section id="title-screen" class="title-screen" aria-label="아스라 메인 메뉴">
+        <div class="title-screen__weather" aria-hidden="true"></div>
+        <div class="title-screen__content">
+          <header class="title-brand">
+            <span>조선 다크 판타지</span>
+            <h1>아스라</h1>
+            <p>희미해진 나라, 사라지지 않은 원한</p>
+          </header>
+          <nav class="title-menu" aria-label="게임 시작 메뉴">
+            <button class="title-menu__primary" data-title-action="story" aria-expanded="false"><small>STORY MODE</small><strong>이야기 모드</strong><span>서로 다른 운명으로 조선을 가르는 네 개의 전쟁</span></button>
+            <button class="title-menu__online" data-title-action="online"><small>ONLINE CITADEL</small><strong>온라인 성채</strong><span>서버 판정 1:1 결투와 유저 거래 제안</span></button>
+            <button class="title-menu__travel" data-title-action="travel"><small>WORLD MAP</small><strong>여행 모드</strong><span>월드맵을 열어 대도시와 항구를 선택</span></button>
+            <a class="title-menu__guide" href="/guide/"><small>OFFICIAL GUIDE</small><strong>게임 안내</strong><span>세계관·인물·지역·공략·게시판</span></a>
+            <button data-title-action="settings" aria-expanded="false"><small>OPTIONS</small><strong>설정</strong></button>
+          </nav>
+          <section class="story-roster" aria-hidden="true" aria-label="이야기 모드 주인공 선택">
+            <header>
+              <div><small>STORY MODE · FOUR FATES</small><strong>누구의 기록을 열겠습니까</strong><span>네 인물의 저장 기록은 서로 섞이지 않습니다.</span></div>
+              <button type="button" data-title-action="story-cancel" aria-label="주인공 선택 닫기">×</button>
+            </header>
+            <div class="story-roster__cards">
+              <article class="story-character story-character--donghyeok">
+                <figure><img src="/assets/ui/kim-donghyeok-portrait-v1.png" alt="울릉의 죄인 김동혁"></figure>
+                <div class="story-character__copy">
+                  <small>대동계 · 농민 봉기의 첫 깃발</small>
+                  <h2>김동혁</h2>
+                  <p>정여립의 대동 사상을 이어받아 농민 서른두 명과 봉기한다. 울릉 관아에서 시작해 조선의 성을 백성의 근거지로 바꾸는 성장 전쟁.</p>
+                  <ul><li>조선 대동 농민군</li><li>농민·의병 규합</li><li>울릉에서 한성까지</li></ul>
+                  <em data-save-status="kim">기기 기록 확인 중</em>
+                </div>
+                <nav aria-label="김동혁 이야기 시작">
+                  <button type="button" class="story-character__new" data-title-action="kim-new"><small>NEW GAME</small><b>새로 시작</b></button>
+                  <button type="button" class="story-character__continue" data-title-action="kim-continue"><small>CONTINUE</small><b>이어하기</b></button>
+                </nav>
+              </article>
+              <article class="story-character story-character--harlan">
+                <figure><img src="/assets/ui/harlan-portrait-v1.png" alt="북방 활잡이 하진"></figure>
+                <div class="story-character__copy">
+                  <small>여진 부족연맹 · 패전군 재건</small>
+                  <h2>하진</h2>
+                  <p>압록 첫 전투에서 군세를 잃고 예비병 호출 0명으로 귀환한다. 세 부족의 족장을 설득해 연맹을 다시 세우고 평양성으로 남하한다.</p>
+                  <ul><li>강궁·기마 전열</li><li>세 부족 회맹</li><li>패전 뒤 0명부터 성장</li></ul>
+                  <em data-save-status="archer">기기 기록 확인 중</em>
+                </div>
+                <nav aria-label="하진 이야기 시작">
+                  <button type="button" class="story-character__new" data-title-action="archer-new"><small>NEW GAME</small><b>새로 시작</b></button>
+                  <button type="button" class="story-character__continue" data-title-action="archer-continue"><small>CONTINUE</small><b>이어하기</b></button>
+                </nav>
+              </article>
+              <article class="story-character story-character--yeonhwa">
+                <figure><img src="/assets/ui/yeonhwa-portrait-v1.webp" alt="오사카 포로촌의 무당 연화"></figure>
+                <div class="story-character__copy">
+                  <small>왜군 원정연합 · 망향의 무당</small>
+                  <h2>연화</h2>
+                  <p>오사카 포로촌 생존자와 왜군 낙오병 스물넷을 묶는다. 원혼술로 작은 원정대를 지휘해 부산진과 조선의 성로를 차례로 노린다.</p>
+                  <ul><li>왜군 원정연합</li><li>방울·부적 원혼술</li><li>오사카에서 한성까지</li></ul>
+                  <em data-save-status="mudang">기기 기록 확인 중</em>
+                </div>
+                <nav aria-label="연화 이야기 시작">
+                  <button type="button" class="story-character__new" data-title-action="mudang-new"><small>NEW GAME</small><b>새로 시작</b></button>
+                  <button type="button" class="story-character__continue" data-title-action="mudang-continue"><small>CONTINUE</small><b>이어하기</b></button>
+                </nav>
+              </article>
+              <article class="story-character story-character--gwanghae">
+                <figure><img src="/assets/ui/gwanghae-crown-prince-portrait-v1.webp" alt="전란의 왕세자 광해"></figure>
+                <div class="story-character__copy">
+                  <small>조선 왕세자 · 분조 총책</small>
+                  <h2>왕세자 광해</h2>
+                  <p>선조가 임금으로 재위한 전란기. 왕세자 광해는 분조를 이끌고 무너진 고을의 군량과 민심, 흩어진 관군과 의병을 다시 모은다.</p>
+                  <ul><li>조선 분조</li><li>관군·의병 지휘</li><li>한성에서 평양까지</li></ul>
+                  <em data-save-status="gwanghae">기기 기록 확인 중</em>
+                </div>
+                <nav aria-label="왕세자 광해 이야기 시작">
+                  <button type="button" class="story-character__new" data-title-action="gwanghae-new"><small>NEW GAME</small><b>새로 시작</b></button>
+                  <button type="button" class="story-character__continue" data-title-action="gwanghae-continue"><small>CONTINUE</small><b>이어하기</b></button>
+                </nav>
+              </article>
+            </div>
+          </section>
+          <section class="online-lobby" aria-hidden="true" aria-label="온라인 접속 설정">
+            <div>
+              <small>LIVE SERVER · 운종가 연무성</small>
+              <strong>온라인 이름</strong>
+            </div>
+            <input id="online-player-name" maxlength="16" value="김동혁" autocomplete="nickname" aria-label="온라인 캐릭터 이름" />
+            <p><i></i><span>결투장과 거래 제안소를 한곳에서 이용합니다</span></p>
+            <button data-title-action="online-connect">온라인 성채 입장</button>
+            <button data-title-action="online-cancel">취소</button>
+          </section>
+          <section class="title-settings" aria-hidden="true">
+            <button data-title-action="mute">소리 <b>켜짐</b></button>
+            <button data-title-action="fullscreen">전체 화면</button>
+            <button data-title-action="install" hidden>아스라 설치</button>
+          </section>
+          <footer><b>첫째 장</b><span>울릉의 죄인 · 김동혁</span></footer>
+        </div>
+      </section>
+      <section id="online-citadel" class="online-citadel" hidden aria-label="아스라 온라인 성채">
+        <div class="online-citadel__weather" aria-hidden="true"></div>
+        <header class="online-citadel__header">
+          <div class="online-citadel__brand">
+            <small>ASRA ONLINE · 雲從街 鍊武城</small>
+            <strong>온라인 성채</strong>
+            <span>승부는 서버가 기록하고 거래는 별도 장부에 남습니다</span>
+          </div>
+          <div class="online-citadel__identity">
+            <i data-online-light></i>
+            <span><small>접속 무사</small><b data-online-name>김동혁</b></span>
+            <em data-online-status>서버 확인 중</em>
+          </div>
+          <button type="button" class="online-citadel__exit" data-online-action="exit"><span>성채 나가기</span><kbd>ESC</kbd></button>
+        </header>
+
+        <nav class="online-citadel__nav" aria-label="온라인 시설">
+          <button type="button" class="is-active" data-online-tab="arena" aria-pressed="true">
+            <i>劍</i><span><small>SERVER DUEL</small><b>1:1 결투장</b><em>실시간 대련</em></span>
+          </button>
+          <button type="button" data-online-tab="market" aria-pressed="false">
+            <i>市</i><span><small>TRADE BOARD</small><b>거래 제안소</b><em>장비 예약·취소</em></span>
+          </button>
+          <aside>
+            <small>성채 규율</small>
+            <p>결투의 체력·피해·승패는 서버가 판정합니다.</p>
+            <p>거래 제안은 싱글 저장의 금화·가방과 분리됩니다.</p>
+          </aside>
+        </nav>
+
+        <main class="online-citadel__main">
+          <section class="online-arena is-active" data-online-panel="arena" aria-label="1대1 결투장">
+            <header class="online-panel-heading">
+              <div><small>一對一 · SERVER AUTHORITATIVE</small><h2>운종가 결투장</h2><p>같은 규칙, 같은 체력. 먼저 상대의 체력을 모두 깎는 무사가 승리합니다.</p></div>
+              <span class="online-arena__record"><small>오늘의 전적</small><b data-duel-record>0승 0패</b></span>
+            </header>
+
+            <div class="online-arena__stage" data-duel-stage="idle">
+              <div class="online-arena__mist" aria-hidden="true"></div>
+              <article class="online-fighter online-fighter--self" data-duel-fighter="self">
+                <div class="online-fighter__portrait"><img src="/assets/ui/kim-donghyeok-portrait-v1.png" alt="내 결투 캐릭터"></div>
+                <div class="online-fighter__name"><small>청룡 진영 · 나</small><strong data-duel-self-name>김동혁</strong></div>
+                <div class="online-fighter__hp"><span><b data-duel-self-hp-label>100 / 100</b></span><i><em data-duel-self-hp></em></i></div>
+                <p data-duel-self-state>출전 대기</p>
+              </article>
+
+              <div class="online-arena__versus">
+                <small data-duel-round>DUEL READY</small>
+                <strong>對</strong>
+                <b data-duel-timer>--</b>
+              </div>
+
+              <article class="online-fighter online-fighter--opponent" data-duel-fighter="opponent">
+                <div class="online-fighter__portrait"><img src="/assets/ui/harlan-portrait-v1.png" alt="상대 결투 캐릭터"></div>
+                <div class="online-fighter__name"><small>백호 진영 · 상대</small><strong data-duel-opponent-name>상대를 기다리는 중</strong></div>
+                <div class="online-fighter__hp"><span><b data-duel-opponent-hp-label>100 / 100</b></span><i><em data-duel-opponent-hp></em></i></div>
+                <p data-duel-opponent-state>미입장</p>
+              </article>
+
+              <div class="online-arena__result" data-duel-result hidden>
+                <small>DUEL COMPLETE</small><strong data-duel-result-title>승부 종료</strong><p data-duel-result-copy></p>
+              </div>
+            </div>
+
+            <section class="online-arena__console">
+              <div class="online-arena__matching">
+                <small data-duel-eyebrow>대련 접수처</small>
+                <strong data-duel-status>상대를 찾아 결투를 시작하십시오</strong>
+                <p data-duel-copy>두 명이 모이면 서버가 방을 만들고 3초 뒤 승부를 시작합니다.</p>
+              </div>
+              <nav class="online-arena__actions" aria-label="결투 행동">
+                <button type="button" class="online-arena__queue" data-duel-action="queue"><kbd>↵</kbd><span><small>MATCHMAKING</small><b>대련 상대 찾기</b></span></button>
+                <button type="button" data-duel-action="slash" disabled><kbd>1</kbd><span><small>빠른 베기</small><b>참격</b></span></button>
+                <button type="button" data-duel-action="break" disabled><kbd>2</kbd><span><small>방어를 꿰뚫음</small><b>파갑</b></span></button>
+                <button type="button" data-duel-action="guard" disabled><kbd>3</kbd><span><small>다음 피해 감소</small><b>수비</b></span></button>
+              </nav>
+              <ol class="online-arena__log" data-duel-log aria-live="polite"><li><time>기록</time><span>연무관의 북이 아직 울리지 않았습니다.</span></li></ol>
+            </section>
+          </section>
+
+          <section class="online-market" data-online-panel="market" aria-label="온라인 거래 제안소" hidden>
+            <header class="online-panel-heading">
+              <div><small>雲從街 市廛 · FIRESTORE LEDGER</small><h2>운종가 거래 제안소</h2><p>온라인 전용 장부에 물품 제안을 올리고 다른 무사의 제안을 예약합니다.</p></div>
+              <span class="online-market__mode"><small>거래 방식</small><b data-market-mode>안전 장부 확인 중</b></span>
+            </header>
+
+            <div class="online-market__toolbar">
+              <label><span>품목 찾기</span><input type="search" data-market-search maxlength="30" placeholder="환도, 활, 주문서…"></label>
+              <label><span>분류</span><select data-market-slot><option value="all">모든 물품</option><option value="weapon">무기</option><option value="armor">복장</option><option value="charm">부적</option><option value="scroll">주문서</option><option value="material">재료</option></select></label>
+              <button type="button" data-market-action="refresh"><i>↻</i><span>장부 새로고침</span></button>
+              <button type="button" class="online-market__sell-button" data-market-action="open-sell"><i>＋</i><span>판매 제안 쓰기</span></button>
+            </div>
+
+            <div class="online-market__body">
+              <section class="online-market__ledger">
+                <header><span><small>LIVE OFFERS</small><b>현재 거래 제안</b></span><em data-market-count>0건</em></header>
+                <div class="online-market__list" data-market-list aria-live="polite">
+                  <div class="online-market__empty"><i>市</i><strong>장부를 불러오는 중입니다</strong><span>온라인 연결 상태를 확인하고 있습니다.</span></div>
+                </div>
+              </section>
+
+              <aside class="online-market__detail" data-market-detail>
+                <small>SELECT AN OFFER</small>
+                <strong>거래패를 선택하십시오</strong>
+                <p>목록의 장비를 누르면 판매자와 강화 수치, 제안 가격을 확인할 수 있습니다.</p>
+                <div class="online-market__safety"><b>온라인 거래 보호</b><span>싱글 플레이의 금화나 장비를 직접 차감하지 않습니다. 이번 단계에서는 제안 등록·예약·취소만 기록합니다.</span></div>
+              </aside>
+            </div>
+
+            <form class="online-market__sell" data-market-sell-form hidden>
+              <header><div><small>NEW TRADE OFFER</small><strong>새 판매 제안</strong></div><button type="button" data-market-action="close-sell" aria-label="판매 제안 닫기">×</button></header>
+              <label><span>제안할 물품</span><select data-market-item></select></label>
+              <label><span>강화 수치</span><select data-market-enhancement><option value="0">강화 없음</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option><option value="4">+4</option><option value="5">+5</option></select></label>
+              <label><span>희망 엽전</span><input type="number" data-market-price min="1" max="999999" value="120"></label>
+              <p data-market-form-status>등록한 제안은 다른 접속자에게 즉시 보입니다.</p>
+              <button type="submit"><small>POST OFFER</small><b>장부에 제안 올리기</b></button>
+            </form>
+          </section>
+        </main>
+      </section>
+      <div id="game-canvas" aria-label="아스라 사냥터"></div>
+      <div id="hud"></div>
+      <aside id="online-presence" class="online-presence" hidden aria-live="polite"><i></i><span>온라인 연결 중</span></aside>
+      <aside id="save-presence" class="save-presence" hidden aria-live="polite"><i></i><span>저장 준비</span></aside>
+      <section id="online-chat" class="online-chat is-collapsed" hidden aria-label="온라인 채팅">
+        <header><div><i></i><strong>울릉 사냥 채널</strong></div><button type="button" data-chat-toggle aria-label="채팅 펼치기">+</button></header>
+        <ol data-chat-messages aria-live="polite"></ol>
+        <form data-chat-form>
+          <input data-chat-input maxlength="100" autocomplete="off" placeholder="친구에게 전할 말" aria-label="채팅 메시지" />
+          <button type="submit">전송</button>
+        </form>
+      </section>
+      <aside id="mobile-experience" class="mobile-experience" hidden aria-live="polite">
+        <button class="mobile-experience__close" type="button" data-mobile-action="dismiss" aria-label="안내 닫기">×</button>
+        <div>
+          <small>ASRA MOBILE</small>
+          <strong data-mobile-title>모바일 플레이 준비</strong>
+          <p data-mobile-message></p>
+        </div>
+        <nav aria-label="모바일 실행 도구">
+          <button type="button" data-mobile-action="copy" hidden>주소 복사</button>
+          <button type="button" data-mobile-action="fullscreen" hidden>전체 화면</button>
+          <button type="button" data-mobile-action="install" hidden>PWA 설치</button>
+        </nav>
+      </aside>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

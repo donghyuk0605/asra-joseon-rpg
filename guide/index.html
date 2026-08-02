@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0d0c" />
+    <meta name="description" content="조선 다크 판타지 액션 RPG 아스라의 세계관, 인물, 지역, 전투와 여행 모드를 살펴보세요." />
+    <meta property="og:title" content="아스라 — 공식 게임 가이드" />
+    <meta property="og:description" content="네 개의 운명, 52개 지역, 100층 심층 던전. 희미해진 나라에 남은 이들의 기록." />
+    <meta property="og:image" content="/assets/ui/asra-title-keyart-v1.webp" />
+    <link rel="icon" href="/assets/ui/pwa-icon-192.png" />
+    <title>아스라 — 공식 게임 가이드</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#guide-main">본문으로 바로가기</a>
+
+    <header class="site-header" data-site-header>
+      <a class="site-brand" href="#top" aria-label="아스라 가이드 처음으로">
+        <span class="site-brand__mark" aria-hidden="true">月</span>
+        <span><b>아스라</b><small>OFFICIAL CHRONICLE</small></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" data-nav-toggle>
+        <i></i><i></i><i></i>
+      </button>
+      <nav class="site-nav" aria-label="주요 안내" data-site-nav>
+        <a href="#chronicle">세계관</a>
+        <a href="#fates">인물</a>
+        <a href="#atlas">천하도</a>
+        <a href="#play-guide">게임 안내</a>
+        <a href="#board">게시판</a>
+      </nav>
+      <a class="site-header__play" href="https://haze-479ed.web.app/" data-game-link>
+        <span>GAME START</span><b>게임 시작</b>
+      </a>
+    </header>
+
+    <main id="guide-main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <picture class="hero__art" aria-hidden="true">
+          <source media="(max-width: 680px)" srcset="/assets/ui/asra-title-keyart-mobile-v1.webp" />
+          <img src="/assets/ui/asra-title-keyart-v1.webp" alt="" fetchpriority="high" />
+        </picture>
+        <div class="hero__weather" aria-hidden="true"></div>
+        <div class="hero__shade" aria-hidden="true"></div>
+        <div class="hero__content">
+          <p class="eyebrow"><span>壬辰錄</span> JOSEON DARK FANTASY</p>
+          <h1 id="hero-title"><small>희미해진 나라</small><strong>아스라</strong><span>사라지지 않은 원한</span></h1>
+          <p class="hero__lead">울릉의 죄인, 북방의 패장, 오사카 포로촌의 무당, 전란의 왕세자.<br />서로 다른 네 운명이 하나의 천하를 가른다.</p>
+          <div class="hero__actions">
+            <a class="cta cta--primary" href="https://haze-479ed.web.app/" data-game-link><i aria-hidden="true">劍</i><span><small>PLAY NOW</small><b>지금 게임 시작</b></span></a>
+            <a class="cta cta--secondary" href="#chronicle"><span><small>READ CHRONICLE</small><b>기록 펼쳐보기</b></span><em aria-hidden="true">↓</em></a>
+          </div>
+        </div>
+        <dl class="hero__facts" aria-label="게임 주요 규모">
+          <div><dt>04</dt><dd>서로 다른 운명</dd></div>
+          <div><dt>52</dt><dd>지상 여행 지역</dd></div>
+          <div><dt>100</dt><dd>무영광산 심층</dd></div>
+        </dl>
+        <a class="hero__scroll" href="#chronicle" aria-label="아래의 세계관 소개로 이동"><span></span>SCROLL</a>
+      </section>
+
+      <section class="chronicle section-shell" id="chronicle" aria-labelledby="chronicle-title">
+        <header class="section-title" data-reveal>
+          <span>01 · THE CHRONICLE</span>
+          <h2 id="chronicle-title">나라가 흐려진 밤,<br />각자의 전쟁이 시작됐다.</h2>
+          <p>선과 악이 아니라 살아남은 이유로 편을 가르는 시대. 백성의 성, 부족의 맹약, 망향의 원혼, 왕세자의 분조가 같은 길 위에서 충돌한다.</p>
+        </header>
+        <div class="chronicle__panels">
+          <article class="chronicle-card chronicle-card--people" data-reveal>
+            <span>民</span>
+            <div><small>THE PEOPLE</small><h3>성의 주인을 바꾸다</h3><p>사냥으로 강해지고 백성과 의병을 모아, 빼앗은 관아와 성을 새로운 근거지로 세운다.</p></div>
+          </article>
+          <article class="chronicle-card chronicle-card--war" data-reveal>
+            <span>戰</span>
+            <div><small>THE WAR</small><h3>전선은 멈추지 않는다</h3><p>네 세력의 병력과 보유 성, 다음 공방전이 계속 변한다. 선택한 길이 천하의 균형을 흔든다.</p></div>
+          </article>
+          <article class="chronicle-card chronicle-card--ghost" data-reveal>
+            <span>魂</span>
+            <div><small>THE GRUDGE</small><h3>원한도 무기가 된다</h3><p>망향의 무당 연화는 오사카 포로촌의 원혼을 달래고 부리며, 바다 건너 복수의 길을 연다.</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="fates" id="fates" aria-labelledby="fates-title">
+        <div class="section-shell">
+          <header class="section-title section-title--light" data-reveal>
+            <span>02 · FOUR FATES</span>
+            <h2 id="fates-title">네 개의 운명</h2>
+            <p>모든 인물은 다른 시작지, 전투 방식, 세력 목표와 독립된 저장 기록을 가진다.</p>
+          </header>
+          <div class="fate-grid" role="list">
+            <article class="fate-card is-active" data-character="donghyeok" role="listitem" data-reveal>
+              <img src="/assets/ui/kim-donghyeok-portrait-v1.png" alt="울릉의 죄인 김동혁" loading="lazy" />
+              <div class="fate-card__veil"></div>
+              <div class="fate-card__number">壹</div>
+              <div class="fate-card__copy"><small>대동계 · 농민 봉기</small><h3>김동혁</h3><p>울릉에서 한성까지<br />백성의 성을 세운다</p><span>환도 · 근접 선봉</span></div>
+              <button type="button" aria-label="김동혁 상세 기록 보기" data-character-select="donghyeok"></button>
+            </article>
+            <article class="fate-card" data-character="hajin" role="listitem" data-reveal>
+              <img src="/assets/ui/harlan-portrait-v1.png" alt="북방 활잡이 하진" loading="lazy" />
+              <div class="fate-card__veil"></div>
+              <div class="fate-card__number">貳</div>
+              <div class="fate-card__copy"><small>여진 부족연맹 · 패전군</small><h3>하진</h3><p>세 부족을 통합해<br />압록의 패배를 갚는다</p><span>강궁 · 원거리 지휘</span></div>
+              <button type="button" aria-label="하진 상세 기록 보기" data-character-select="hajin"></button>
+            </article>
+            <article class="fate-card" data-character="yeonhwa" role="listitem" data-reveal>
+              <img src="/assets/ui/yeonhwa-portrait-v1.webp" alt="오사카 포로촌의 무당 연화" loading="lazy" />
+              <div class="fate-card__veil"></div>
+              <div class="fate-card__number">參</div>
+              <div class="fate-card__copy"><small>왜군 원정연합 · 망향</small><h3>연화</h3><p>원혼과 낙오병을 모아<br />오사카에서 조선으로</p><span>방울 · 부적 · 진혼굿</span></div>
+              <button type="button" aria-label="연화 상세 기록 보기" data-character-select="yeonhwa"></button>
+            </article>
+            <article class="fate-card" data-character="gwanghae" role="listitem" data-reveal>
+              <img src="/assets/ui/gwanghae-crown-prince-portrait-v1.webp" alt="전란의 왕세자 광해" loading="lazy" />
+              <div class="fate-card__veil"></div>
+              <div class="fate-card__number">肆</div>
+              <div class="fate-card__copy"><small>조선 왕세자 · 분조</small><h3>왕세자 광해</h3><p>무너진 군량과 민심,<br />관군과 의병을 재건한다</p><span>세자 검법 · 부대 지휘</span></div>
+              <button type="button" aria-label="왕세자 광해 상세 기록 보기" data-character-select="gwanghae"></button>
+            </article>
+          </div>
+
+          <div class="fate-record" data-fate-record data-reveal>
+            <span class="fate-record__seal" data-fate-seal>民</span>
+            <div class="fate-record__title"><small data-fate-kicker>DAEDONG PEASANT ARMY</small><h3 data-fate-name>울릉의 죄인 · 김동혁</h3></div>
+            <p data-fate-story>정여립의 대동 사상을 이어받아 농민 서른두 명과 봉기한다. 울릉 관아에서 시작해 조선의 성을 백성의 근거지로 바꾸는 성장 전쟁.</p>
+            <dl>
+              <div><dt>시작</dt><dd data-fate-start>울릉 관청 감옥터</dd></div>
+              <div><dt>목표</dt><dd data-fate-goal>울릉 해방 · 한성 진군</dd></div>
+              <div><dt>고유 전투</dt><dd data-fate-style>환도 연격 · 동행 부대</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section class="atlas section-shell" id="atlas" aria-labelledby="atlas-title">
+        <header class="section-title" data-reveal>
+          <span>03 · WORLD ATLAS</span>
+          <h2 id="atlas-title">천하 행군도</h2>
+          <p>조선·여진·일본을 잇는 8개 권역, 지상 52개 지역. 도시와 항구를 고르고 육로와 해로를 따라 전선으로 향한다.</p>
+        </header>
+        <div class="atlas__layout">
+          <figure class="atlas-map" data-reveal>
+            <img src="/assets/ui/joseon-regional-world-map-v1.webp" alt="조선, 만주, 일본 오사카를 잇는 전체 지도" loading="lazy" />
+            <span class="map-marker map-marker--jurchen" style="--x:34%;--y:22%"><i></i><b>장백산</b></span>
+            <span class="map-marker map-marker--pyongyang" style="--x:35%;--y:37%"><i></i><b>평양</b></span>
+            <span class="map-marker map-marker--hanseong" style="--x:38%;--y:52%"><i></i><b>한성</b></span>
+            <span class="map-marker map-marker--ulleung" style="--x:54%;--y:50%"><i></i><b>울릉</b></span>
+            <span class="map-marker map-marker--busan" style="--x:43%;--y:68%"><i></i><b>부산진</b></span>
+            <span class="map-marker map-marker--tsushima" style="--x:49%;--y:72%"><i></i><b>대마도</b></span>
+            <span class="map-marker map-marker--osaka" style="--x:72%;--y:68%"><i></i><b>오사카</b></span>
+            <figcaption><span>地上 五十二域</span><b>육로 · 해로 · 성곽</b></figcaption>
+          </figure>
+          <aside class="route-ledger" data-reveal>
+            <header><small>SELECT A ROUTE</small><h3>운명의 길</h3></header>
+            <div class="route-tabs" role="tablist" aria-label="주요 여정 선택">
+              <button type="button" class="is-active" role="tab" aria-selected="true" data-route="revenge">복수의 해로</button>
+              <button type="button" role="tab" aria-selected="false" data-route="uprising">대동 봉기</button>
+              <button type="button" role="tab" aria-selected="false" data-route="unification">북방 통합</button>
+            </div>
+            <div class="route-ledger__copy">
+              <span data-route-number>ROUTE 01</span>
+              <h4 data-route-title>오사카에서 조선으로</h4>
+              <p data-route-summary>포로촌의 생존자와 왜군 낙오병을 모은 연화가 세츠·야마자키·막부 본영을 거쳐 조선 침공로를 연다.</p>
+              <ol data-route-stops><li>오사카 외항 포로촌</li><li>대마도 왜구 정박지</li><li>부산진 성문</li><li>한성 북로</li></ol>
+            </div>
+            <div class="route-ledger__mode"><i aria-hidden="true">魂</i><p><b>유령 여행 모드</b><span>전투와 저장 없이, 지상 52개 지역을 골라 자유롭게 답사합니다.</span></p></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="campaign-gallery" aria-labelledby="regions-title">
+        <div class="section-shell">
+          <header class="section-title section-title--light" data-reveal>
+            <span>04 · BATTLEFIELDS</span>
+            <h2 id="regions-title">밤이 머무는 전장</h2>
+            <p>건물과 지형이 전투 공간을 이루는 대도시, 부족 마을, 섬과 성곽을 가로지른다.</p>
+          </header>
+          <div class="gallery-rail" data-gallery>
+            <article class="region-card region-card--wide" data-reveal>
+              <img src="/assets/environment/campaign/osaka-outer-harbor-v1.webp" alt="달빛 아래 오사카 외항 포로촌" loading="lazy" />
+              <div><small>日本 · 攝津</small><h3>오사카 외항</h3><p>연화의 시작지 · 포로촌 탈출</p></div>
+            </article>
+            <article class="region-card" data-reveal>
+              <img src="/assets/environment/ulleung-raided-village-v2.webp" alt="습격으로 무너진 울릉도 마을" loading="lazy" />
+              <div><small>鬱陵 · 東海</small><h3>울릉도</h3><p>감옥 · 관아 · 해방전</p></div>
+            </article>
+            <article class="region-card" data-reveal>
+              <img src="/assets/environment/campaign/manchu-frontier-v1.webp" alt="눈 덮인 여진 변경" loading="lazy" />
+              <div><small>女眞 · 白山</small><h3>여진 변경</h3><p>세 부족 회맹 · 압록 설욕</p></div>
+            </article>
+            <article class="region-card region-card--wide" data-reveal>
+              <img src="/assets/environment/campaign/busanjin-siege-v1.webp" alt="불타는 부산진 성곽" loading="lazy" />
+              <div><small>朝鮮 · 釜山鎭</small><h3>부산진 공성</h3><p>왜군 대선단 · 조총 진형</p></div>
+            </article>
+            <article class="region-card" data-reveal>
+              <img src="/assets/environment/campaign/hanseong-unjongga-v1.webp" alt="전란 속 한성 운종가" loading="lazy" />
+              <div><small>漢城 · 雲從街</small><h3>한성</h3><p>왕도 진입 · 세력의 충돌</p></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="play-guide section-shell" id="play-guide" aria-labelledby="play-title">
+        <header class="section-title" data-reveal>
+          <span>05 · HOW TO PLAY</span>
+          <h2 id="play-title">칼을 들기 전에</h2>
+          <p>클릭으로 이동하고 대상을 추적하며, 무공·장비·동행 부대를 엮어 자신만의 전투 흐름을 만든다.</p>
+        </header>
+        <div class="system-grid">
+          <article class="system-card system-card--combat" data-reveal>
+            <span class="system-card__index">01</span><small>REAL-TIME COMBAT</small><h3>사냥과 무공</h3>
+            <p>적을 선택하면 거리를 좁혀 기본 공격을 이어간다. Q·W·E·R 무공과 회피 보법으로 포위망을 끊는다.</p>
+            <ul><li>실시간 추적 전투</li><li>캐릭터 고유 무공</li><li>지역별 보스 패턴</li></ul>
+          </article>
+          <article class="system-card system-card--war" data-reveal>
+            <span class="system-card__index">02</span><small>FACTION WAR</small><h3>세력과 공성전</h3>
+            <p>대동군·여진·왜군·조정군의 병력과 성이 변한다. 동행을 모으고 다음 공방전에 개입한다.</p>
+            <ul><li>네 세력 전황</li><li>백성·병사 영입</li><li>거점 점령과 회복</li></ul>
+          </article>
+          <article class="system-card system-card--travel" data-reveal>
+            <span class="system-card__index">03</span><small>GHOST TRAVEL</small><h3>유령 여행</h3>
+            <p>아무것도 하지 않는 답사 전용 모드. 전투와 기록 없이 전체 지도의 어느 지역이든 골라 둘러본다.</p>
+            <ul><li>지상 52개 지역</li><li>대도시·섬·항구</li><li>이야기와 분리된 기록</li></ul>
+          </article>
+        </div>
+
+        <div class="dungeon-feature" data-reveal>
+          <img src="/assets/environment/muyeong-dungeon-base-v1.webp" alt="도형 대신 실제 석벽과 구조물로 구성된 무영광산" loading="lazy" />
+          <div class="dungeon-feature__shade"></div>
+          <div class="dungeon-feature__copy"><small>ENDLESS UNDERGROUND</small><h3><em>100층</em> 무영광산</h3><p>교차로·고리·돌파로·미궁이 층마다 바뀌고, 매 10층마다 봉인된 보스 성소가 열린다.</p><dl><div><dt>100</dt><dd>심층</dd></div><div><dt>10</dt><dd>보스</dd></div><div><dt>04</dt><dd>구조 유형</dd></div></dl></div>
+        </div>
+
+        <div class="controls" data-reveal>
+          <header><small>QUICK START</small><h3>기본 조작</h3><p>모바일에서는 화면 버튼이 같은 기능을 대신합니다.</p></header>
+          <div class="controls__grid">
+            <span><kbd>CLICK</kbd><b>이동 · 대상 추적</b></span>
+            <span><kbd>Q W E R</kbd><b>고유 무공</b></span>
+            <span><kbd>SPACE</kbd><b>회피 보법</b></span>
+            <span><kbd>2</kbd><b>산삼환</b></span>
+            <span><kbd>I</kbd><b>행낭 · 장비</b></span>
+            <span><kbd>K · J · M</kbd><b>무공 · 기록 · 지도</b></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="board" id="board" aria-labelledby="board-title">
+        <div class="section-shell">
+          <header class="section-title section-title--light" data-reveal>
+            <span>06 · TRAVELERS' BOARD</span>
+            <h2 id="board-title">나그네 게시판</h2>
+            <p>막힌 전장과 발견한 길을 기록하고, 다른 플레이어와 공략과 질문을 나눕니다.</p>
+          </header>
+
+          <div class="board-shell" data-reveal>
+            <div class="board-shell__top">
+              <div class="board-status" data-board-status data-state="loading"><i></i><span>게시판 연결 중</span></div>
+              <button class="board-write" type="button" data-open-compose><span>붓을 들다</span><b>새 글 쓰기</b></button>
+            </div>
+            <div class="board-toolbar">
+              <div class="board-filters" role="tablist" aria-label="게시판 분류">
+                <button class="is-active" type="button" role="tab" aria-selected="true" data-board-filter="all">전체</button>
+                <button type="button" role="tab" aria-selected="false" data-board-filter="notice">공지</button>
+                <button type="button" role="tab" aria-selected="false" data-board-filter="general">자유</button>
+                <button type="button" role="tab" aria-selected="false" data-board-filter="question">질문</button>
+                <button type="button" role="tab" aria-selected="false" data-board-filter="strategy">공략</button>
+                <button type="button" role="tab" aria-selected="false" data-board-filter="party">동행</button>
+              </div>
+              <label class="board-search"><span class="sr-only">게시글 검색</span><input type="search" placeholder="제목·내용·작성자 검색" data-board-search /><i aria-hidden="true"></i></label>
+            </div>
+            <div class="board-list" role="feed" aria-busy="true" aria-live="polite" data-board-list>
+              <div class="board-row board-row--skeleton"><i></i><span></span><span></span></div>
+              <div class="board-row board-row--skeleton"><i></i><span></span><span></span></div>
+              <div class="board-row board-row--skeleton"><i></i><span></span><span></span></div>
+            </div>
+            <div class="board-empty" hidden data-board-empty><span>無</span><b>아직 남겨진 기록이 없습니다</b><p>첫 번째 나그네가 되어 길 위의 소식을 전해 주세요.</p></div>
+            <footer class="board-shell__footer"><span>최근 기록 최대 40개</span><p>개인정보와 불쾌감을 주는 내용은 남기지 마세요. 게시글은 운영 정책에 따라 정리될 수 있습니다.</p></footer>
+          </div>
+        </div>
+      </section>
+
+      <section class="final-cta" aria-labelledby="final-title">
+        <div class="final-cta__art" aria-hidden="true"></div>
+        <div class="final-cta__copy" data-reveal><small>YOUR CHRONICLE BEGINS</small><h2 id="final-title">이제, 당신의 기록을 시작하라.</h2><p>네 운명 중 하나를 택하거나 유령이 되어 천하를 먼저 답사하세요.</p><a class="cta cta--primary" href="https://haze-479ed.web.app/" data-game-link><i aria-hidden="true">月</i><span><small>ENTER ASRA</small><b>아스라 입장</b></span></a></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="site-brand" href="#top"><span class="site-brand__mark" aria-hidden="true">月</span><span><b>아스라</b><small>OFFICIAL CHRONICLE</small></span></a>
+      <p>조선 다크 판타지 액션 RPG · 희미해진 나라, 사라지지 않은 원한</p>
+      <nav aria-label="하단 메뉴"><a href="#chronicle">세계관</a><a href="#play-guide">게임 안내</a><a href="#board">게시판</a><a href="https://haze-479ed.web.app/" data-game-link>게임 시작</a></nav>
+    </footer>
+
+    <dialog class="ink-dialog compose-dialog" data-compose-dialog aria-labelledby="compose-title">
+      <form method="dialog" class="dialog-close-form"><button type="submit" aria-label="글쓰기 닫기">×</button></form>
+      <header><small>LEAVE A RECORD</small><h2 id="compose-title">새 기록 남기기</h2><p>여정에 도움이 될 이야기와 질문을 나눠 주세요.</p></header>
+      <form class="compose-form" data-compose-form>
+        <div class="compose-form__row">
+          <label><span>분류</span><select name="category"><option value="general">자유</option><option value="question">질문</option><option value="strategy">공략</option><option value="party">동행</option></select></label>
+          <label><span>이름</span><input name="nickname" minlength="2" maxlength="16" autocomplete="nickname" placeholder="나그네 이름" required /></label>
+        </div>
+        <fieldset class="compose-profile">
+          <legend><span>여정 기록</span><small data-profile-source>게임 저장 기록이 있으면 자동으로 불러옵니다</small></legend>
+          <div class="compose-profile__fields">
+            <label><span>캐릭터</span><select name="characterId"><option value="none">선택 안 함</option><option value="kim-donghyeok">김동혁</option><option value="frontier-archer">하진</option><option value="osaka-mudang">연화</option><option value="gwanghae-prince">왕세자 광해</option><option value="travel">유령 여행자</option></select></label>
+            <label><span>현재 지역</span><input name="regionName" maxlength="40" autocomplete="off" placeholder="예: 오사카 외항 포로촌" /></label>
+            <label><span>품계</span><input name="level" type="number" min="0" max="999" step="1" inputmode="numeric" placeholder="0" /></label>
+          </div>
+        </fieldset>
+        <label><span>제목</span><input name="title" minlength="2" maxlength="60" placeholder="어떤 기록인가요?" required /></label>
+        <label><span>내용</span><textarea name="body" minlength="2" maxlength="1200" rows="8" placeholder="전장의 소식이나 공략을 적어 주세요." required></textarea><small><b data-body-count>0</b> / 1,200</small></label>
+        <aside class="compose-save-summary" aria-live="polite">
+          <span>함께 저장됨</span>
+          <b data-profile-summary>캐릭터 미선택 · 지역 미입력 · 품계 미입력</b>
+          <small>익명 작성자 인장 · 서버 작성 시각 · 게시판 데이터 v2</small>
+          <em data-draft-status>작성 중인 기록은 이 기기에 자동 저장됩니다</em>
+        </aside>
+        <p class="compose-form__error" data-compose-error aria-live="polite"></p>
+        <div class="compose-form__actions"><button type="button" data-close-compose>취소</button><button type="submit" data-submit-post><span>기록 올리기</span><i aria-hidden="true">印</i></button></div>
+      </form>
+    </dialog>
+
+    <dialog class="ink-dialog post-dialog" data-post-dialog aria-labelledby="post-detail-title">
+      <form method="dialog" class="dialog-close-form"><button type="submit" aria-label="게시글 닫기">×</button></form>
+      <header><small data-post-category>나그네 게시판</small><h2 id="post-detail-title" data-post-title></h2><p><span data-post-author></span><time data-post-time></time></p></header>
+      <div class="post-dialog__profile" data-post-profile></div>
+      <div class="post-dialog__body" data-post-body></div>
+      <section class="post-comments" data-comments-panel aria-labelledby="post-comments-title">
+        <header><span>TRAVELERS' REPLIES</span><h3 id="post-comments-title">댓글 <b data-comment-count>0</b></h3><p data-comment-status>댓글을 불러오는 중입니다</p></header>
+        <ol class="comment-list" data-comment-list aria-live="polite"></ol>
+        <form class="comment-form" data-comment-form>
+          <label><span>이름</span><input name="nickname" minlength="2" maxlength="16" autocomplete="nickname" placeholder="나그네 이름" required /></label>
+          <label><span>댓글</span><textarea name="body" minlength="2" maxlength="500" rows="3" placeholder="길 위의 답글을 남겨 주세요." required></textarea></label>
+          <p data-comment-error aria-live="polite"></p>
+          <button type="submit" data-submit-comment><span>댓글 남기기</span><i aria-hidden="true">答</i></button>
+        </form>
+      </section>
+      <footer><button type="button" data-close-post>목록으로</button></footer>
+    </dialog>
+
+    <button class="to-top" type="button" aria-label="페이지 맨 위로" data-to-top>↑</button>
+    <script type="module" src="/src/guide/main.ts"></script>
+  </body>
+</html>
