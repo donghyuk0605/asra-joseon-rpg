@@ -1,4 +1,12 @@
 node_modules/
 dist/
+guide-dist/
+/.firebase/
+/assets/
+/tmp/
+**/__pycache__/
+*.py[cod]
+.env*
+!.env.example
 .DS_Store
 *.log

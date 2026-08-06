@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs><linearGradient id="saltblade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f2e8c3"/><stop offset=".45" stop-color="#8eb9b0"/><stop offset="1" stop-color="#36535c"/></linearGradient></defs>
+  <path d="M43 194l54-46 77-87c10-11 27 2 18 15l-66 97-52 38z" fill="url(#saltblade)" stroke="#25282d" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M117 163l31 23-22 22-35-22z" fill="#8b5a44" stroke="#3a2828" stroke-width="7"/>
+  <path d="M66 197l56-33" stroke="#fff0c4" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+  <path d="M49 209c32 8 80 8 127-8M45 223c38 7 84 4 130-12" fill="none" stroke="#b9d1c0" stroke-width="6" stroke-linecap="round" opacity=".68"/>
+  <circle cx="51" cy="210" r="9" fill="#e3c479"/>
+</svg>

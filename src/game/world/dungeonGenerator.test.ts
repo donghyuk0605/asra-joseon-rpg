@@ -10,7 +10,16 @@ describe('dungeonGenerator', () => {
     expect(generateDungeonFloor(1).pattern).toBe('crossroads');
     expect(generateDungeonFloor(2).pattern).toBe('ring');
     expect(generateDungeonFloor(3).pattern).toBe('gauntlet');
+    expect(generateDungeonFloor(4).pattern).toBe('maze');
     expect(generateDungeonFloor(10).pattern).toBe('sanctum');
+  });
+
+  it('turns every fourth route into a real zigzag maze with an upper exit', () => {
+    const maze = generateDungeonFloor(4);
+    expect(maze.pattern).toBe('maze');
+    expect(maze.features.filter((feature) => feature.kind === 'wall')).toHaveLength(4);
+    expect(maze.monsterSpawns).toHaveLength(8);
+    expect(maze.nextStairs.y).toBeLessThan(maze.playerSpawn.y);
   });
 
   it('supports six encounters per floor and clamps the tower to 100 floors', () => {

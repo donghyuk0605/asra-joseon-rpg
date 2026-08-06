@@ -1,17 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { EquipmentState, InventoryItem } from '../simulation/types';
-import { resolvePlayerLayers, resolvePlayerVisualMode } from './playerVisualMode';
-
-describe('resolvePlayerVisualMode', () => {
-  it.each<[EquipmentState, string]>([
-    [{ weapon: null, armor: null, charm: null }, 'unequipped'],
-    [{ weapon: 'weapon-1', armor: null, charm: null }, 'weapon-only'],
-    [{ weapon: null, armor: 'armor-1', charm: null }, 'armor-only'],
-    [{ weapon: 'weapon-1', armor: 'armor-1', charm: null }, 'fully-equipped'],
-  ])('maps equipment %j to %s', (equipment, mode) => {
-    expect(resolvePlayerVisualMode(equipment)).toBe(mode);
-  });
-});
+import { resolvePlayerLayers, resolvePlayerVisualMovement } from './playerVisualMode';
 
 describe('resolvePlayerLayers', () => {
   const inventory: InventoryItem[] = [
@@ -31,5 +20,31 @@ describe('resolvePlayerLayers', () => {
   it('hides stale equipment ids that are not actually in the inventory', () => {
     expect(resolvePlayerLayers({ weapon: 'missing-weapon', armor: 'missing-armor', charm: null }, inventory))
       .toEqual({ armor: false, weapon: false });
+  });
+
+  it('hides inventory items assigned to the wrong equipment slot', () => {
+    expect(resolvePlayerLayers({ weapon: 'armor-1', armor: 'weapon-1', charm: null }, inventory))
+      .toEqual({ armor: false, weapon: false });
+  });
+});
+
+describe('resolvePlayerVisualMovement', () => {
+  it('does not play the walk cycle from target or destination intent alone', () => {
+    expect(resolvePlayerVisualMovement(0, 0, Math.PI / 3)).toEqual({
+      moving: false,
+      facing: Math.PI / 3,
+      distance: 0,
+    });
+  });
+
+  it('faces the actual collision-resolved movement vector', () => {
+    const result = resolvePlayerVisualMovement(-2, 2, 0);
+    expect(result.moving).toBe(true);
+    expect(result.distance).toBeCloseTo(Math.sqrt(8));
+    expect(result.facing).toBeCloseTo(3 * Math.PI / 4);
+  });
+
+  it('keeps authored skill travel visually active during interpolation', () => {
+    expect(resolvePlayerVisualMovement(0, 0, 0, true).moving).toBe(true);
   });
 });

@@ -3,7 +3,7 @@ import { bossForFloor } from '../bosses/catalog';
 import type { BossId } from '../bosses/types';
 
 export const MAX_DUNGEON_FLOOR = 100;
-export type DungeonPatternId = 'crossroads' | 'ring' | 'gauntlet' | 'sanctum';
+export type DungeonPatternId = 'crossroads' | 'ring' | 'gauntlet' | 'maze' | 'sanctum';
 export type DungeonFeature =
   | { kind: 'wall'; x: number; y: number; width: number; height: number }
   | { kind: 'pillar' | 'trap' | 'seal'; x: number; y: number; radius: number };
@@ -22,7 +22,7 @@ export type DungeonFloorLayout = {
   bossId: BossId | null;
 };
 
-const PATTERNS: DungeonPatternId[] = ['crossroads', 'ring', 'gauntlet', 'sanctum'];
+const PATTERNS: DungeonPatternId[] = ['crossroads', 'ring', 'gauntlet', 'maze'];
 
 function seededRandom(seed: number): () => number {
   let state = seed >>> 0;
@@ -54,7 +54,10 @@ export function generateDungeonFloor(requestedFloor: number): DungeonFloorLayout
       ? [{ x: 490, y: 360 }, { x: 760, y: 310 }, { x: 1045, y: 375 }, { x: 1080, y: 610 }, { x: 760, y: 670 }, { x: 455, y: 590 }]
       : pattern === 'gauntlet'
         ? [{ x: 510, y: 360 }, { x: 760, y: 390 }, { x: 1015, y: 360 }, { x: 505, y: 615 }, { x: 760, y: 590 }, { x: 1030, y: 615 }]
-        : [{ x: 610, y: 395 }, { x: 760, y: 350 }, { x: 910, y: 395 }, { x: 610, y: 575 }, { x: 760, y: 620 }, { x: 910, y: 575 }];
+        : pattern === 'maze'
+          ? [{ x: 1110, y: 745 }, { x: 420, y: 625 }, { x: 760, y: 610 }, { x: 1100, y: 505 },
+            { x: 410, y: 390 }, { x: 760, y: 360 }, { x: 1070, y: 275 }, { x: 430, y: 245 }]
+          : [{ x: 610, y: 395 }, { x: 760, y: 350 }, { x: 910, y: 395 }, { x: 610, y: 575 }, { x: 760, y: 620 }, { x: 910, y: 575 }];
 
   const features: DungeonFeature[] = pattern === 'crossroads'
     ? [
@@ -73,6 +76,21 @@ export function generateDungeonFloor(requestedFloor: number): DungeonFloorLayout
           { kind: 'trap', x: 700, y: 450, radius: 30 }, { kind: 'trap', x: 820, y: 560, radius: 30 },
           { kind: 'pillar', x: 760, y: 505, radius: 38 },
         ]
+        : pattern === 'maze'
+          ? [
+            // Alternating openings force a readable S-route from the entrance
+            // to the upper stair instead of a straight-line rush.
+            { kind: 'wall', x: 520, y: 700, width: 650, height: 34 },
+            { kind: 'wall', x: 990, y: 580, width: 650, height: 34 },
+            { kind: 'wall', x: 520, y: 460, width: 650, height: 34 },
+            { kind: 'wall', x: 990, y: 340, width: 650, height: 34 },
+            { kind: 'pillar', x: 1160, y: 680, radius: 30 },
+            { kind: 'pillar', x: 360, y: 550, radius: 30 },
+            { kind: 'pillar', x: 1160, y: 430, radius: 30 },
+            { kind: 'trap', x: 980, y: 650, radius: 28 },
+            { kind: 'trap', x: 520, y: 520, radius: 28 },
+            { kind: 'trap', x: 980, y: 400, radius: 28 },
+          ]
         : [
           { kind: 'pillar', x: 555, y: 390, radius: 34 }, { kind: 'pillar', x: 965, y: 390, radius: 34 },
           { kind: 'pillar', x: 555, y: 620, radius: 34 }, { kind: 'pillar', x: 965, y: 620, radius: 34 },
@@ -81,7 +99,9 @@ export function generateDungeonFloor(requestedFloor: number): DungeonFloorLayout
 
   return {
     floor, maxFloor: MAX_DUNGEON_FLOOR, pattern, title: floorTitle(floor),
-    playerSpawn: { x: 760, y: 785 }, exitStairs: { x: 590, y: 800 }, nextStairs: { x: 930, y: 800 },
+    playerSpawn: { x: 760, y: 785 },
+    exitStairs: { x: 590, y: 800 },
+    nextStairs: pattern === 'maze' ? { x: 420, y: 235 } : { x: 930, y: 800 },
     monsterSpawns: boss ? [] : baseSpawns.map((point) => ({ x: point.x + jitter(), y: point.y + jitter() })),
     features,
     isBossFloor: boss !== null,

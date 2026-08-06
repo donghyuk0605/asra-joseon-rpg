@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs><linearGradient id="reed" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d3c18a"/><stop offset=".55" stop-color="#72866e"/><stop offset="1" stop-color="#34494d"/></linearGradient></defs>
+  <path d="M84 57l44-28 44 28 34 151H50z" fill="url(#reed)" stroke="#252b2c" stroke-width="9" stroke-linejoin="round"/>
+  <path d="M128 30v178M91 51l19 157M165 51l-19 157M59 177h138" stroke="#e5d39d" stroke-width="6" opacity=".72"/>
+  <path d="M74 72c-19 28-28 66-23 103M182 72c19 28 28 66 23 103" fill="none" stroke="#afc99f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M128 29c-10 18-12 35 0 52 12-17 10-34 0-52z" fill="#e6d59a" stroke="#4b5c4c" stroke-width="5"/>
+</svg>

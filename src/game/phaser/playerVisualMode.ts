@@ -1,17 +1,6 @@
 import { ITEM_CATALOG } from '../items/catalog';
 import type { EquipmentState, InventoryItem } from '../simulation/types';
 
-export type PlayerVisualMode = 'unequipped' | 'weapon-only' | 'armor-only' | 'fully-equipped';
-
-export function resolvePlayerVisualMode(equipment: EquipmentState): PlayerVisualMode {
-  const hasWeapon = Boolean(equipment.weapon);
-  const hasArmor = Boolean(equipment.armor);
-  if (hasWeapon && hasArmor) return 'fully-equipped';
-  if (hasWeapon) return 'weapon-only';
-  if (hasArmor) return 'armor-only';
-  return 'unequipped';
-}
-
 export function resolvePlayerLayers(
   equipment: EquipmentState,
   inventory: readonly InventoryItem[],
@@ -22,4 +11,18 @@ export function resolvePlayerLayers(
     return inventory.some((item) => item.instanceId === instanceId && ITEM_CATALOG[item.itemId].slot === slot);
   };
   return { armor: hasEquippedItem('armor'), weapon: hasEquippedItem('weapon') };
+}
+
+export function resolvePlayerVisualMovement(
+  movementX: number,
+  movementY: number,
+  fallbackFacing: number,
+  skillMotionActive = false,
+): { moving: boolean; facing: number; distance: number } {
+  const distance = Math.hypot(movementX, movementY);
+  return {
+    moving: distance > 0.03 || skillMotionActive,
+    facing: distance > 0.03 ? Math.atan2(movementY, movementX) : fallbackFacing,
+    distance,
+  };
 }

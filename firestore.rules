@@ -1,0 +1,270 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function validGuideAuthorId(authorId) {
+      return authorId is string
+        && authorId.size() >= 20
+        && authorId.size() <= 64
+        && authorId.matches('^[A-Za-z0-9._:-]+$');
+    }
+
+    function validGuideNickname(nickname) {
+      return nickname is string
+        && nickname.size() >= 2
+        && nickname.size() <= 16;
+    }
+
+    function validGuideProfile(profile) {
+      return profile is map
+        && profile.keys().hasAll(['characterId', 'regionName', 'level'])
+        && profile.keys().hasOnly(['characterId', 'regionName', 'level'])
+        && profile.characterId in [
+          'none',
+          'kim-donghyeok',
+          'frontier-archer',
+          'osaka-mudang',
+          'gwanghae-prince',
+          'travel'
+        ]
+        && profile.regionName is string
+        && profile.regionName.size() <= 40
+        && profile.level is int
+        && profile.level >= 0
+        && profile.level <= 999;
+    }
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function validMarketplaceName(name) {
+      return name is string
+        && name.size() >= 1
+        && name.size() <= 16;
+    }
+
+    function validMarketplaceItemId(itemId) {
+      return itemId in [
+        'worn-hwando',
+        'frontier-horn-bow',
+        'white-birch-bow',
+        'iron-horn-warbow',
+        'thunderbird-bow',
+        'northwind-warbow',
+        'dokkaebi-club',
+        'hunter-durumagi',
+        'boar-tusk-charm',
+        'frontier-lamellar-coat',
+        'falcon-eye-bracer',
+        'border-war-dispatch',
+        'jurchen-iron-arrowheads',
+        'joseon-border-token',
+        'moonsteel-hwando',
+        'warden-durumagi',
+        'silver-tiger-charm',
+        'ember-hwando',
+        'frost-hwando',
+        'storm-hwando',
+        'venom-hwando',
+        'gale-hwando',
+        'earth-hwando',
+        'shadow-hwando',
+        'ulleung-tiger-pelt',
+        'tiger-pelt-armor',
+        'weapon-enchant-scroll',
+        'armor-enchant-scroll',
+        'crescent-manual',
+        'insight-manual'
+      ];
+    }
+
+    function validMarketplaceOffer(offer) {
+      return offer is map
+        && offer.keys().hasAll([
+          'schemaVersion', 'kind', 'sellerUid', 'sellerName',
+          'itemId', 'enhancement', 'askingPrice', 'status',
+          'reservedByUid', 'createdAt', 'updatedAt', 'reservedAt', 'cancelledAt'
+        ])
+        && offer.keys().hasOnly([
+          'schemaVersion', 'kind', 'sellerUid', 'sellerName',
+          'itemId', 'enhancement', 'askingPrice', 'status',
+          'reservedByUid', 'createdAt', 'updatedAt', 'reservedAt', 'cancelledAt'
+        ])
+        && offer.schemaVersion == 1
+        && offer.kind == 'non-binding-trade-proposal'
+        && offer.sellerUid is string
+        && offer.sellerUid.size() >= 1
+        && offer.sellerUid.size() <= 128
+        && validMarketplaceName(offer.sellerName)
+        && validMarketplaceItemId(offer.itemId)
+        && offer.enhancement is int
+        && offer.enhancement >= 0
+        && offer.enhancement <= 5
+        && offer.askingPrice is int
+        && offer.askingPrice >= 1
+        && offer.askingPrice <= 9999999
+        && offer.status in ['open', 'reserved', 'cancelled']
+        && offer.createdAt is timestamp
+        && offer.updatedAt is timestamp
+        && (
+          (
+            offer.status == 'open'
+            && offer.reservedByUid == null
+            && offer.reservedAt == null
+            && offer.cancelledAt == null
+          )
+          || (
+            offer.status == 'reserved'
+            && offer.reservedByUid is string
+            && offer.reservedByUid.size() >= 1
+            && offer.reservedByUid.size() <= 128
+            && offer.reservedAt is timestamp
+            && offer.cancelledAt == null
+          )
+          || (
+            offer.status == 'cancelled'
+            && offer.reservedByUid == null
+            && offer.reservedAt == null
+            && offer.cancelledAt is timestamp
+          )
+        );
+    }
+
+    function marketplaceOfferTermsUnchanged() {
+      return request.resource.data.schemaVersion == resource.data.schemaVersion
+        && request.resource.data.kind == resource.data.kind
+        && request.resource.data.sellerUid == resource.data.sellerUid
+        && request.resource.data.sellerName == resource.data.sellerName
+        && request.resource.data.itemId == resource.data.itemId
+        && request.resource.data.enhancement == resource.data.enhancement
+        && request.resource.data.askingPrice == resource.data.askingPrice
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    function isMarketplaceReservation() {
+      return resource.data.status == 'open'
+        && request.resource.data.status == 'reserved'
+        && request.auth.uid != resource.data.sellerUid
+        && request.resource.data.reservedByUid == request.auth.uid
+        && request.resource.data.reservedAt == request.time
+        && request.resource.data.cancelledAt == null;
+    }
+
+    function isMarketplaceReservationRelease() {
+      return resource.data.status == 'reserved'
+        && resource.data.reservedByUid == request.auth.uid
+        && request.resource.data.status == 'open'
+        && request.resource.data.reservedByUid == null
+        && request.resource.data.reservedAt == null
+        && request.resource.data.cancelledAt == null;
+    }
+
+    function isMarketplaceCancellation() {
+      return resource.data.status in ['open', 'reserved']
+        && resource.data.sellerUid == request.auth.uid
+        && request.resource.data.status == 'cancelled'
+        && request.resource.data.reservedByUid == null
+        && request.resource.data.reservedAt == null
+        && request.resource.data.cancelledAt == request.time;
+    }
+
+    match /online_chat/{messageId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['name', 'message', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1
+        && request.resource.data.name.size() <= 16
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 1
+        && request.resource.data.message.size() <= 100
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    match /guide_posts/{postId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'schemaVersion', 'authorId', 'nickname', 'title', 'body',
+          'category', 'profile', 'createdAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'schemaVersion', 'authorId', 'nickname', 'title', 'body',
+          'category', 'profile', 'createdAt'
+        ])
+        && request.resource.data.schemaVersion == 2
+        && validGuideAuthorId(request.resource.data.authorId)
+        && validGuideNickname(request.resource.data.nickname)
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 2
+        && request.resource.data.title.size() <= 60
+        && request.resource.data.body is string
+        && request.resource.data.body.size() >= 2
+        && request.resource.data.body.size() <= 1200
+        && request.resource.data.category in ['general', 'question', 'strategy', 'party']
+        && validGuideProfile(request.resource.data.profile)
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if signedIn()
+          && exists(/databases/$(database)/documents/guide_posts/$(postId))
+          && request.resource.data.keys().hasAll([
+            'schemaVersion', 'authorId', 'nickname', 'body', 'createdAt'
+          ])
+          && request.resource.data.keys().hasOnly([
+            'schemaVersion', 'authorId', 'nickname', 'body', 'createdAt'
+          ])
+          && request.resource.data.schemaVersion == 1
+          && validGuideAuthorId(request.resource.data.authorId)
+          && validGuideNickname(request.resource.data.nickname)
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 2
+          && request.resource.data.body.size() <= 500
+          && request.resource.data.createdAt == request.time;
+        allow update, delete: if false;
+      }
+    }
+
+    // This is deliberately a non-binding offer board. It never reads from or
+    // writes to single-player inventory/gold. Authentication only establishes
+    // who may reserve or cancel a proposal; no economic transfer is implied.
+    match /marketplace_offers/{offerId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && offerId.size() >= 1
+        && offerId.size() <= 128
+        && validMarketplaceOffer(request.resource.data)
+        && request.resource.data.sellerUid == request.auth.uid
+        && request.resource.data.status == 'open'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if signedIn()
+        && validMarketplaceOffer(request.resource.data)
+        && marketplaceOfferTermsUnchanged()
+        && request.resource.data.updatedAt == request.time
+        && (
+          isMarketplaceReservation()
+          || isMarketplaceReservationRelease()
+          || isMarketplaceCancellation()
+        );
+      allow delete: if false;
+    }
+
+    match /single_saves/{deviceId} {
+      allow read: if signedIn()
+        && deviceId.size() >= 20
+        && deviceId.size() <= 80;
+      allow create, update: if signedIn()
+        && deviceId.size() >= 20
+        && deviceId.size() <= 80
+        && request.resource.data.keys().hasOnly(['snapshot', 'updatedAt'])
+        && request.resource.data.snapshot is map
+        && request.resource.data.snapshot.version == 1
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+  }
+}

@@ -1,0 +1,4 @@
+game.35.209.52.2.nip.io {
+  encode zstd gzip
+  reverse_proxy 127.0.0.1:3000
+}

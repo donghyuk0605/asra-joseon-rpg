@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs><linearGradient id="bow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d4ad66"/><stop offset="1" stop-color="#405e58"/></linearGradient></defs>
+  <path d="M79 35c-43 48-43 137 0 186" fill="none" stroke="url(#bow)" stroke-width="19" stroke-linecap="round"/>
+  <path d="M78 36c64 46 71 136 0 184" fill="none" stroke="#d9e4cc" stroke-width="5"/>
+  <path d="M71 123h139" stroke="#dbc28b" stroke-width="7" stroke-linecap="round"/>
+  <path d="M209 123l-24-13 9 13-9 13z" fill="#e9d6a3" stroke="#4d4641" stroke-width="4"/>
+  <path d="M48 189c33-12 74-12 112 0 27 9 41 8 56-4" fill="none" stroke="#5d9da0" stroke-width="9" stroke-linecap="round" opacity=".8"/>
+  <path d="M48 207c33-12 74-12 112 0 27 9 41 8 56-4" fill="none" stroke="#a8d0c5" stroke-width="6" stroke-linecap="round" opacity=".65"/>
+</svg>

@@ -1,0 +1,19 @@
+[Unit]
+Description=Asra online presence server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=asra
+WorkingDirectory=/opt/asra-online
+Environment=NODE_ENV=production
+Environment=PORT=3000
+ExecStart=/usr/bin/node /opt/asra-online/multiplayer-server.mjs
+Restart=always
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

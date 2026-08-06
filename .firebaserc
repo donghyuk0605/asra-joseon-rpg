@@ -1,5 +1,17 @@
 {
   "projects": {
-    "default": "the-project7039"
+    "default": "haze-479ed"
+  },
+  "targets": {
+    "haze-479ed": {
+      "hosting": {
+        "game": [
+          "haze-479ed"
+        ],
+        "guide": [
+          "haze-479ed-guide"
+        ]
+      }
+    }
   }
 }

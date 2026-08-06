@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs><radialGradient id="stone"><stop stop-color="#d5e2c5"/><stop offset=".65" stop-color="#73908a"/><stop offset="1" stop-color="#354b4f"/></radialGradient></defs>
+  <path d="M128 28l22 21 31-3-3 31 22 22-22 22 3 31-31-3-22 21-22-21-31 3 3-31-22-22 22-22-3-31 31 3z" fill="#b69158" stroke="#28292c" stroke-width="8"/>
+  <path d="M128 50c33 0 59 27 59 60 0 38-26 72-59 99-33-27-59-61-59-99 0-33 26-60 59-60z" fill="url(#stone)" stroke="#293c40" stroke-width="7"/>
+  <path d="M95 104c8-25 24-35 33-35 9 0 25 10 33 35l-15-7 9 22-27-7-27 7 9-22z" fill="#e1c17c" stroke="#3b3533" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="111" cy="105" r="5" fill="#263b43"/><circle cx="145" cy="105" r="5" fill="#263b43"/>
+  <path d="M105 143c14 12 32 12 46 0" fill="none" stroke="#e2c37d" stroke-width="7" stroke-linecap="round"/>
+  <path d="M128 157v30" stroke="#e2c37d" stroke-width="6" stroke-linecap="round"/>
+</svg>

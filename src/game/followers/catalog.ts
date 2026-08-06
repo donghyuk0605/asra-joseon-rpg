@@ -1,0 +1,163 @@
+import type { FollowerKind, MonsterKind, RecruitmentRoute, SkillId } from '../simulation/types';
+
+export type FollowerDefinition = {
+  kind: FollowerKind;
+  name: string;
+  title: string;
+  role: string;
+  route: RecruitmentRoute;
+  routeLabel: string;
+  cost: number;
+  requiredLevel: number;
+  requiredSkill?: SkillId;
+  requiresPrisonEscape?: boolean;
+  visualKind: MonsterKind;
+  damage: number;
+  attackRange: number;
+  moveSpeed: number;
+};
+
+export const FOLLOWER_CATALOG: Record<FollowerKind, FollowerDefinition> = {
+  'peasant-militia': {
+    kind: 'peasant-militia',
+    name: '돌쇠',
+    title: '울릉 농민군',
+    role: '낫과 몽둥이로 근접한 적을 붙잡는 선봉',
+    route: 'tavern',
+    routeLabel: '주막 품팔이꾼 설득',
+    cost: 80,
+    requiredLevel: 1,
+    visualKind: 'jeonju-militia-sickle',
+    damage: 9,
+    attackRange: 76,
+    moveSpeed: 148,
+  },
+  'government-defector': {
+    kind: 'government-defector',
+    name: '최만석',
+    title: '전향한 관군 창수',
+    role: '긴 창으로 앞줄 너머의 적까지 견제하는 호위병',
+    route: 'defection',
+    routeLabel: '감옥 포졸의 전향',
+    cost: 140,
+    requiredLevel: 4,
+    requiresPrisonEscape: true,
+    visualKind: 'yeongwol-spearman',
+    damage: 13,
+    attackRange: 102,
+    moveSpeed: 154,
+  },
+  'special-warrior': {
+    kind: 'special-warrior',
+    name: '청야',
+    title: '월영 특수전사',
+    role: '비급을 알아본 뒤 합류해 강한 적을 우선 베는 검객',
+    route: 'hidden-contract',
+    routeLabel: '비급 인연 · 은밀한 계약',
+    cost: 260,
+    requiredLevel: 8,
+    requiredSkill: 'crescent-wave',
+    visualKind: 'jeonju-commander',
+    damage: 19,
+    attackRange: 86,
+    moveSpeed: 166,
+  },
+  'jurchen-vanguard': {
+    kind: 'jurchen-vanguard',
+    name: '여진 철갑 선봉',
+    title: '남진 철갑 장창수',
+    role: '하진의 앞줄을 지키며 조선 수비진을 밀어내는 장창병',
+    route: 'invasion',
+    routeLabel: '압록 진보 함락 후 남진 합류',
+    cost: 0,
+    requiredLevel: 1,
+    visualKind: 'manchu-lancer',
+    damage: 15,
+    attackRange: 102,
+    moveSpeed: 160,
+  },
+  'jurchen-bowguard': {
+    kind: 'jurchen-bowguard',
+    name: '여진 각궁 호위',
+    title: '남진 각궁수',
+    role: '후열에서 달아나는 적과 백성을 추격해 화살을 쏘는 궁수',
+    route: 'invasion',
+    routeLabel: '압록 진보 함락 후 남진 합류',
+    cost: 0,
+    requiredLevel: 1,
+    visualKind: 'manchu-archer',
+    damage: 13,
+    attackRange: 220,
+    moveSpeed: 154,
+  },
+  'jurchen-captain': {
+    kind: 'jurchen-captain',
+    name: '여진 선봉장',
+    title: '남진 선봉 지휘관',
+    role: '하진의 남하 대열을 지휘하고 강한 조선군을 우선 공격한다',
+    route: 'invasion',
+    routeLabel: '압록 진보 함락 후 남진 합류',
+    cost: 0,
+    requiredLevel: 1,
+    visualKind: 'manchu-captain',
+    damage: 20,
+    attackRange: 90,
+    moveSpeed: 164,
+  },
+  'gwanghae-militia': {
+    kind: 'gwanghae-militia',
+    name: '분조 의병',
+    title: '분조 의병 낫군',
+    role: '고을에서 규합한 백성으로 적의 전열을 붙잡는 근접 의병',
+    route: 'bunjo',
+    routeLabel: '광해 분조 의병 명부',
+    cost: 0,
+    requiredLevel: 1,
+    visualKind: 'jeonju-militia-sickle',
+    damage: 10,
+    attackRange: 78,
+    moveSpeed: 150,
+  },
+  'gwanghae-spearman': {
+    kind: 'gwanghae-spearman',
+    name: '분조 장창수',
+    title: '분조군 장창병',
+    role: '긴 창으로 전열을 유지하며 왕당군의 돌격을 저지하는 창병',
+    route: 'bunjo',
+    routeLabel: '광해 분조 의병 명부',
+    cost: 0,
+    requiredLevel: 1,
+    visualKind: 'joseon-border-spearman',
+    damage: 14,
+    attackRange: 106,
+    moveSpeed: 156,
+  },
+  'gwanghae-archer': {
+    kind: 'gwanghae-archer',
+    name: '분조 각궁수',
+    title: '분조군 각궁병',
+    role: '후열 대형을 지키며 지정한 적을 멀리서 집중 사격하는 궁병',
+    route: 'bunjo',
+    routeLabel: '광해 분조 의병 명부',
+    cost: 0,
+    requiredLevel: 1,
+    visualKind: 'joseon-border-archer',
+    damage: 13,
+    attackRange: 220,
+    moveSpeed: 152,
+  },
+  'gwanghae-captain': {
+    kind: 'gwanghae-captain',
+    name: '분조 군관',
+    title: '광해 분조군 군관',
+    role: '의병 전열을 지휘하고 가장 강한 왕당군을 먼저 제압하는 군관',
+    route: 'bunjo',
+    routeLabel: '광해 분조 의병 명부',
+    cost: 0,
+    requiredLevel: 1,
+    visualKind: 'joseon-border-commander',
+    damage: 19,
+    attackRange: 92,
+    moveSpeed: 160,
+  },
+};
