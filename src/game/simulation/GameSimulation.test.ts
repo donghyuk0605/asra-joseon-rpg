@@ -178,6 +178,19 @@ describe('GameSimulation', () => {
     expect(game.player.targetId).toBe(monster.id);
   });
 
+  it('clears a stale target immediately when the target belongs to another region', () => {
+    const game = new GameSimulation();
+    const monster = game.monsters.find((entry) => entry.region === game.region && entry.alive)!;
+    game.selectMonster(monster.id);
+    expect(game.getTarget()?.id).toBe(monster.id);
+
+    game.region = 'village';
+    expect(game.getTarget()).toBeNull();
+    game.update(0.05);
+
+    expect(game.player.targetId).toBeNull();
+  });
+
   it('ignores movement commands while the player is defeated', () => {
     const game = new GameSimulation();
     game.player.hp = 0;

@@ -42,4 +42,9 @@ describe('mobile combat HUD layout', () => {
     expect(styles).toMatch(/orientation:\s*landscape[\s\S]*\.bottom-dock \.action-deck\s*\{[\s\S]*right:\s*max\(8px/);
     expect(styles).toMatch(/\.menu-seal\.skill-seal\s*\{[\s\S]*left:\s*calc\(max\(8px/);
   });
+
+  it('collapses unavailable field-army controls instead of covering the phone playfield', () => {
+    expect(styles).toMatch(/@media \(max-width:\s*700px\)[\s\S]*\.hajin-army-command > button:disabled \{ display:\s*none;/);
+    expect(styles).toMatch(/\.hajin-army-command > button:not\(:disabled\) small \{ display:\s*none;/);
+  });
 });

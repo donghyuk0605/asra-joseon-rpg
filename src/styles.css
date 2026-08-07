@@ -3687,8 +3687,11 @@ body.reduce-game-motion *, body.reduce-game-motion *::before, body.reduce-game-m
   .follower-roster-hud > div > span small { display: none; }
   .follower-roster-hud > div > span b { font-size: 7px; }
   .hajin-army-command { gap: 3px; margin-top: 4px; padding: 4px; }
+  .hajin-army-command > header span { display: none; }
   .hajin-army-command > div { font-size: 6px; }
   .hajin-army-command > button { min-height: 44px; grid-template-columns: 24px 1fr; padding: 4px 6px; }
+  .hajin-army-command > button:disabled { display: none; }
+  .hajin-army-command > button:not(:disabled) small { display: none; }
   .hajin-army-command > button i { font-size: 15px; }
   .hajin-army-command > button span { font-size: 7px; }
   .master-teaching > button,

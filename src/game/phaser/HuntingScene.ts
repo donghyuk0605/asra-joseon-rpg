@@ -1474,6 +1474,9 @@ export class HuntingScene extends Phaser.Scene {
       frameWidth: 512, frameHeight: 512, endFrame: 3,
     });
     this.load.image(ASSETS.projectiles.joseonArrow.key, ASSETS.projectiles.joseonArrow.path);
+    this.load.spritesheet(ASSETS.combatImpacts.key, ASSETS.combatImpacts.path, {
+      frameWidth: 512, frameHeight: 512, endFrame: 3,
+    });
     this.load.spritesheet(ASSETS.frontierCombatFx.key, ASSETS.frontierCombatFx.path, {
       frameWidth: 512, frameHeight: 512, endFrame: 7,
     });
@@ -1597,6 +1600,9 @@ export class HuntingScene extends Phaser.Scene {
 
   create(): void {
     const selectedOrigin = document.body.dataset.selectedOrigin;
+    this.game.canvas.dataset.combatFxAtlas = this.textures.exists(ASSETS.combatImpacts.key)
+      ? `${ASSETS.combatImpacts.key}:4`
+      : 'missing';
     if (selectedOrigin === 'frontier-archer') {
       this.simulation.startFrontierArcherStory();
       this.preconfiguredOrigin = selectedOrigin;
@@ -9921,7 +9927,14 @@ export class HuntingScene extends Phaser.Scene {
         } else {
           this.createPunchFx(target.x, target.y - 48, angle, event.critical, event.step);
         }
-        this.createImpactFx(target.x, target.y - 52, event.critical, event.step);
+        this.createImpactFx(
+          target.x,
+          target.y - 52,
+          event.critical,
+          event.step,
+          event.style === 'fist' ? 'blunt' : 'blade',
+          angle,
+        );
         this.createHitDebris(target.x, target.y - 48, angle, event.step, event.critical);
         this.combatNumber(target.x, target.y - 92, event.damage, event.critical, event.step);
         view.hitFlashUntil = Math.max(
@@ -9945,7 +9958,14 @@ export class HuntingScene extends Phaser.Scene {
           this.createSlashFx(grip.x, grip.y, boss.x, boss.y - 54, angle, event.critical, event.step);
         }
         else this.createPunchFx(boss.x, boss.y - 58, angle, event.critical, event.step);
-        this.createImpactFx(boss.x, boss.y - 62, event.critical, event.step);
+        this.createImpactFx(
+          boss.x,
+          boss.y - 62,
+          event.critical,
+          event.step,
+          event.style === 'fist' ? 'blunt' : 'blade',
+          angle,
+        );
         this.createHitDebris(boss.x, boss.y - 58, angle, event.step, event.critical);
         this.combatNumber(boss.x, boss.y - 116, event.damage, event.critical, event.step);
         this.bossView.sprite.setTintFill(event.finisher ? 0xffffff : event.critical ? 0xfff1b8 : 0xff9d8d);
@@ -11585,7 +11605,7 @@ export class HuntingScene extends Phaser.Scene {
       duration: Phaser.Math.Clamp(distance * 0.94, 175, 315),
       ease: 'Linear',
       onComplete: () => {
-        this.createImpactFx(arrow.x, arrow.y, false);
+        this.createImpactFx(arrow.x, arrow.y, false, 1, 'pierce', arrow.rotation);
         arrow.destroy();
       },
     });
@@ -11697,15 +11717,45 @@ export class HuntingScene extends Phaser.Scene {
           arrow.setPosition(x, y).setRotation(Math.atan2(tangentY, tangentX));
         },
         onComplete: () => {
-          this.createImpactFx(arrow.x, arrow.y, isPiercing, isPiercing ? 3 : 1);
+          this.createImpactFx(
+            arrow.x,
+            arrow.y,
+            isPiercing,
+            isPiercing ? 3 : 1,
+            'pierce',
+            arrow.rotation,
+          );
           arrow.destroy();
         },
       });
     });
   }
 
-  private createImpactFx(x: number, y: number, critical: boolean, step: BasicAttackStep = 1): void {
+  private createImpactFx(
+    x: number,
+    y: number,
+    critical: boolean,
+    step: BasicAttackStep = 1,
+    kind: 'blade' | 'pierce' | 'blunt' = 'blade',
+    rotation = 0,
+  ): void {
     const finisher = step === 3;
+    const atlasFrame = finisher || critical ? 3 : kind === 'pierce' ? 1 : kind === 'blunt' ? 2 : 0;
+    this.game.canvas.dataset.combatFxFrame = `${atlasFrame}`;
+    const decal = this.add.image(x, y, ASSETS.combatImpacts.key, atlasFrame)
+      .setDepth(1948)
+      .setRotation(atlasFrame === 0 ? rotation : atlasFrame === 1 ? rotation : 0)
+      .setScale(finisher ? 0.18 : critical ? 0.16 : kind === 'blunt' ? 0.14 : 0.13)
+      .setAlpha(finisher ? 0.96 : 0.88);
+    this.tweens.add({
+      targets: decal,
+      scaleX: decal.scaleX * (finisher ? 1.7 : 1.46),
+      scaleY: decal.scaleY * (finisher ? 1.7 : 1.46),
+      alpha: 0,
+      duration: finisher ? 250 : critical ? 215 : 175,
+      ease: 'Cubic.easeOut',
+      onComplete: () => decal.destroy(),
+    });
     const impact = this.add.graphics({ x, y }).setDepth(1950);
     impact.fillStyle(finisher ? 0xffffff : critical ? 0xffcf62 : 0xf5ead0, 0.94)
       .fillCircle(0, 0, finisher ? 14 : critical ? 10 : 7);

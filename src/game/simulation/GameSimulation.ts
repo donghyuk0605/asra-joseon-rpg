@@ -5051,6 +5051,11 @@ export class GameSimulation {
 
     const bossTarget = this.getBossTarget();
     const target = this.getTarget();
+    if (this.player.targetId && !target && !bossTarget) {
+      this.player.targetId = null;
+      this.pendingPlayerAttack = null;
+      this.resetBasicAttackChain();
+    }
     if (this.player.lootTargetId) this.updateLootCollection(dt);
     else if (bossTarget) this.updateBossTargetCombat(bossTarget, dt);
     else if (target) this.updateTargetCombat(target, dt);
@@ -5713,6 +5718,7 @@ export class GameSimulation {
     if (!this.player.targetId) return null;
     return this.monsters.find((entry) => entry.id === this.player.targetId
       && entry.alive
+      && entry.region === this.region
       && this.isRoyalRefugeMonsterActive(entry)) ?? null;
   }
 
