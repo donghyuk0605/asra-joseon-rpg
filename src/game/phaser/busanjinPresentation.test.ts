@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { GameSimulation } from '../simulation/GameSimulation';
 import { REGION_ORIGINS } from '../world/layout';
 import { worldTerrainSeamBetween } from '../world/worldContinuity';
+import { CAMPAIGN_FIELD_ROUTES } from '../world/fieldRoutes';
 
 describe('Busanjin fortress renewal', () => {
   it('keeps all seventeen defenders on walkable ground instead of roofs or seawater', () => {
@@ -51,7 +52,18 @@ describe('Busanjin fortress renewal', () => {
     const source = readFileSync(new URL('./HuntingScene.ts', import.meta.url), 'utf8');
     expect(source).toContain('createBusanjinFortressLayers');
     expect(source).toContain("addRasterCrop('south-gate-roof'");
-    expect(source).toContain("routePlaque('busanjin', 768, 145, '북문 군로 · 탄금대'");
-    expect(source).not.toContain("routePlaque('busanjin', 768, 890, '북상 군로 · 탄금대'");
+    expect(source).toContain('for (const fieldRoute of CAMPAIGN_FIELD_ROUTES)');
+    expect(CAMPAIGN_FIELD_ROUTES).toContainEqual(expect.objectContaining({
+      region: 'busanjin',
+      localX: 768,
+      localY: 145,
+      label: '북문 군로 · 탄금대',
+      destination: 'tangeumdae',
+    }));
+    expect(CAMPAIGN_FIELD_ROUTES).not.toContainEqual(expect.objectContaining({
+      region: 'busanjin',
+      localY: 890,
+      destination: 'tangeumdae',
+    }));
   });
 });

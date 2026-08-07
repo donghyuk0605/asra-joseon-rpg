@@ -1,5 +1,6 @@
 import { ITEM_CATALOG, ITEM_SET, ITEM_SLOT_LABEL, SLOT_LABEL } from '../items/catalog';
 import type { ItemDefinition } from '../items/catalog';
+import { itemAcquisitionInfo } from '../items/acquisition';
 import type {
   ActiveWorldEvent, CraftRecipeId, EquipmentSlot, EquipmentState, FollowerKind, FollowerState, GameEvent,
   InventoryItem, ItemSlot, MonsterAiState, MonsterKind, MonsterState, PlayerOrigin, PlayerState, ShopOfferId, SkillId,
@@ -15,6 +16,7 @@ import type { GameSettings, GraphicsQuality, UiScale } from '../settings/GameSet
 import { MAP_HEIGHT, MAP_WIDTH, REGION_ORIGINS } from '../world/layout';
 import { frontierSectorAt } from '../world/frontier';
 import { isJoseonTownRegion, JOSEON_TOWN_LAYOUTS } from '../world/joseonTowns';
+import { fieldExitGuidesForRegion, type FieldRouteEdge } from '../world/fieldRoutes';
 import {
   ACTIVE_SKILL_IDS,
   ARCHER_ACTIVE_SKILL_IDS,
@@ -621,6 +623,7 @@ export class Hud {
   private starterTutorialCompletedAt: number | null = null;
   private lastItemTap: { instanceId: string; at: number } | null = null;
   private skillLoadoutKey: string | null = null;
+  private minimapExitRegion: RegionId | null = null;
   private readonly abortController = new AbortController();
 
   constructor(root: HTMLElement, private readonly actions: HudActions) {
@@ -2438,11 +2441,59 @@ export class Hud {
     } else {
       targetMarker?.classList.remove('is-visible');
     }
+    const exits = fieldExitGuidesForRegion(snapshot.region);
+    const exitsLayer = this.root.querySelector<HTMLElement>('[data-id="minimap-exits"]');
+    if (exitsLayer && this.minimapExitRegion !== snapshot.region) {
+      exitsLayer.replaceChildren(...exits.map((exit) => {
+        const marker = document.createElement('i');
+        marker.className = `minimap-exit mode-${exit.mode} edge-${exit.edge}`;
+        marker.dataset.exitId = exit.id;
+        marker.style.setProperty('--minimap-exit-x', `${clampPercent((exit.x / MAP_WIDTH) * 100)}%`);
+        marker.style.setProperty('--minimap-exit-y', `${clampPercent((exit.y / MAP_HEIGHT) * 100)}%`);
+        marker.title = `${exit.label}${exit.requiresClear ? ' · 전투 완료 후 개방' : ''}`;
+        marker.textContent = this.routeArrow(exit.edge);
+        return marker;
+      }));
+      this.minimapExitRegion = snapshot.region;
+    }
+    const localX = snapshot.player.x - origin.x;
+    const localY = snapshot.player.y - origin.y;
+    const nearestExit = exits.reduce<typeof exits[number] | null>((nearest, exit) => {
+      if (!nearest) return exit;
+      const currentDistance = Math.hypot(exit.x - localX, exit.y - localY);
+      const nearestDistance = Math.hypot(nearest.x - localX, nearest.y - localY);
+      return currentDistance < nearestDistance ? exit : nearest;
+    }, null);
+    for (const marker of exitsLayer?.querySelectorAll<HTMLElement>('.minimap-exit') ?? []) {
+      marker.classList.toggle('is-nearest', marker.dataset.exitId === nearestExit?.id);
+    }
+    const mobileGuide = this.root.querySelector<HTMLElement>('[data-id="mobile-route-guide"]');
+    mobileGuide?.classList.toggle('has-no-route', !nearestExit);
+    if (nearestExit) {
+      const distance = Math.max(1, Math.round(Math.hypot(
+        nearestExit.x - localX,
+        nearestExit.y - localY,
+      ) / 10));
+      const arrow = this.routeArrow(nearestExit.edge);
+      this.text('minimap-exit-summary', `${arrow} ${REGIONS[nearestExit.destination].name}`);
+      this.text('mobile-route-arrow', arrow);
+      this.text('mobile-route-name', REGIONS[nearestExit.destination].name);
+      this.text('mobile-route-distance', nearestExit.requiresClear ? '봉쇄 가능' : `${distance}보`);
+    } else {
+      this.text('minimap-exit-summary', '지도 이동으로 연결');
+      this.text('mobile-route-arrow', '地');
+      this.text('mobile-route-name', '전체 지도 이동');
+      this.text('mobile-route-distance', 'M키');
+    }
     const frontierSector = snapshot.region === 'manchufrontier'
       ? frontierSectorAt(snapshot.player.y - REGION_ORIGINS.manchufrontier.y)
       : null;
     this.text('minimap-name', frontierSector?.name ?? REGIONS[snapshot.region].name);
     this.text('minimap-coords', `${Math.round(snapshot.player.x - origin.x)}, ${Math.round(snapshot.player.y - origin.y)}`);
+  }
+
+  private routeArrow(edge: FieldRouteEdge): string {
+    return ({ north: '↑', south: '↓', west: '←', east: '→' } as const)[edge];
   }
 
   private renderInventory(snapshot: Snapshot): void {
@@ -2559,13 +2610,14 @@ export class Hud {
         const isScroll = definition.slot === 'scroll';
         const manualSkill = MANUAL_SKILL_BY_ITEM[definition.id];
         const isMaterial = definition.slot === 'material';
+        const isTigerPelt = definition.id === 'ulleung-tiger-pelt';
         const isEquippable = !isScroll && !isMaterial;
         const equippedInstanceId = isEquippable ? snapshot.equipment[definition.slot as EquipmentSlot] : null;
         const equippedItem = snapshot.inventory.find((item) => item.instanceId === equippedInstanceId);
         const equippedDefinition = equippedItem ? ITEM_CATALOG[equippedItem.itemId] : null;
         const isEquipped = isEquippable && equippedInstanceId === selectedItem.instanceId;
         const comparisons = isMaterial
-          ? '<span class="comparison-current">산군 호피갑 핵심 재료 · 3장 필요</span>'
+          ? `<span class="comparison-current">${isTigerPelt ? '산군 호피갑 핵심 재료 · 3장 필요' : '교역·의뢰에 쓰이는 재료 아이템'}</span>`
           : manualSkill
             ? `<span class="comparison-current">${snapshot.skillRanks[manualSkill] > 0 ? '이미 익힌 무공' : `${SKILL_CATALOG[manualSkill].name} 습득 가능`}</span>`
           : isScroll
@@ -2578,17 +2630,19 @@ export class Hud {
                 equippedDefinition,
                 equippedItem?.enhancement ?? 0,
               );
+        const acquisition = itemAcquisitionInfo(definition.id);
         detail.innerHTML = `
           <div class="detail-rarity rarity-text-${definition.rarity}">${definition.rarity} · ${ITEM_SLOT_LABEL[definition.slot]}${definition.element ? ` · <span class="element-name element-${definition.element}">${ELEMENT_LABEL[definition.element].name} 속성</span>` : ''}</div>
           <div class="detail-icon rarity-${definition.rarity}"><span class="item-glow"></span><img src="${definition.iconPath}" alt=""></div>
           <strong>${definition.name}${selectedItem.enhancement ? ` +${selectedItem.enhancement}` : ''}</strong>
           <div class="detail-stats">${this.detailStats(definition, selectedItem.enhancement ?? 0)}</div>
           <p>${definition.description}</p>
-          <div class="item-requirements"><span>${isMaterial ? '제작처' : manualSkill ? '습득 방식' : isScroll ? '강화 한도' : '착용 제한'} <b>${isMaterial ? '울릉 대장간' : manualSkill ? '비급 읽기' : isScroll ? '+5 안전 강화' : `${definition.requiredLevel}품 이상`}</b></span><span>매입가 <b>${definition.sellPrice.toLocaleString('ko-KR')}전</b></span></div>
+          <div class="item-requirements"><span>${isMaterial ? '주요 용도' : manualSkill ? '습득 방식' : isScroll ? '강화 한도' : '착용 제한'} <b>${isMaterial ? isTigerPelt ? '울릉 대장간 제작' : '재료·교역' : manualSkill ? '비급 읽기' : isScroll ? '+5 안전 강화' : `${definition.requiredLevel}품 이상`}</b></span><span>매입가 <b>${definition.sellPrice.toLocaleString('ko-KR')}전</b></span></div>
+          <div class="item-acquisition"><small>획득처</small><b>${acquisition.primary}</b><span>${acquisition.detail}</span></div>
           ${definition.setId ? this.setDetail(snapshot) : ''}
           <div class="detail-comparison"><small>${isMaterial ? '제작 정보' : manualSkill ? '무공 습득' : isScroll ? '강화 상태' : equippedDefinition && !isEquipped ? `${equippedDefinition.name} 대비` : '장비 비교'}</small>${comparisons}</div>
-          <button class="detail-equip" ${isMaterial ? 'disabled' : isScroll ? `data-use-item="${selectedItem.instanceId}"` : `data-equip-item="${selectedItem.instanceId}"`}>${isMaterial ? '대장장이에게 가져가기' : manualSkill ? '비급 읽고 익히기' : isScroll ? '주문서 사용하기' : isEquipped ? '장비 해제' : '장착하기'}</button>
-          <small class="detail-hint">${isMaterial ? '호피 3장과 180전을 모으면 산군 호피갑을 제작할 수 있습니다.' : `PC 더블클릭 · 모바일 더블탭으로 ${isScroll ? '사용' : '장착'}할 수 있습니다.`}</small>`;
+          <button class="detail-equip" ${isMaterial ? 'disabled' : isScroll ? `data-use-item="${selectedItem.instanceId}"` : `data-equip-item="${selectedItem.instanceId}"`}>${isMaterial ? isTigerPelt ? '대장장이에게 가져가기' : '재료 보관 중' : manualSkill ? '비급 읽고 익히기' : isScroll ? '주문서 사용하기' : isEquipped ? '장비 해제' : '장착하기'}</button>
+          <small class="detail-hint">${isMaterial ? isTigerPelt ? '호피 3장과 180전을 모으면 산군 호피갑을 제작할 수 있습니다.' : '획득처를 참고해 필요한 재료를 더 모으거나 상점에 판매할 수 있습니다.' : `PC 더블클릭 · 모바일 더블탭으로 ${isScroll ? '사용' : '장착'}할 수 있습니다.`}</small>`;
       }
     }
 
@@ -2857,12 +2911,18 @@ export class Hud {
       <aside class="field-minimap" aria-label="현재 지역 미니맵">
         <header><span data-id="minimap-name">월영 솔고개</span><b>N</b></header>
         <div class="minimap-surface" data-id="minimap-surface">
+          <span class="minimap-exits" data-id="minimap-exits" aria-label="지역 출구"></span>
           <i class="minimap-player" aria-label="현재 위치"></i>
           <em class="minimap-target" data-id="minimap-target" aria-label="선택한 적"></em>
           <span class="minimap-vignette"></span>
         </div>
-        <footer><span>현재 위치</span><b data-id="minimap-coords">765, 680</b></footer>
+        <footer><span data-id="minimap-exit-summary">가까운 출구 확인</span><b data-id="minimap-coords">765, 680</b></footer>
       </aside>
+      <section class="mobile-route-guide" data-id="mobile-route-guide" aria-label="가까운 지역 출구">
+        <i data-id="mobile-route-arrow">↓</i>
+        <span><small>가까운 출구</small><b data-id="mobile-route-name">달빛고을</b></span>
+        <em data-id="mobile-route-distance">32보</em>
+      </section>
 
       <section class="player-panel ornate-panel">
         <div class="portrait" aria-label="캐릭터 초상"><img class="player-portrait-image" src="" alt=""><i></i></div>

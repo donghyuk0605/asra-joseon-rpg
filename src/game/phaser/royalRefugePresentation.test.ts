@@ -2,17 +2,24 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import sceneSource from './HuntingScene.ts?raw';
 import hudSource from '../ui/Hud.ts?raw';
+import { CAMPAIGN_FIELD_ROUTES } from '../world/fieldRoutes';
 
 const styles = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8');
 
 describe('royal refuge presentation', () => {
   it('routes Pyongyang through the palace entrance instead of teleporting to the royal chamber', () => {
-    expect(sceneSource).toContain(
-      "routePlaque('pyongyanginner', 768, 890, '한성 북로 · 경복궁 광화문', 'gyeongbokgate'",
-    );
-    expect(sceneSource).not.toContain(
-      "routePlaque('pyongyanginner', 768, 890, '한성 북로 · 경복궁 내전', 'gyeongbokinner'",
-    );
+    expect(CAMPAIGN_FIELD_ROUTES).toContainEqual(expect.objectContaining({
+      region: 'pyongyanginner',
+      localX: 768,
+      localY: 890,
+      label: '한성 북로 · 경복궁 광화문',
+      destination: 'gyeongbokgate',
+    }));
+    expect(CAMPAIGN_FIELD_ROUTES).not.toContainEqual(expect.objectContaining({
+      region: 'pyongyanginner',
+      localY: 890,
+      destination: 'gyeongbokinner',
+    }));
   });
 
   it('renders the king at human scale with a royal character atlas', () => {
