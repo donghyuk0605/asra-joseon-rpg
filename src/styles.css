@@ -1438,6 +1438,60 @@ body:not(.game-started) #hud { opacity: 0; visibility: hidden; }
 .target-card.is-boss { min-width: 286px; border-color: rgba(202, 148, 67, .92); background: linear-gradient(135deg, rgba(50, 25, 18, .98), rgba(9, 10, 9, .98)); box-shadow: 0 0 22px rgba(170, 64, 36, .24); }
 .target-card.is-boss > strong { color: #f4d58c; font-size: 18px; }
 .target-card.is-boss .target-hp i { background: linear-gradient(#c84a3e, #7e1f20); box-shadow: 0 0 8px rgba(235, 91, 58, .65); }
+.target-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 7px;
+}
+.target-statuses[hidden] { display: none; }
+.target-status {
+  min-height: 25px;
+  display: inline-grid;
+  grid-template-columns: 21px auto auto;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px 2px 3px;
+  border: 1px solid rgba(121, 116, 91, .72);
+  border-radius: 3px;
+  color: #d8d4c4;
+  background: rgba(8, 11, 9, .78);
+}
+.target-status > i {
+  position: relative;
+  width: 21px;
+  height: 21px;
+  background-image: var(--status-atlas);
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+  background-position: var(--status-x) var(--status-y);
+  filter: drop-shadow(0 1px 2px #000);
+}
+.target-status > i > small {
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  min-width: 10px;
+  height: 10px;
+  padding: 0 2px;
+  border: 1px solid #d4c282;
+  border-radius: 6px;
+  color: #fff5cb;
+  background: #28391f;
+  font: 800 7px/9px Arial, sans-serif;
+  text-align: center;
+  box-shadow: 0 1px 2px #000;
+}
+.target-status > b { font: 700 8px var(--ui-font); white-space: nowrap; }
+.target-status > em { color: #d9bd83; font: 700 8px Arial, sans-serif; font-style: normal; white-space: nowrap; }
+.target-status[data-status="burn"] { border-color: rgba(175, 75, 45, .72); }
+.target-status[data-status="frost"] { border-color: rgba(102, 176, 199, .72); }
+.target-status[data-status="shock"] { border-color: rgba(184, 146, 73, .72); }
+.target-status[data-status="poison"] { border-color: rgba(94, 142, 79, .72); }
+.target-status[data-status="shadow"] { border-color: rgba(103, 74, 137, .76); }
+@media (min-width: 821px) {
+  .target-card.has-statuses ~ .quest-chip { top: 176px; }
+}
 
 .quest-chip { right: 20px; top: 140px; width: 262px; min-height: 82px; display: grid; grid-template-columns: 50px 1fr; gap: 11px; padding: 11px 13px; }
 .quest-mark { width: 47px; height: 55px; border: 1px solid #6e5633; background: #151b16; }
@@ -2638,6 +2692,11 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
   .target-card small { margin-top: 4px; font-size: 8px; }
   .target-card.is-boss { min-width: 0; width: min(260px, calc(100vw - 14px)); }
   .target-card.is-boss > strong { font-size: 15px; }
+  .target-statuses { gap: 2px; margin-top: 4px; }
+  .target-status { min-height: 20px; grid-template-columns: 18px auto; gap: 2px; padding: 1px 3px; }
+  .target-status > i { width: 18px; height: 18px; }
+  .target-status > b { display: none; }
+  .target-status > em { font-size: 7px; }
 
   .bottom-dock {
     left: 0;
@@ -2811,6 +2870,8 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
   .target-card header { justify-content: flex-end; }
   .target-card > strong { margin: 1px 0 3px; font-size: 11px; }
   .target-card .bar { height: 9px; }
+  .target-status { grid-template-columns: 17px auto; }
+  .target-status > i { width: 17px; height: 17px; }
 
   .bottom-dock { height: 70px; }
   .bottom-dock .action-deck { width: min(254px, calc(100vw - 14px)); }

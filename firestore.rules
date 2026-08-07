@@ -266,5 +266,33 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
       allow delete: if false;
     }
+
+    match /pvp-rooms/{roomId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasAll([
+          'name', 'hostUid', 'hostName', 'hostFighterId', 'guestUid', 'guestName', 'guestFighterId', 'createdAt'
+        ])
+        && request.resource.data.hostUid == request.auth.uid
+        && request.resource.data.guestUid == null
+        && request.resource.data.name is string
+        && request.resource.data.hostFighterId in ['donghyeok', 'hajin', 'yeonhwa', 'gwanghae']
+        && request.resource.data.createdAt == request.time;
+      allow update: if signedIn()
+        && (
+          (
+            // Guest join
+            resource.data.guestUid == null
+            && request.resource.data.guestUid == request.auth.uid
+            && request.resource.data.hostUid == resource.data.hostUid
+          ) || (
+            // Guest leave
+            resource.data.guestUid == request.auth.uid
+            && request.resource.data.guestUid == null
+            && request.resource.data.hostUid == resource.data.hostUid
+          )
+        );
+      allow delete: if signedIn() && resource.data.hostUid == request.auth.uid;
+    }
   }
 }

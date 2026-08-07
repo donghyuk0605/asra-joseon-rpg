@@ -21,6 +21,7 @@ vi.mock('firebase/auth', () => ({
   setPersistence: firebase.setPersistence,
   signInAnonymously: firebase.signInAnonymously,
 }));
+vi.mock('firebase/database', () => ({ getDatabase: vi.fn(() => ({ name: 'rtdb' })) }));
 
 import { ensureAnonymousAuth } from './firebase';
 

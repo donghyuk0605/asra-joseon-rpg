@@ -41,6 +41,14 @@ export type DuelSnapshot = {
   endReason: DuelEndReason | null;
 };
 
+export type OnlinePvpRoomInfo = {
+  id: string;
+  name: string;
+  hostName: string;
+  guestName: string | null;
+  full: boolean;
+};
+
 export type ClientOnlineMessage =
   | { type: 'join'; name: string }
   | { type: 'state'; x: number; y: number; facing: number; moving: boolean; region: RegionId }
@@ -54,7 +62,12 @@ export type ClientOnlineMessage =
     moveY: number;
     attack: 'none' | 'slash' | 'break';
     guard: boolean;
-  };
+  }
+  | { type: 'pvp-room-create'; roomName: string; fighterId: DuelFighterId }
+  | { type: 'pvp-room-join'; roomId: string; fighterId: DuelFighterId }
+  | { type: 'pvp-room-leave' }
+  | { type: 'pvp-room-list-request' }
+  | { type: 'pvp-state'; x: number; y: number; facing: number; moving: boolean };
 
 export type DuelServerMessage =
   | { type: 'duel-queued'; position: number }
@@ -63,11 +76,29 @@ export type DuelServerMessage =
   | { type: 'duel-ended'; snapshot: DuelSnapshot }
   | { type: 'duel-idle'; reason: 'cancelled' | 'reconnecting' | 'disconnected' };
 
+export type PvpServerMessage =
+  | { type: 'pvp-room-list'; rooms: OnlinePvpRoomInfo[] }
+  | { type: 'pvp-room-created'; roomId: string; roomName: string }
+  | { type: 'pvp-room-error'; reason: string }
+  | { type: 'pvp-room-dissolved'; reason: string }
+  | { type: 'pvp-room-left' }
+  | { type: 'pvp-guest-left' }
+  | {
+    type: 'pvp-field-enter';
+    roomId: string;
+    selfFighterId: DuelFighterId;
+    opponentName: string;
+    opponentFighterId: DuelFighterId;
+    isHost: boolean;
+  }
+  | { type: 'pvp-opponent-state'; x: number; y: number; facing: number; moving: boolean };
+
 export type ServerOnlineMessage =
   | { type: 'welcome'; id: string }
   | { type: 'roster'; players: OnlinePresence[] }
   | { type: 'error'; message: string }
-  | DuelServerMessage;
+  | DuelServerMessage
+  | PvpServerMessage;
 
 export const sanitizeOnlineName = (value: string): string => {
   const normalized = value.normalize('NFKC').replace(/[^\p{L}\p{N}_\- ·]/gu, '').trim();

@@ -1,6 +1,6 @@
 import type { RegionId } from '../world/regions';
 import type {
-  ClientOnlineMessage, DuelFighterId, DuelServerMessage, OnlinePresence,
+  ClientOnlineMessage, DuelFighterId, DuelServerMessage, OnlinePresence, PvpServerMessage,
 } from './protocol';
 import { parseServerOnlineMessage, sanitizeOnlineName } from './protocol';
 
@@ -17,6 +17,7 @@ type OnlineClientOptions = {
   onRoster: (players: OnlinePresence[]) => void;
   onStatus: (status: 'connecting' | 'connected' | 'reconnecting' | 'offline', onlineCount: number) => void;
   onDuelEvent?: (message: DuelServerMessage) => void;
+  onPvpEvent?: (message: PvpServerMessage) => void;
   socketFactory?: (url: string) => WebSocket;
 };
 
@@ -107,6 +108,26 @@ export class OnlineClient {
     });
   }
 
+  createPvpRoom(roomName: string, fighterId: DuelFighterId): boolean {
+    return this.send({ type: 'pvp-room-create', roomName, fighterId });
+  }
+
+  joinPvpRoom(roomId: string, fighterId: DuelFighterId): boolean {
+    return this.send({ type: 'pvp-room-join', roomId, fighterId });
+  }
+
+  leavePvpRoom(): boolean {
+    return this.send({ type: 'pvp-room-leave' });
+  }
+
+  requestPvpRoomList(): boolean {
+    return this.send({ type: 'pvp-room-list-request' });
+  }
+
+  publishPvpState(x: number, y: number, facing: number, moving: boolean): boolean {
+    return this.send({ type: 'pvp-state', x, y, facing, moving });
+  }
+
   private send(message: ClientOnlineMessage): boolean {
     if (this.socket?.readyState !== WebSocket.OPEN) return false;
     this.socket.send(JSON.stringify(message));
@@ -152,6 +173,19 @@ export class OnlineClient {
     if (message.type === 'duel-idle') {
       this.clearDuelState();
       this.options.onDuelEvent?.(message);
+    }
+    // PvP room events
+    if (
+      message.type === 'pvp-room-list'
+      || message.type === 'pvp-room-created'
+      || message.type === 'pvp-room-error'
+      || message.type === 'pvp-room-dissolved'
+      || message.type === 'pvp-room-left'
+      || message.type === 'pvp-guest-left'
+      || message.type === 'pvp-field-enter'
+      || message.type === 'pvp-opponent-state'
+    ) {
+      this.options.onPvpEvent?.(message);
     }
   }
 

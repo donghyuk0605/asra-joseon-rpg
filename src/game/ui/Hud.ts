@@ -56,6 +56,41 @@ type InventoryMobileTab = 'equipment' | 'bag' | 'stats';
 type WorldMapSidebarTab = 'settlements' | 'war';
 export type VillageService = 'market' | 'forge' | 'inn';
 
+type TargetStatusView = {
+  id: 'burn' | 'frost' | 'shock' | 'poison' | 'gust' | 'stone' | 'shadow';
+  label: string;
+  detail: string;
+  frame: number;
+  seconds: number;
+  stacks: number;
+};
+
+const TARGET_STATUS_META = [
+  { id: 'burn', field: 'burnSeconds', label: '화상', detail: '지속 피해', frame: 0 },
+  { id: 'frost', field: 'frostSeconds', label: '빙결', detail: '이동 둔화', frame: 1 },
+  { id: 'shock', field: 'shockSeconds', label: '감전', detail: '강한 둔화 · 연쇄', frame: 2 },
+  { id: 'poison', field: 'poisonSeconds', label: '중독', detail: '중첩 지속 피해', frame: 3 },
+  { id: 'gust', field: 'gustSeconds', label: '칼바람', detail: '추가 베기', frame: 4 },
+  { id: 'stone', field: 'stoneSeconds', label: '지맥 경직', detail: '이동 봉쇄', frame: 5 },
+  { id: 'shadow', field: 'shadowSeconds', label: '암영 표식', detail: '흡수 · 처형 표식', frame: 6 },
+] as const;
+
+export const targetStatusEntries = (target: MonsterState | BossState): TargetStatusView[] => {
+  if (!('elemental' in target)) return [];
+  return TARGET_STATUS_META.flatMap((meta) => {
+    const seconds = target.elemental[meta.field];
+    if (seconds <= 0.05) return [];
+    return [{
+      id: meta.id,
+      label: meta.label,
+      detail: meta.detail,
+      frame: meta.frame,
+      seconds,
+      stacks: meta.id === 'poison' ? target.elemental.poisonStacks : 0,
+    }];
+  });
+};
+
 export type QuestProgress = {
   label: string;
   ratio: number;
@@ -624,6 +659,7 @@ export class Hud {
   private lastItemTap: { instanceId: string; at: number } | null = null;
   private skillLoadoutKey: string | null = null;
   private minimapExitRegion: RegionId | null = null;
+  private targetStatusSignature = '';
   private readonly abortController = new AbortController();
 
   constructor(root: HTMLElement, private readonly actions: HudActions) {
@@ -2002,6 +2038,7 @@ export class Hud {
           : `위험도 ${target.level}`);
       this.text('target-hp-label', `${Math.ceil(target.hp)} / ${target.maxHp}`);
       this.width('target-hp-fill', targetHpRatio);
+      this.renderTargetStatuses(targetStatusEntries(target));
       this.text('target-kind', dungeonBoss
         ? '심층 우두머리 · 봉인 전투'
         : campaignBoss
@@ -2033,7 +2070,32 @@ export class Hud {
     } else {
       targetCard?.classList.remove('is-intent-danger', 'is-low-hp', 'is-vulnerable', 'is-boss');
       targetCard?.removeAttribute('data-intent');
+      this.renderTargetStatuses([]);
     }
+  }
+
+  private renderTargetStatuses(statuses: TargetStatusView[]): void {
+    const container = this.root.querySelector<HTMLElement>('[data-id="target-statuses"]');
+    const targetCard = this.root.querySelector<HTMLElement>('.target-card');
+    if (!container) return;
+    targetCard?.classList.toggle('has-statuses', statuses.length > 0);
+    const signature = statuses.map((status) =>
+      `${status.id}:${Math.ceil(status.seconds * 10)}:${status.stacks}`).join('|');
+    if (signature === this.targetStatusSignature) return;
+    this.targetStatusSignature = signature;
+    container.hidden = statuses.length === 0;
+    container.innerHTML = statuses.map((status) => {
+      const remaining = status.seconds >= 10
+        ? `${Math.ceil(status.seconds)}초`
+        : `${Math.max(0.1, Math.ceil(status.seconds * 10) / 10).toFixed(1)}초`;
+      const stackLabel = status.stacks > 1 ? ` · ${status.stacks}중첩` : '';
+      const stackBadge = status.stacks > 1 ? `<small>${status.stacks}</small>` : '';
+      const x = (status.frame % 3) * 50;
+      const y = Math.floor(status.frame / 3) * 50;
+      return `<span class="target-status" data-status="${status.id}" title="${status.label} · ${status.detail}${stackLabel} · ${remaining}" aria-label="${status.label} ${remaining}${stackLabel}">
+        <i style="--status-x:${x}%;--status-y:${y}%">${stackBadge}</i><b>${status.label}</b><em>${remaining}</em>
+      </span>`;
+    }).join('');
   }
 
   private configureCombatSkillLoadout(origin: PlayerOrigin, bowEquipped: boolean): void {
@@ -2939,6 +3001,7 @@ export class Hud {
         <header><span data-id="target-kind">괴이 · 요괴</span><b data-id="target-level">위험도 4</b></header>
         <strong data-id="target-name">검푸른 도깨비</strong>
         <div class="bar target-hp"><i data-id="target-hp-fill"></i><b data-id="target-hp-label">132 / 132</b></div>
+        <div class="target-statuses" data-id="target-statuses" style="--status-atlas:url('${ASSETS.statusEffects.path}')" aria-label="대상 상태이상" hidden></div>
         <small data-id="target-intent">선택 대상 · 자동 추적 중</small>
       </section>
 

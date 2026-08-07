@@ -21,7 +21,10 @@ import { resolvePlayerAttackVisual, resolvePlayerMovementVisual } from './player
 import { isPointBehindOccluder } from './buildingOcclusion';
 import { monsterScaleForRegion } from './pyongyangSoldierScale';
 import { ARCHER_ACTIVE_SKILL_IDS, SHAMAN_ACTIVE_SKILL_IDS, SWORD_ACTIVE_SKILL_IDS } from '../skills/catalog';
+import { SinglePlayerSave } from '../save/SinglePlayerSave';
 import { OnlineClient } from '../online/OnlineClient';
+import { db, rtdb } from '../../firebase';
+import { PvpRtdbService } from '../online/PvpRtdbService';
 import type { OnlinePresence } from '../online/protocol';
 import {
   CENTRAL_WORLD_HEIGHT, MAP_HEIGHT, MAP_WIDTH, VILLAGE_TOP,
@@ -740,7 +743,13 @@ export class HuntingScene extends Phaser.Scene {
   private singlePlayerSave: import('../save/SinglePlayerSave').SinglePlayerSave | null = null;
   private saveLifecycleCleanup: (() => void) | null = null;
   private saveReadyForWrites = false;
-  private gameMode: 'menu' | 'story' | 'archer' | 'mudang' | 'gwanghae' | 'hunt' | 'travel' | 'online' = 'menu';
+  private gameMode: 'menu' | 'story' | 'archer' | 'mudang' | 'gwanghae' | 'hunt' | 'travel' | 'online' | 'pvp' = 'menu';
+  private pvpRoomId = '';
+  private pvpOpponentView: { root: Phaser.GameObjects.Container; sprite: Phaser.GameObjects.Sprite; name: Phaser.GameObjects.Text; targetX: number; targetY: number; facing: number; moving: boolean } | null = null;
+  private pvpOpponentFighterId: string = 'donghyeok';
+  private pvpPublishAccumulator = 0;
+  private pvpService: PvpRtdbService | null = null;
+  private pvpSelfUid = '';
   private autosaveAccumulator = 0;
   private gameSettings = loadGameSettings();
   private saveInFlight = false;
@@ -1027,6 +1036,84 @@ export class HuntingScene extends Phaser.Scene {
     });
     this.onlineClient.connect();
     this.alertMarker(this.simulation.player.x, this.simulation.player.y - 118, `온라인 울릉 해안 사냥터 · ${name.trim() || '김동혁'}`);
+  }
+
+  async startPvpFieldMode(params: {
+    roomId: string;
+    selfUid: string;
+    selfFighterId: string;
+    opponentUid: string;
+    opponentName: string;
+    opponentFighterId: string;
+  }): Promise<void> {
+    this.gameStarted = true;
+    this.gameMode = 'pvp';
+    this.pvpRoomId = params.roomId;
+    this.pvpSelfUid = params.selfUid;
+    this.pvpOpponentFighterId = params.opponentFighterId;
+    this.storyNarrativeReady = false;
+    this.resetSinglePlayerSave();
+
+    // Load existing character save for PvP to play with raised stats
+    try {
+      const saveService = await this.getSinglePlayerSave();
+      const saved = await saveService.load();
+      if (saved) {
+        this.simulation.importSinglePlayerSnapshot(saved.snapshot);
+      }
+    } catch (e) {
+      console.warn('Could not load character save for PvP', e);
+    }
+    
+    // Place player at PvP arena spawn
+    const playerX = 160;
+    const playerY = 300;
+    this.simulation.enterOnlineHuntingField();
+    this.simulation.player.x = playerX;
+    this.simulation.player.y = playerY;
+    this.playerRoot.setPosition(playerX, playerY);
+    this.lastPlayerSimulationPosition = { x: playerX, y: playerY };
+    this.fitCamera();
+    document.querySelector<HTMLElement>('#save-presence')?.setAttribute('hidden', '');
+    
+    this.pvpOpponentView?.root.destroy(true);
+    this.pvpOpponentView = null;
+    
+    // Spawn opponent view
+    const oppX = 640;
+    const oppY = 300;
+    const shadow = this.add.ellipse(0, 5, 58, 18, 0x080807, 0.42);
+    const textureKey = this.pvpOpponentFighterId === 'gwanghae' ? ASSETS.gwanghaePrince?.key
+      : this.pvpOpponentFighterId === 'yeonhwa' ? ASSETS.osakaMudang?.key
+      : this.pvpOpponentFighterId === 'hajin' ? ASSETS.frontierArcher?.key
+      : ASSETS.playerUnequipped.key;
+    const sprite = this.add.sprite(0, 0, textureKey ?? ASSETS.playerUnequipped.key, 16)
+      .setScale(PLAYER_SCALE).setOrigin(0.5, 0.97).setTint(0xd5ddd5);
+    const nameTag = this.add.text(0, -126, params.opponentName, {
+      fontFamily: 'sans-serif', fontSize: '12px', fontStyle: 'bold', color: '#e0b4b4',
+      stroke: '#101010', strokeThickness: 4,
+    }).setOrigin(0.5);
+    const root = this.add.container(oppX, oppY, [shadow, sprite, nameTag]).setDepth(oppY + 9);
+    this.pvpOpponentView = { root, sprite, name: nameTag, targetX: oppX, targetY: oppY, facing: Math.PI, moving: false };
+    
+    // Connect to RTDB for PvP sync
+    this.onlineClient?.disconnect();
+    this.onlineClient = null;
+    if (!this.pvpService) this.pvpService = new PvpRtdbService(db, rtdb);
+    
+    this.pvpService.subscribeOpponentPosition(params.roomId, params.opponentUid, (pos) => {
+      if (!pos && this.pvpOpponentView) {
+        // 상대방 연결 끊김
+        this.alertMarker(this.simulation.player.x, this.simulation.player.y - 100, '상대방이 전장을 떠났습니다');
+      } else if (pos && this.pvpOpponentView) {
+        this.pvpOpponentView.targetX = pos.x;
+        this.pvpOpponentView.targetY = pos.y;
+        this.pvpOpponentView.facing = pos.facing;
+        this.pvpOpponentView.moving = pos.moving;
+      }
+    });
+
+    this.alertMarker(playerX, playerY - 118, `전장 입장 · ${params.opponentName}과(와) 대전`);
   }
 
   private async resumeStoryOrPlayOpening(): Promise<void> {
@@ -8732,7 +8819,38 @@ export class HuntingScene extends Phaser.Scene {
   }
 
   private syncOnlinePlayers(delta: number): void {
+    if (this.gameMode === 'pvp') {
+      if (!this.pvpService || !this.pvpRoomId) return;
+      this.pvpPublishAccumulator += delta;
+      if (this.pvpPublishAccumulator >= 100) {
+        this.pvpPublishAccumulator = 0;
+        const player = this.simulation.player;
+        this.pvpService.publishPosition(
+          this.pvpRoomId,
+          this.pvpSelfUid,
+          player.x, player.y, player.facing,
+          Boolean(player.destination || player.lootTargetId || player.targetId),
+        );
+      }
+      // Interpolate opponent view
+      if (this.pvpOpponentView) {
+        const smoothing = 1 - Math.exp(-11 * (delta / 1000));
+        const view = this.pvpOpponentView;
+        view.root.x += (view.targetX - view.root.x) * smoothing;
+        view.root.y += (view.targetY - view.root.y) * smoothing;
+        view.root.setDepth(view.root.y + 9);
+        const direction = directionToFrame(view.facing);
+        view.sprite.setFlipX(direction.flip);
+        if (view.moving) view.sprite.play(`player-walk-unequipped-${direction.row}`, true);
+        else view.sprite.stop().setFrame(frameForPlayerLayer(direction.row, 0));
+      }
+      return;
+    }
+
     if (!this.onlineClient) return;
+
+
+    // Open-world online mode
     this.onlinePublishAccumulator += delta;
     if (this.onlinePublishAccumulator >= 100) {
       this.onlinePublishAccumulator = 0;
@@ -8783,6 +8901,7 @@ export class HuntingScene extends Phaser.Scene {
       else view.sprite.stop().setFrame(frameForPlayerLayer(direction.row, 0));
     }
   }
+
 
   private updateOnlineStatus(status: 'connecting' | 'connected' | 'reconnecting' | 'offline', count: number): void {
     const badge = document.querySelector<HTMLElement>('#online-presence');

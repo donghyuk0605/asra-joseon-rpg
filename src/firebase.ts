@@ -9,6 +9,7 @@ import {
   type User,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,13 +19,15 @@ const firebaseConfig = {
   storageBucket: "haze-479ed.firebasestorage.app",
   messagingSenderId: "41005434075",
   appId: "1:41005434075:web:46c734146f22638c5878fe",
-  measurementId: "G-BKXJ0JB160"
+  measurementId: "G-BKXJ0JB160",
+  databaseURL: "https://haze-83cb5-default-rtdb.firebaseio.com",
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const rtdb = getDatabase(app);
 
 type AnonymousAuthAttempt = {
   promise: Promise<User>;

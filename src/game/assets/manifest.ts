@@ -328,6 +328,10 @@ export const ASSETS = {
     key: 'beta-combat-impact-atlas-v1',
     path: '/assets/fx/beta-combat-impact-atlas-v1.png',
   },
+  statusEffects: {
+    key: 'beta-status-effects-v1',
+    path: '/assets/ui/beta-status-effects-v1.png',
+  },
   dungeonProps: { key: 'dungeon-prop-atlas-v1', path: '/assets/environment/props/dungeon-prop-atlas-v1.png' },
   dungeonWalls: { key: 'dungeon-wall-atlas-v1', path: '/assets/environment/props/dungeon-wall-atlas-v1.png' },
   dungeonTelegraphs: { key: 'dungeon-telegraph-atlas-v1', path: '/assets/fx/dungeon-telegraph-atlas-v1.png' },

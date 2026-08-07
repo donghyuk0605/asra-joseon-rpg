@@ -468,6 +468,17 @@ const openOnlineCitadel = async (): Promise<void> => {
       root: onlineCitadelRoot,
       multiplayerUrl,
       onExit: closeOnlineCitadel,
+      onPvpFieldEnter: (params) => {
+        closeOnlineCitadel();
+        document.body.dataset.bootCampaign = 'mainland';
+        document.body.classList.add('game-started');
+        titleScreen?.classList.add('is-leaving');
+        titleScreen?.setAttribute('aria-hidden', 'true');
+        window.setTimeout(() => titleScreen?.setAttribute('hidden', ''), 720);
+        ensureGame().then((scene) => {
+          void scene.startPvpFieldMode(params);
+        }).catch(console.error);
+      },
     });
   }
   await onlineCitadel.open(name);

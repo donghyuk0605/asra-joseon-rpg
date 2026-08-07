@@ -1,9 +1,11 @@
-import { db } from '../../firebase';
+import { db, rtdb } from '../../firebase';
 import { ITEM_CATALOG, ITEM_SLOT_LABEL } from '../items/catalog';
 import type { ItemId } from '../simulation/types';
 import { ensureOnlineIdentity, type OnlineIdentity } from './OnlineIdentity';
 import { OnlineClient } from './OnlineClient';
 import { sanitizeOnlineName } from './protocol';
+import type { DuelFighterId, PvpServerMessage } from './protocol';
+import { PvpRtdbService, type PvpRoomInfo, type PvpFighterId } from './PvpRtdbService';
 
 type FighterId = 'donghyeok' | 'hajin' | 'yeonhwa' | 'gwanghae';
 type DuelPhase = 'idle' | 'queueing' | 'fighting' | 'finished';
@@ -79,6 +81,14 @@ type OnlineCitadelOptions = {
   root: HTMLElement;
   multiplayerUrl: string;
   onExit: () => void;
+  onPvpFieldEnter?: (params: {
+    roomId: string;
+    selfUid: string;
+    selfFighterId: DuelFighterId;
+    opponentUid: string;
+    opponentName: string;
+    opponentFighterId: DuelFighterId;
+  }) => void;
 };
 
 const TRADEABLE_ITEM_IDS: ItemId[] = [
@@ -133,6 +143,13 @@ export class OnlineCitadel {
   private openGeneration = 0;
   private readonly recordedRooms = new Set<string>();
   private readonly fighterActions = new Map<string, string>();
+  // PvP room lobby state
+  private pvpRooms: PvpRoomInfo[] = [];
+  private pvpSelectedFighterId: PvpFighterId = 'donghyeok';
+  private pvpMyRoomId = '';
+  private pvpService = new PvpRtdbService(db, rtdb);
+  private pvpUnsubscribeRooms: (() => void) | null = null;
+  private pvpSelfUid = '';
 
   constructor(private readonly options: OnlineCitadelOptions) {
     this.bindEvents();
@@ -173,6 +190,8 @@ export class OnlineCitadel {
     this.openGeneration += 1;
     this.closeConnections();
     this.closeSellForm();
+    this.pvpUnsubscribeRooms?.();
+    this.pvpUnsubscribeRooms = null;
   }
 
   private closeConnections(): void {
@@ -188,7 +207,7 @@ export class OnlineCitadel {
     this.options.root.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       const tab = target.closest<HTMLButtonElement>('[data-online-tab]')?.dataset.onlineTab;
-      if (tab === 'arena' || tab === 'market') this.switchTab(tab);
+      if (tab === 'arena' || tab === 'market' || tab === 'battlefield') this.switchTab(tab);
 
       const onlineAction = target.closest<HTMLButtonElement>('[data-online-action]')?.dataset.onlineAction;
       if (onlineAction === 'exit') this.options.onExit();
@@ -207,6 +226,23 @@ export class OnlineCitadel {
 
       const offerId = target.closest<HTMLElement>('[data-market-offer-id]')?.dataset.marketOfferId;
       if (offerId) this.selectOffer(offerId);
+
+      // PvP battlefield actions
+      const pvpAction = target.closest<HTMLButtonElement>('[data-pvp-action]')?.dataset.pvpAction;
+      if (pvpAction === 'create-room') this.handlePvpCreateRoom();
+      if (pvpAction === 'leave-room') this.handlePvpLeaveRoom();
+      if (pvpAction === 'refresh-rooms') this.client?.requestPvpRoomList();
+
+      const pvpFighter = target.closest<HTMLButtonElement>('[data-pvp-fighter]')?.dataset.pvpFighter;
+      if (pvpFighter) {
+        this.pvpSelectedFighterId = pvpFighter as DuelFighterId;
+        this.options.root.querySelectorAll<HTMLButtonElement>('[data-pvp-fighter]').forEach((btn) => {
+          btn.classList.toggle('is-selected', btn.dataset.pvpFighter === pvpFighter);
+        });
+      }
+
+      const pvpJoinId = target.closest<HTMLButtonElement>('[data-pvp-join-room]')?.dataset.pvpJoinRoom;
+      if (pvpJoinId) this.handlePvpJoinRoom(pvpJoinId);
     });
 
     this.options.root.querySelector<HTMLFormElement>('[data-market-sell-form]')?.addEventListener('submit', (event) => {
@@ -223,7 +259,7 @@ export class OnlineCitadel {
     });
   }
 
-  private switchTab(tab: 'arena' | 'market'): void {
+  private switchTab(tab: 'arena' | 'market' | 'battlefield'): void {
     this.options.root.querySelectorAll<HTMLElement>('[data-online-panel]').forEach((panel) => {
       const active = panel.dataset.onlinePanel === tab;
       panel.toggleAttribute('hidden', !active);
@@ -235,6 +271,7 @@ export class OnlineCitadel {
       button.setAttribute('aria-pressed', String(active));
     });
     if (tab === 'market' && this.market) void this.refreshMarket();
+    if (tab === 'battlefield') this.client?.requestPvpRoomList();
   }
 
   private setConnectionStatus(
@@ -756,4 +793,100 @@ export class OnlineCitadel {
     const element = this.options.root.querySelector<HTMLElement>(selector);
     if (element) element.textContent = value;
   }
+
+  // --- PvP Battlefield (Firestore 방 관리 + RTDB 위치 동기화) ---
+
+  private startPvpRoomSubscription(): void {
+    this.pvpUnsubscribeRooms?.();
+    this.pvpUnsubscribeRooms = this.pvpService.subscribeRooms((rooms) => {
+      this.pvpRooms = rooms;
+      this.renderPvpRoomList();
+    });
+  }
+
+  private handlePvpCreateRoom(): void {
+    const input = this.options.root.querySelector<HTMLInputElement>('[data-pvp-room-name-input]');
+    const roomName = input?.value.trim() || `${this.playerName}의 전장`;
+    this.text('[data-pvp-status]', '방을 만드는 중…');
+    void (async () => {
+      try {
+        const uid = this.identity?.uid ?? `anon-${Math.random().toString(36).slice(2)}`;
+        this.pvpSelfUid = uid;
+        const roomId = await this.pvpService.createRoom(roomName, uid, this.playerName, this.pvpSelectedFighterId);
+        this.pvpMyRoomId = roomId;
+        this.text('[data-pvp-status]', `방 생성됨 · ${roomName} — 상대를 기다리는 중`);
+      } catch (err) {
+        this.text('[data-pvp-status]', err instanceof Error ? err.message : '방을 만들지 못했습니다');
+      }
+    })();
+  }
+
+  private handlePvpJoinRoom(roomId: string): void {
+    this.text('[data-pvp-status]', '방에 참가하는 중…');
+    void (async () => {
+      try {
+        const uid = this.identity?.uid ?? `anon-${Math.random().toString(36).slice(2)}`;
+        this.pvpSelfUid = uid;
+        const room = await this.pvpService.joinRoom(roomId, uid, this.playerName, this.pvpSelectedFighterId);
+        if (!room) {
+          this.text('[data-pvp-status]', '방이 가득 찼거나 존재하지 않습니다');
+          return;
+        }
+        // 양쪽 모두 필드로 진입 — 참가자가 joinRoom 후 직접 진입
+        const opponentUid = room.hostUid;
+        const opponentName = room.hostName;
+        const opponentFighterId = room.hostFighterId;
+        await this.pvpService.registerPosition(roomId, uid);
+        this.pvpMyRoomId = '';
+        this.options.onPvpFieldEnter?.({
+          roomId,
+          selfUid: uid,
+          selfFighterId: this.pvpSelectedFighterId,
+          opponentUid,
+          opponentName,
+          opponentFighterId,
+        });
+      } catch (err) {
+        this.text('[data-pvp-status]', err instanceof Error ? err.message : '참가에 실패했습니다');
+      }
+    })();
+  }
+
+  private handlePvpLeaveRoom(): void {
+    if (!this.pvpMyRoomId) return;
+    const roomId = this.pvpMyRoomId;
+    const uid = this.pvpSelfUid;
+    this.pvpMyRoomId = '';
+    void this.pvpService.leaveRoom(roomId, uid).catch(() => undefined);
+    this.text('[data-pvp-status]', '전장 방을 나왔습니다');
+  }
+
+  private renderPvpRoomList(): void {
+    const list = this.options.root.querySelector<HTMLElement>('[data-pvp-room-list]');
+    if (!list) return;
+    if (!this.pvpRooms.length) {
+      list.innerHTML = '<li class="pvp-room-empty"><span>열린 전장이 없습니다</span><small>방을 만들어 상대를 기다리십시오</small></li>';
+      return;
+    }
+    list.replaceChildren(...this.pvpRooms.map((room) => {
+      const li = document.createElement('li');
+      li.className = 'pvp-room-card';
+      const info = document.createElement('span');
+      info.innerHTML = `<strong>${room.name}</strong><small>${room.hostName} · 1인 대기</small>`;
+      li.append(info);
+      if (room.id !== this.pvpMyRoomId) {
+        const joinBtn = document.createElement('button');
+        joinBtn.type = 'button';
+        joinBtn.dataset.pvpJoinRoom = room.id;
+        joinBtn.textContent = '참가';
+        li.append(joinBtn);
+      } else {
+        const badge = document.createElement('em');
+        badge.textContent = '내 방 · 대기 중';
+        li.append(badge);
+      }
+      return li;
+    }));
+  }
+
 }
