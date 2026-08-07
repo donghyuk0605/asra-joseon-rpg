@@ -41,7 +41,7 @@ describe('mobile Chrome and PWA flow', () => {
     expect(manifest.display).toBe('fullscreen');
     expect(manifest.icons.map((icon) => icon.sizes)).toEqual(['192x192', '512x512']);
     expect(worker).toContain("self.addEventListener('fetch'");
-    expect(worker).toContain("const CACHE_NAME = 'asra-shell-v4'");
+    expect(worker).toContain("const CACHE_NAME = 'asra-shell-v5'");
     expect(worker).toContain("'/assets/ui/beta/beta-campaign-keyart-v1.webp'");
     expect(worker).toContain("url.pathname.startsWith('/guide') ? '/guide/' : '/'");
     expect(worker).toContain("fetch(request, { cache: 'no-store' })");

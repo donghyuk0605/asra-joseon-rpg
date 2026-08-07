@@ -1,7 +1,7 @@
 // Bump the shell cache whenever an application release changes the startup
 // flow. Existing installed clients then discard old hashed entry chunks rather
 // than combining a new HTML shell with a previous protagonist-selection build.
-const CACHE_NAME = 'asra-shell-v4';
+const CACHE_NAME = 'asra-shell-v5';
 const APP_SHELL = [
   '/',
   '/guide/',
