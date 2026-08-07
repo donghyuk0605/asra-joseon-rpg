@@ -5849,6 +5849,10 @@ export class GameSimulation {
   ): void {
     if (!monster.alive) return;
 
+    const affinityScale = monsterElementEffectMultiplier(monster, element);
+    const scaledDuration = (seconds: number): number => Math.round(seconds * affinityScale * 100) / 100;
+    const scaledDamage = (damage: number): number => Math.max(1, Math.round(damage * affinityScale));
+
     let reaction: Extract<GameEvent, { type: 'elemental-reaction' }>['reaction'] | null = null;
     let reactionMultiplier = 0;
     if (element === 'fire' && monster.elemental.frostSeconds > 0) {
@@ -5874,7 +5878,10 @@ export class GameSimulation {
       monster.elemental.shockSeconds = 0;
     }
     if (reaction) {
-      const reactionDamage = Math.min(monster.hp, Math.max(4, Math.round(baseDamage * reactionMultiplier)));
+      const reactionDamage = Math.min(
+        monster.hp,
+        Math.max(4, scaledDamage(baseDamage * reactionMultiplier)),
+      );
       monster.hp = Math.max(0, monster.hp - reactionDamage);
       this.events.push({ type: 'elemental-reaction', reaction, targetId: monster.id, damage: reactionDamage });
       if (monster.hp === 0) {
@@ -5884,56 +5891,67 @@ export class GameSimulation {
     }
 
     if (element === 'fire') {
-      monster.elemental.burnSeconds = Math.max(monster.elemental.burnSeconds, 4);
+      const duration = scaledDuration(4);
+      monster.elemental.burnSeconds = Math.max(monster.elemental.burnSeconds, duration);
       monster.elemental.burnTick = Math.min(monster.elemental.burnTick || 0.72, 0.72);
-      monster.elemental.burnDamage = Math.max(monster.elemental.burnDamage, Math.max(3, Math.round(baseDamage * 0.18)));
-      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration: 4, fromTargetId });
+      monster.elemental.burnDamage = Math.max(
+        monster.elemental.burnDamage,
+        scaledDamage(Math.max(3, Math.round(baseDamage * 0.18))),
+      );
+      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration, fromTargetId });
       return;
     }
     if (element === 'ice') {
-      monster.elemental.frostSeconds = Math.max(monster.elemental.frostSeconds, 2.8);
-      monster.hitStun = Math.max(monster.hitStun, 0.38);
-      monster.attackCooldown = Math.max(monster.attackCooldown, 0.7);
-      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration: 2.8, fromTargetId });
+      const duration = scaledDuration(2.8);
+      monster.elemental.frostSeconds = Math.max(monster.elemental.frostSeconds, duration);
+      monster.hitStun = Math.max(monster.hitStun, scaledDuration(0.38));
+      monster.attackCooldown = Math.max(monster.attackCooldown, scaledDuration(0.7));
+      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration, fromTargetId });
       return;
     }
     if (element === 'lightning') {
-      monster.elemental.shockSeconds = Math.max(monster.elemental.shockSeconds, 0.72);
-      monster.hitStun = Math.max(monster.hitStun, 0.34);
-      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration: 0.72, fromTargetId });
+      const duration = scaledDuration(0.72);
+      monster.elemental.shockSeconds = Math.max(monster.elemental.shockSeconds, duration);
+      monster.hitStun = Math.max(monster.hitStun, scaledDuration(0.34));
+      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration, fromTargetId });
       if (!allowChain) return;
       const chained = this.nearbyMonsters(monster, 190, 2);
-      const chainDamage = Math.max(4, Math.round(baseDamage * 0.48));
       for (const target of chained) {
-        target.elemental.shockSeconds = Math.max(target.elemental.shockSeconds, 0.9);
-        target.hitStun = Math.max(target.hitStun, 0.42);
+        const targetScale = monsterElementEffectMultiplier(target, element);
+        const targetDuration = Math.round(0.9 * targetScale * 100) / 100;
+        const chainDamage = Math.max(1, Math.round(Math.max(4, Math.round(baseDamage * 0.48)) * targetScale));
+        target.elemental.shockSeconds = Math.max(target.elemental.shockSeconds, targetDuration);
+        target.hitStun = Math.max(target.hitStun, 0.42 * targetScale);
         target.aggro = true;
         target.hp = Math.max(0, target.hp - chainDamage);
-        this.events.push({ type: 'elemental-applied', element, targetId: target.id, duration: 0.9, fromTargetId: monster.id });
+        this.events.push({ type: 'elemental-applied', element, targetId: target.id, duration: targetDuration, fromTargetId: monster.id });
         this.events.push({ type: 'elemental-damage', element, targetId: target.id, damage: chainDamage, fromTargetId: monster.id });
         if (target.hp === 0) this.killMonster(target);
       }
       return;
     }
     if (element === 'poison') {
+      const duration = scaledDuration(5);
       monster.elemental.poisonStacks = Math.min(3, monster.elemental.poisonStacks + 1);
-      monster.elemental.poisonSeconds = Math.max(monster.elemental.poisonSeconds, 5);
+      monster.elemental.poisonSeconds = Math.max(monster.elemental.poisonSeconds, duration);
       monster.elemental.poisonTick = Math.min(monster.elemental.poisonTick || 0.8, 0.8);
-      monster.elemental.poisonDamage = Math.max(2, Math.round(baseDamage * 0.11));
-      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration: 5, fromTargetId });
+      monster.elemental.poisonDamage = scaledDamage(Math.max(2, Math.round(baseDamage * 0.11)));
+      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration, fromTargetId });
       return;
     }
     if (element === 'wind') {
-      monster.elemental.gustSeconds = Math.max(monster.elemental.gustSeconds, 0.65);
+      const duration = scaledDuration(0.65);
+      monster.elemental.gustSeconds = Math.max(monster.elemental.gustSeconds, duration);
       const angle = Math.atan2(monster.y - this.player.y, monster.x - this.player.x);
-      monster.knockback = { x: Math.cos(angle) * 126, y: Math.sin(angle) * 126 };
-      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration: 0.65, fromTargetId });
+      monster.knockback = { x: Math.cos(angle) * 126 * affinityScale, y: Math.sin(angle) * 126 * affinityScale };
+      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration, fromTargetId });
       if (!allowChain) return;
-      const cleaveDamage = Math.max(3, Math.round(baseDamage * 0.34));
       for (const target of this.nearbyMonsters(monster, 155, 2)) {
+        const targetScale = monsterElementEffectMultiplier(target, element);
+        const cleaveDamage = Math.max(1, Math.round(Math.max(3, Math.round(baseDamage * 0.34)) * targetScale));
         target.hp = Math.max(0, target.hp - cleaveDamage);
-        target.elemental.gustSeconds = Math.max(target.elemental.gustSeconds, 0.45);
-        target.knockback = { x: Math.cos(angle) * 88, y: Math.sin(angle) * 88 };
+        target.elemental.gustSeconds = Math.max(target.elemental.gustSeconds, 0.45 * targetScale);
+        target.knockback = { x: Math.cos(angle) * 88 * targetScale, y: Math.sin(angle) * 88 * targetScale };
         target.aggro = true;
         this.events.push({ type: 'elemental-damage', element, targetId: target.id, damage: cleaveDamage, fromTargetId: monster.id });
         if (target.hp === 0) this.killMonster(target);
@@ -5941,15 +5959,17 @@ export class GameSimulation {
       return;
     }
     if (element === 'earth') {
-      monster.elemental.stoneSeconds = Math.max(monster.elemental.stoneSeconds, 0.95);
-      monster.hitStun = Math.max(monster.hitStun, 0.76);
-      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration: 0.95, fromTargetId });
+      const duration = scaledDuration(0.95);
+      monster.elemental.stoneSeconds = Math.max(monster.elemental.stoneSeconds, duration);
+      monster.hitStun = Math.max(monster.hitStun, scaledDuration(0.76));
+      this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration, fromTargetId });
       if (!allowChain) return;
-      const quakeDamage = Math.max(3, Math.round(baseDamage * 0.27));
       for (const target of this.nearbyMonsters(monster, 135, 3)) {
+        const targetScale = monsterElementEffectMultiplier(target, element);
+        const quakeDamage = Math.max(1, Math.round(Math.max(3, Math.round(baseDamage * 0.27)) * targetScale));
         target.hp = Math.max(0, target.hp - quakeDamage);
-        target.elemental.stoneSeconds = Math.max(target.elemental.stoneSeconds, 0.52);
-        target.hitStun = Math.max(target.hitStun, 0.46);
+        target.elemental.stoneSeconds = Math.max(target.elemental.stoneSeconds, 0.52 * targetScale);
+        target.hitStun = Math.max(target.hitStun, 0.46 * targetScale);
         target.aggro = true;
         this.events.push({ type: 'elemental-damage', element, targetId: target.id, damage: quakeDamage, fromTargetId: monster.id });
         if (target.hp === 0) this.killMonster(target);
@@ -5957,14 +5977,19 @@ export class GameSimulation {
       return;
     }
 
-    monster.elemental.shadowSeconds = Math.max(monster.elemental.shadowSeconds, 1.8);
-    this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration: 1.8, fromTargetId });
-    const heal = Math.min(this.player.maxHp - this.player.hp, Math.max(2, Math.round(baseDamage * 0.2)));
+    const duration = scaledDuration(1.8);
+    monster.elemental.shadowSeconds = Math.max(monster.elemental.shadowSeconds, duration);
+    this.events.push({ type: 'elemental-applied', element, targetId: monster.id, duration, fromTargetId });
+    const heal = Math.min(
+      this.player.maxHp - this.player.hp,
+      scaledDamage(Math.max(2, Math.round(baseDamage * 0.2))),
+    );
     if (heal > 0) {
       this.player.hp += heal;
       this.events.push({ type: 'elemental-heal', element: 'shadow', amount: heal });
     }
-    if (monster.hp > 0 && monster.hp / monster.maxHp <= 0.22) {
+    const executeThreshold = affinityScale > 1 ? 0.26 : affinityScale < 1 ? 0.16 : 0.22;
+    if (monster.hp > 0 && monster.hp / monster.maxHp <= executeThreshold) {
       const executeDamage = monster.hp;
       monster.hp = 0;
       this.events.push({ type: 'elemental-damage', element, targetId: monster.id, damage: executeDamage, fromTargetId });

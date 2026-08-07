@@ -1489,8 +1489,69 @@ body:not(.game-started) #hud { opacity: 0; visibility: hidden; }
 .target-status[data-status="shock"] { border-color: rgba(184, 146, 73, .72); }
 .target-status[data-status="poison"] { border-color: rgba(94, 142, 79, .72); }
 .target-status[data-status="shadow"] { border-color: rgba(103, 74, 137, .76); }
+.target-intel {
+  display: grid;
+  gap: 5px;
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(120, 106, 76, .38);
+}
+.target-intel[hidden] { display: none; }
+.target-affinities { display: flex; gap: 4px; }
+.target-affinity {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 18px auto 1fr auto;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 4px 2px 2px;
+  border: 1px solid rgba(114, 107, 84, .68);
+  border-radius: 3px;
+  background: rgba(7, 10, 8, .72);
+}
+.target-affinity.is-weakness { border-color: rgba(194, 115, 67, .72); background: rgba(48, 22, 15, .68); }
+.target-affinity.is-resistance { border-color: rgba(78, 126, 126, .68); background: rgba(12, 31, 31, .68); }
+.target-affinity > i {
+  width: 18px;
+  height: 18px;
+  background-image: var(--status-atlas);
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+  background-position: var(--status-x) var(--status-y);
+  filter: drop-shadow(0 1px 2px #000);
+}
+.target-card .target-affinity > small {
+  margin: 0;
+  color: #aaa38e;
+  font: 700 7px var(--ui-font);
+}
+.target-affinity > b { overflow: hidden; color: #eee1c4; font: 700 8px var(--ui-font); text-overflow: ellipsis; white-space: nowrap; }
+.target-affinity > em { color: #d2b66e; font: 700 7px Arial, sans-serif; font-style: normal; }
+.target-loot-intel {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 5px;
+  color: #b9b39f;
+}
+.target-loot-intel > span { min-width: 0; display: flex; align-items: center; gap: 5px; }
+.target-card .target-loot-intel small { margin: 0; color: #8f8d80; font: 7px serif; }
+.target-loot-intel strong { overflow: hidden; font: 700 8px var(--ui-font); text-overflow: ellipsis; white-space: nowrap; }
+.target-loot-intel > b { color: #d7c486; font: 700 7px var(--ui-font); white-space: nowrap; }
+.target-loot-intel > em {
+  padding: 2px 4px;
+  border: 1px solid rgba(151, 126, 72, .58);
+  border-radius: 8px;
+  color: #e1c67e;
+  font: 700 7px Arial, sans-serif;
+  font-style: normal;
+  white-space: nowrap;
+}
 @media (min-width: 821px) {
-  .target-card.has-statuses ~ .quest-chip { top: 176px; }
+  .target-card.has-intel ~ .quest-chip { top: 208px; }
+  .target-card.has-intel.has-statuses ~ .quest-chip { top: 240px; }
 }
 
 .quest-chip { right: 20px; top: 140px; width: 262px; min-height: 82px; display: grid; grid-template-columns: 50px 1fr; gap: 11px; padding: 11px 13px; }
@@ -2697,6 +2758,16 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
   .target-status > i { width: 18px; height: 18px; }
   .target-status > b { display: none; }
   .target-status > em { font-size: 7px; }
+  .target-intel { gap: 3px; margin-top: 4px; padding-top: 4px; }
+  .target-affinities { gap: 2px; }
+  .target-affinity { grid-template-columns: 16px auto 1fr; padding: 1px 3px 1px 1px; }
+  .target-affinity > i { width: 16px; height: 16px; }
+  .target-affinity > em { display: none; }
+  .target-affinity > b { font-size: 7px; }
+  .target-loot-intel { gap: 3px; }
+  .target-loot-intel > b { display: none; }
+  .target-loot-intel strong { font-size: 7px; }
+  .target-loot-intel > em { padding: 1px 3px; font-size: 6px; }
 
   .bottom-dock {
     left: 0;
@@ -2857,8 +2928,8 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
   .momentum-hud { display: none; }
 
   .target-card {
-    top: calc(max(7px, env(safe-area-inset-top)) + 35px);
-    width: 154px;
+    top: calc(max(7px, env(safe-area-inset-top)) + 142px);
+    width: 178px;
     min-height: 45px;
     padding: 6px 9px;
     background: linear-gradient(90deg, rgba(10, 13, 11, .68), rgba(10, 13, 11, .9));
@@ -2872,6 +2943,9 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
   .target-card .bar { height: 9px; }
   .target-status { grid-template-columns: 17px auto; }
   .target-status > i { width: 17px; height: 17px; }
+  .target-affinity { grid-template-columns: 15px auto 1fr; }
+  .target-affinity > i { width: 15px; height: 15px; }
+  .target-loot-intel > span small { display: none; }
 
   .bottom-dock { height: 70px; }
   .bottom-dock .action-deck { width: min(254px, calc(100vw - 14px)); }

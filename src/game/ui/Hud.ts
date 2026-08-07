@@ -4,6 +4,7 @@ import { itemAcquisitionInfo } from '../items/acquisition';
 import type {
   ActiveWorldEvent, CraftRecipeId, EquipmentSlot, EquipmentState, FollowerKind, FollowerState, GameEvent,
   InventoryItem, ItemSlot, MonsterAiState, MonsterKind, MonsterState, PlayerOrigin, PlayerState, ShopOfferId, SkillId,
+  WeaponElement,
 } from '../simulation/types';
 import { ASSETS } from '../assets/manifest';
 import { resolvePlayerLayers } from '../phaser/playerVisualMode';
@@ -49,6 +50,12 @@ import {
   type AttributeValues,
   type DerivedAttributeBonuses,
 } from '../progression/attributes';
+import {
+  ELEMENT_EFFECT_MULTIPLIER,
+  monsterElementAffinity,
+  monsterLootIntel,
+  monsterLootPityProgress,
+} from '../combat/monsterIntel';
 
 type InventoryFilter = 'all' | ItemSlot;
 type InventorySort = 'recent' | 'type';
@@ -248,6 +255,15 @@ const ELEMENT_LABEL = {
   earth: { name: '지맥', glyph: '地' },
   shadow: { name: '암영', glyph: '影' },
 } as const;
+const ELEMENT_STATUS_FRAME: Record<WeaponElement, number> = {
+  fire: 0,
+  ice: 1,
+  lightning: 2,
+  poison: 3,
+  wind: 4,
+  earth: 5,
+  shadow: 6,
+};
 
 type CharacterStoryProfile = Readonly<{
   journalTitle: string;
@@ -660,6 +676,7 @@ export class Hud {
   private skillLoadoutKey: string | null = null;
   private minimapExitRegion: RegionId | null = null;
   private targetStatusSignature = '';
+  private targetIntelSignature = '';
   private readonly abortController = new AbortController();
 
   constructor(root: HTMLElement, private readonly actions: HudActions) {
@@ -2039,6 +2056,7 @@ export class Hud {
       this.text('target-hp-label', `${Math.ceil(target.hp)} / ${target.maxHp}`);
       this.width('target-hp-fill', targetHpRatio);
       this.renderTargetStatuses(targetStatusEntries(target));
+      this.renderTargetIntel(dungeonBoss ? null : target, snapshot);
       this.text('target-kind', dungeonBoss
         ? '심층 우두머리 · 봉인 전투'
         : campaignBoss
@@ -2071,6 +2089,7 @@ export class Hud {
       targetCard?.classList.remove('is-intent-danger', 'is-low-hp', 'is-vulnerable', 'is-boss');
       targetCard?.removeAttribute('data-intent');
       this.renderTargetStatuses([]);
+      this.renderTargetIntel(null, snapshot);
     }
   }
 
@@ -2096,6 +2115,65 @@ export class Hud {
         <i style="--status-x:${x}%;--status-y:${y}%">${stackBadge}</i><b>${status.label}</b><em>${remaining}</em>
       </span>`;
     }).join('');
+  }
+
+  private renderTargetIntel(target: MonsterState | null, snapshot: Snapshot): void {
+    const container = this.root.querySelector<HTMLElement>('[data-id="target-intel"]');
+    const targetCard = this.root.querySelector<HTMLElement>('.target-card');
+    if (!container) return;
+    targetCard?.classList.toggle('has-intel', Boolean(target));
+    if (!target) {
+      if (this.targetIntelSignature === '') return;
+      this.targetIntelSignature = '';
+      container.hidden = true;
+      container.innerHTML = '';
+      return;
+    }
+
+    const affinity = monsterElementAffinity(target);
+    const loot = monsterLootIntel(target.kind, target.region, snapshot.playerOrigin);
+    const kills = snapshot.huntKills[target.kind] ?? 0;
+    const pity = loot.pityEvery ? monsterLootPityProgress(kills, loot.pityEvery) : null;
+    const signature = [
+      target.kind,
+      target.region,
+      snapshot.playerOrigin,
+      affinity.weakness,
+      affinity.resistance,
+      loot.primary,
+      loot.rare,
+      loot.guarantee,
+      pity?.current ?? '-',
+    ].join('|');
+    if (signature === this.targetIntelSignature) return;
+    this.targetIntelSignature = signature;
+
+    const affinityChip = (kind: 'weakness' | 'resistance', element: WeaponElement): string => {
+      const label = kind === 'weakness' ? '약점' : '저항';
+      const multiplier = ELEMENT_EFFECT_MULTIPLIER[kind];
+      const percentage = kind === 'weakness'
+        ? `+${Math.round((multiplier - 1) * 100)}%`
+        : `-${Math.round((1 - multiplier) * 100)}%`;
+      const frame = ELEMENT_STATUS_FRAME[element];
+      const x = (frame % 3) * 50;
+      const y = Math.floor(frame / 3) * 50;
+      return `<span class="target-affinity is-${kind}" data-affinity="${kind}" title="${ELEMENT_LABEL[element].name} ${label} · 상태 효과 ${percentage}" aria-label="${ELEMENT_LABEL[element].name} ${label} ${percentage}">
+        <i style="--status-x:${x}%;--status-y:${y}%"></i><small>${label}</small><b>${ELEMENT_LABEL[element].name}</b><em>${percentage}</em>
+      </span>`;
+    };
+    const primary = loot.primary ? ITEM_CATALOG[loot.primary].name : '엽전·수련 경험';
+    const rare = loot.rare && loot.rare !== loot.primary ? ITEM_CATALOG[loot.rare].name : null;
+    const dropCopy = rare ? `${primary} · 희귀 ${rare}` : primary;
+    const guarantee = loot.guarantee ? `<b>${loot.guarantee}</b>` : '';
+    const pityCopy = pity && loot.pityEvery
+      ? `<em title="${pity.remaining}회 안에 강화 주문서 보정">보정 ${pity.current}/${loot.pityEvery}</em>`
+      : '';
+    container.hidden = false;
+    container.innerHTML = `<div class="target-affinities">
+      ${affinityChip('weakness', affinity.weakness)}${affinityChip('resistance', affinity.resistance)}
+    </div><div class="target-loot-intel" title="주요 전리품 · ${dropCopy}">
+      <span><small>戰利品</small><strong>${dropCopy}</strong></span>${guarantee}${pityCopy}
+    </div>`;
   }
 
   private configureCombatSkillLoadout(origin: PlayerOrigin, bowEquipped: boolean): void {
@@ -3002,6 +3080,7 @@ export class Hud {
         <strong data-id="target-name">검푸른 도깨비</strong>
         <div class="bar target-hp"><i data-id="target-hp-fill"></i><b data-id="target-hp-label">132 / 132</b></div>
         <div class="target-statuses" data-id="target-statuses" style="--status-atlas:url('${ASSETS.statusEffects.path}')" aria-label="대상 상태이상" hidden></div>
+        <div class="target-intel" data-id="target-intel" style="--status-atlas:url('${ASSETS.statusEffects.path}')" aria-label="대상 약점과 전리품" hidden></div>
         <small data-id="target-intent">선택 대상 · 자동 추적 중</small>
       </section>
 
