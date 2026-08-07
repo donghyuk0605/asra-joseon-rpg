@@ -337,6 +337,13 @@ const canvasSize = () => ({
   height: Math.max(1, Math.round(window.innerHeight * renderResolution)),
 });
 
+// A cold production cache can take longer than 20 seconds to decode the full
+// high-resolution world atlas even though Phaser is still making progress.
+// Keep the launch request alive so the selected campaign can finish its save
+// setup and prologue instead of leaving a correctly rendered scene marked as
+// failed.
+const GAME_SCENE_BOOT_TIMEOUT_MS = 60_000;
+
 const waitForSceneCreate = async (createdGame: PhaserType.Game): Promise<HuntingScene> => {
   const startedAt = performance.now();
   return new Promise<HuntingScene>((resolve, reject) => {
@@ -346,7 +353,7 @@ const waitForSceneCreate = async (createdGame: PhaserType.Game): Promise<Hunting
         resolve(scene);
         return;
       }
-      if (performance.now() - startedAt > 20_000) {
+      if (performance.now() - startedAt > GAME_SCENE_BOOT_TIMEOUT_MS) {
         reject(new Error('Game scene boot timed out'));
         return;
       }
