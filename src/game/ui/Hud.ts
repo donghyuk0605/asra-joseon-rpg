@@ -11,7 +11,7 @@ import { isJapanRegion, JAPAN_STAGE_COPY } from '../world/japanCampaign';
 import { JURCHEN_EXPANSION_REGION_IDS, JURCHEN_STAGE_COPY } from '../world/jurchenCampaign';
 import { isUlleungRegion } from '../world/ulleungContinuity';
 import type { BossState } from '../bosses/types';
-import type { GameSettings, GraphicsQuality } from '../settings/GameSettings';
+import type { GameSettings, GraphicsQuality, UiScale } from '../settings/GameSettings';
 import { MAP_HEIGHT, MAP_WIDTH, REGION_ORIGINS } from '../world/layout';
 import { frontierSectorAt } from '../world/frontier';
 import { isJoseonTownRegion, JOSEON_TOWN_LAYOUTS } from '../world/joseonTowns';
@@ -21,7 +21,10 @@ import {
   MANUAL_SKILL_BY_ITEM,
   SHAMAN_ACTIVE_SKILL_IDS,
   SKILL_CATALOG,
+  SKILL_TREE_META,
   SWORD_ACTIVE_SKILL_IDS,
+  skillPrerequisiteLabel,
+  unmetSkillPrerequisite,
 } from '../skills/catalog';
 import { FOLLOWER_CATALOG } from '../followers/catalog';
 import {
@@ -34,6 +37,13 @@ import {
 } from '../world/worldMap';
 import type { FactionWarSnapshot } from '../world/factionWar';
 import type { StoryCampaignState } from '../story/StoryCampaign';
+import {
+  ATTRIBUTE_IDS,
+  ATTRIBUTE_LABELS,
+  type AttributeId,
+  type AttributeValues,
+  type DerivedAttributeBonuses,
+} from '../progression/attributes';
 
 type InventoryFilter = 'all' | ItemSlot;
 type InventorySort = 'recent' | 'type';
@@ -521,6 +531,12 @@ type Snapshot = {
   skillRanks: Record<SkillId, number>;
   skillCooldowns: Record<SkillId, number>;
   skillPoints: number;
+  attributes: {
+    values: AttributeValues;
+    allocations: AttributeValues;
+    points: number;
+  };
+  derivedAttributes: DerivedAttributeBonuses;
   followers: FollowerState[];
   activeWorldEvent: ActiveWorldEvent | null;
   huntKills: Partial<Record<MonsterKind, number>>;
@@ -565,6 +581,8 @@ type HudActions = {
   onSkill: (skillId: SkillId) => void;
   onLearnSkill: (skillId: SkillId) => void;
   onMasterTeach: (skillId: SkillId) => void;
+  onAllocateAttribute: (attributeId: AttributeId) => void;
+  onResetAttributes: () => void;
   onRecruitFollower: (kind: FollowerKind) => void;
   onCallReinforcements: () => void;
   onShopPurchase: (offer: ShopOfferId) => void;
@@ -703,9 +721,26 @@ export class Hud {
       if (settingButton?.dataset.setting && this.snapshot) {
         const key = settingButton.dataset.setting as keyof Pick<
           GameSettings,
-          'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion'
+          'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion' | 'autoLoot' | 'highContrastObjectives'
         >;
         this.actions.onSettingsChange({ ...this.snapshot.settings, [key]: !this.snapshot.settings[key] });
+        return;
+      }
+      const uiScaleButton = target.closest<HTMLButtonElement>('[data-ui-scale]');
+      if (uiScaleButton?.dataset.uiScale && this.snapshot) {
+        this.actions.onSettingsChange({
+          ...this.snapshot.settings,
+          uiScale: Number(uiScaleButton.dataset.uiScale) as UiScale,
+        });
+        return;
+      }
+      const attributeButton = target.closest<HTMLButtonElement>('[data-attribute]');
+      if (attributeButton?.dataset.attribute) {
+        this.actions.onAllocateAttribute(attributeButton.dataset.attribute as AttributeId);
+        return;
+      }
+      if (target.closest('[data-action="attributes-reset"]')) {
+        this.actions.onResetAttributes();
         return;
       }
       if (target.closest('[data-action="starter-weapon-tutorial"]')) {
@@ -1336,6 +1371,8 @@ export class Hud {
 
   update(snapshot: Snapshot): void {
     this.snapshot = snapshot;
+    this.root.dataset.playerOrigin = snapshot.playerOrigin;
+    document.body.dataset.activeOrigin = snapshot.playerOrigin;
     const { player, target } = snapshot;
     const playerHpRatio = player.hp / player.maxHp;
     const playerPanel = this.root.querySelector<HTMLElement>('.player-panel');
@@ -1407,6 +1444,20 @@ export class Hud {
     if (inventoryTitle) inventoryTitle.textContent = `${characterName}의 행낭`;
     this.text('inventory-channel-region', `${region.name} 1`);
     this.text('inventory-class-rank', `${className} ${player.level}품`);
+    this.text('attribute-points', String(snapshot.attributes.points));
+    for (const attributeId of ATTRIBUTE_IDS) {
+      this.text(`attribute-${attributeId}`, String(snapshot.attributes.values[attributeId]));
+      const button = this.root.querySelector<HTMLButtonElement>(`[data-attribute="${attributeId}"]`);
+      if (button) {
+        button.disabled = snapshot.attributes.points <= 0;
+        button.setAttribute('aria-label', `${ATTRIBUTE_LABELS[attributeId].name} ${snapshot.attributes.values[attributeId]}, 1점 투자`);
+      }
+    }
+    this.text('derived-critical', `${snapshot.derivedAttributes.criticalChance}%`);
+    this.text('derived-status', `${snapshot.derivedAttributes.statusResistance}%`);
+    this.text('derived-follower', `${snapshot.derivedAttributes.followerPower}%`);
+    const resetAttributes = this.root.querySelector<HTMLButtonElement>('[data-action="attributes-reset"]');
+    if (resetAttributes) resetAttributes.disabled = Object.values(snapshot.attributes.allocations).every((value) => value === 0);
     const portrait = this.root.querySelector<HTMLImageElement>('.player-portrait-image');
     if (portrait) {
       const portraitPath = frontierArcher
@@ -1621,12 +1672,22 @@ export class Hud {
       const node = this.root.querySelector<HTMLElement>(`[data-skill-node="${skillId}"]`);
       node?.classList.toggle('is-unlocked', rank > 0);
       node?.classList.toggle('is-mastered', rank >= definition.maxRank);
+      const prerequisite = unmetSkillPrerequisite(skillId, snapshot.skillRanks);
+      node?.classList.toggle('is-prerequisite-locked', Boolean(prerequisite));
+      if (node) {
+        const meta = SKILL_TREE_META[skillId];
+        node.dataset.skillBranch = meta.branch;
+        node.dataset.skillTier = String(meta.tier);
+        node.dataset.recommended = String(meta.recommendedOrigins.includes(snapshot.playerOrigin));
+      }
       const learn = this.root.querySelector<HTMLButtonElement>(`[data-learn-skill="${skillId}"]`);
       if (learn) {
         const canUnlockByTraining = rank === 0 && definition.acquisition === 'training';
-        learn.disabled = snapshot.skillPoints <= 0 || rank >= definition.maxRank || (rank === 0 && !canUnlockByTraining);
+        learn.disabled = Boolean(prerequisite) || snapshot.skillPoints <= 0 || rank >= definition.maxRank || (rank === 0 && !canUnlockByTraining);
         learn.textContent = rank >= definition.maxRank
           ? '수련 완료'
+          : prerequisite
+            ? `선행 · ${skillPrerequisiteLabel(skillId)}`
           : rank === 0
             ? definition.acquisition === 'training' ? '1점으로 수련' : definition.acquisitionLabel
             : '단계 강화';
@@ -1638,12 +1699,17 @@ export class Hud {
       const skillId = button.dataset.masterSkill as SkillId;
       const definition = SKILL_CATALOG[skillId];
       const known = snapshot.skillRanks[skillId] > 0;
+      const prerequisite = unmetSkillPrerequisite(skillId, snapshot.skillRanks);
       const requiredLevel = definition.requiredLevel ?? 1;
       const cost = definition.masterCost ?? 0;
-      button.disabled = known || player.level < requiredLevel || player.gold < cost;
-      button.classList.toggle('is-ready', !known && player.level >= requiredLevel && player.gold >= cost);
+      button.disabled = known || Boolean(prerequisite) || player.level < requiredLevel || player.gold < cost;
+      button.classList.toggle('is-ready', !known && !prerequisite && player.level >= requiredLevel && player.gold >= cost);
       const state = button.querySelector<HTMLElement>('em');
-      if (state) state.textContent = known ? '전수 완료' : `${requiredLevel}품 · ${cost}전`;
+      if (state) state.textContent = known
+        ? '전수 완료'
+        : prerequisite
+          ? `선행 · ${skillPrerequisiteLabel(skillId)}`
+          : `${requiredLevel}품 · ${cost}전`;
     });
     const potionButton = this.root.querySelector<HTMLButtonElement>('[data-action="potion"]');
     if (potionButton) potionButton.disabled = player.potions <= 0 || player.hp >= player.maxHp;
@@ -2122,7 +2188,9 @@ export class Hud {
     if (event.type === 'player-impact' && event.critical) this.addFeed(`치명적인 일격! ${event.damage} 피해`);
     if (event.type === 'basic-finisher') this.addFeed(`파쇄 일격 · ${event.targets}개 대상 ${event.damage} 피해 · 기세 상승`);
     if (event.type === 'potion') this.addFeed(`산삼환을 삼켰다. 체력 +${event.healed}`);
-    if (event.type === 'level-up') this.addFeed(`품계 상승! 무사 ${event.level}품이 되었다.`);
+    if (event.type === 'level-up') this.addFeed(`품계 상승! 무사 ${event.level}품이 되었다.${event.attributePointsGained ? ' 수련점 +1' : ''}`);
+    if (event.type === 'attribute-allocated') this.addFeed(`${ATTRIBUTE_LABELS[event.attributeId].name} 수련 · ${event.value} · 남은 점수 ${event.pointsLeft}`);
+    if (event.type === 'attributes-reset') this.addFeed(`능력치 배분 초기화 · 수련점 ${event.refunded}점 회수`);
     if (event.type === 'player-defeated') {
       const destination = event.respawnRegion === 'ulleunghunt'
         ? '피난민 해송마을'
@@ -2156,6 +2224,8 @@ export class Hud {
           ? `전수 비용 ${event.cost}전이 부족하다.`
           : event.reason === 'known'
             ? '이미 전수받은 무공이다.'
+            : event.reason === 'prerequisite' && event.requiredSkill
+              ? `선행 무공 ${SKILL_CATALOG[event.requiredSkill].name} ${event.requiredRank}단이 필요하다.`
             : '이 무공은 다른 경로로 익혀야 한다.');
     }
     if (event.type === 'skill-blocked') {
@@ -2165,6 +2235,8 @@ export class Hud {
           ? '아직 무공의 호흡이 돌아오지 않았다.'
           : event.reason === 'locked'
             ? `${SKILL_CATALOG[event.skillId].name}을(를) 아직 익히지 못했다.`
+            : event.reason === 'prerequisite' && event.requiredSkill
+              ? `선행 무공 ${SKILL_CATALOG[event.requiredSkill].name} ${event.requiredRank}단이 필요하다.`
             : event.reason === 'passive'
               ? '지속 무공은 익히는 순간 항상 적용된다.'
               : '무공 점수나 단계가 부족하다.';
@@ -2312,12 +2384,17 @@ export class Hud {
     for (const button of this.root.querySelectorAll<HTMLButtonElement>('[data-setting]')) {
       const key = button.dataset.setting as keyof Pick<
         GameSettings,
-        'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion'
+        'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion' | 'autoLoot' | 'highContrastObjectives'
       >;
       const active = settings[key];
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', String(active));
       button.querySelector<HTMLElement>('em')!.textContent = active ? '켜짐' : '꺼짐';
+    }
+    for (const button of this.root.querySelectorAll<HTMLButtonElement>('[data-ui-scale]')) {
+      const active = Number(button.dataset.uiScale) === settings.uiScale;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
     }
   }
 
@@ -2356,6 +2433,7 @@ export class Hud {
       snapshot.inventory, snapshot.equipment, snapshot.player.maxHp, snapshot.attackPower,
       snapshot.defense, snapshot.accuracy, snapshot.evasion,
       snapshot.weaponEnchantLevel, snapshot.armorEnchantLevel,
+      snapshot.attributes, snapshot.derivedAttributes,
       snapshot.playerOrigin, snapshot.region,
       this.selectedItemId, this.inventoryFilter, this.inventorySort,
     ]);
@@ -3047,13 +3125,20 @@ export class Hud {
                 <span title="적의 공격을 완전히 피할 확률"><i class="ui-icon ui-icon-stat-evasion"></i><small>회피</small><b data-id="inventory-evasion">3%</b></span>
                 <span title="품계와 장비를 합산한 현재 성장 단계"><i class="ui-icon ui-icon-stat-rank"></i><small>전투 등급</small><b data-id="inventory-class-rank">무사 4품</b></span>
               </div>
-              <section class="hunt-codex" aria-label="사냥 도감">
-                <header><span>獵 · HUNT RECORD</span><b>울릉 사냥 도감</b><em><strong data-id="hunt-species-count">0</strong>종 발견</em></header>
-                <div>
-                  <img src="/assets/items/ulleung-tiger-pelt-v1.png" alt="">
-                  <p><strong>울릉 산군</strong><small>처치 <b data-id="tiger-hunt-count">0</b>회 · 1/5/15회 도감 보상</small></p>
-                  <span><small>호피 보유</small><b><em data-id="tiger-pelt-count">0</em> / 3</b></span>
+              <section class="attribute-panel" aria-label="기본 능력치 배분">
+                <header><span>六藝 · ATTRIBUTES</span><b>기본 능력치</b><em>남은 수련점 <strong data-id="attribute-points">0</strong></em></header>
+                <div class="attribute-grid">
+                  ${ATTRIBUTE_IDS.map((attributeId) => {
+                    const attribute = ATTRIBUTE_LABELS[attributeId];
+                    return `<button data-attribute="${attributeId}" title="${attribute.description}"><i>${attribute.hanja}</i><span><b>${attribute.name}</b><small>${attribute.description}</small></span><strong data-id="attribute-${attributeId}">0</strong><em>＋</em></button>`;
+                  }).join('')}
                 </div>
+                <div class="derived-attribute-strip" aria-label="파생 능력치">
+                  <span><small>치명타</small><b data-id="derived-critical">0%</b></span>
+                  <span><small>상태 위력</small><b data-id="derived-status">0%</b></span>
+                  <span><small>동료 지휘</small><b data-id="derived-follower">0%</b></span>
+                </div>
+                <button class="attribute-reset" data-action="attributes-reset" disabled>배분 초기화</button>
               </section>
             </section>
           </aside>
@@ -3072,6 +3157,11 @@ export class Hud {
               <button class="inventory-sort" data-action="inventory-sort" aria-label="소지품 정렬 방식 변경"><span data-id="inventory-sort-label">획득순</span><i>↕</i></button>
             </nav>
             <div class="inventory-grid" data-id="inventory-grid"></div>
+            <section class="bag-hunt-summary" aria-label="사냥 도감 요약">
+              <img src="/assets/items/ulleung-tiger-pelt-v1.png" alt="">
+              <span><small>獵 · 사냥 기록</small><b><em data-id="hunt-species-count">0</em>종 발견 · 산군 <em data-id="tiger-hunt-count">0</em>회</b></span>
+              <strong>호피 <em data-id="tiger-pelt-count">0</em> / 3</strong>
+            </section>
             <footer><span>클릭·탭 선택</span><span>더블클릭·더블탭 장착</span><span>빈손은 주먹 공격</span></footer>
           </main>
           <aside class="item-detail" data-id="item-detail" aria-live="polite"></aside>
@@ -3197,6 +3287,16 @@ export class Hud {
           <button data-setting="damageNumbers" aria-pressed="true"><span><b>피해 숫자</b><small>일반·치명타 피해 표시</small></span><em>켜짐</em></button>
           <button data-setting="vibration" aria-pressed="true"><span><b>모바일 진동</b><small>피격과 처치 촉각 반응</small></span><em>켜짐</em></button>
           <button data-setting="reducedMotion" aria-pressed="false"><span><b>동작 줄이기</b><small>흔들림과 반복 연출 최소화</small></span><em>꺼짐</em></button>
+          <button data-setting="autoLoot" aria-pressed="true"><span><b>근거리 자동 줍기</b><small>240보 안의 전리품을 자동 추적</small></span><em>켜짐</em></button>
+          <button data-setting="highContrastObjectives" aria-pressed="false"><span><b>목표 고대비</b><small>목표·위험 문구를 더 선명하게</small></span><em>꺼짐</em></button>
+        </section>
+        <section class="ui-scale-settings" aria-label="인터페이스 크기">
+          <span><small>인터페이스 크기</small><b>글자와 조작 버튼 확대</b></span>
+          <nav>
+            <button data-ui-scale="0.9" aria-pressed="false">작게</button>
+            <button data-ui-scale="1" aria-pressed="true">기본</button>
+            <button data-ui-scale="1.15" aria-pressed="false">크게</button>
+          </nav>
         </section>
         <footer>
           <button data-action="pause-fullscreen"><span>전체 화면</span><small>몰입형 화면 전환</small></button>

@@ -103,6 +103,21 @@ let launchRequestId = 0;
 let requestedMute = false;
 const mobilePwa = setupMobilePwaExperience();
 
+const CAMPAIGN_LAUNCH_PROFILE: Partial<Record<GameMode, Readonly<{
+  origin: 'kim-donghyeok' | 'frontier-archer' | 'osaka-mudang' | 'gwanghae-prince';
+  campaign: 'mainland' | 'frontier' | 'japan' | 'gwanghae';
+  label: string;
+}>>> = {
+  'kim-new': { origin: 'kim-donghyeok', campaign: 'mainland', label: '김동혁' },
+  'kim-continue': { origin: 'kim-donghyeok', campaign: 'mainland', label: '김동혁' },
+  'archer-new': { origin: 'frontier-archer', campaign: 'frontier', label: '하진' },
+  'archer-continue': { origin: 'frontier-archer', campaign: 'frontier', label: '하진' },
+  'mudang-new': { origin: 'osaka-mudang', campaign: 'japan', label: '연화' },
+  'mudang-continue': { origin: 'osaka-mudang', campaign: 'japan', label: '연화' },
+  'gwanghae-new': { origin: 'gwanghae-prince', campaign: 'gwanghae', label: '왕세자 광해' },
+  'gwanghae-continue': { origin: 'gwanghae-prince', campaign: 'gwanghae', label: '왕세자 광해' },
+};
+
 type SaveRecord = Record<string, unknown>;
 
 const asSaveRecord = (value: unknown): SaveRecord | null =>
@@ -453,21 +468,31 @@ const openOnlineCitadel = async (): Promise<void> => {
 
 const launchGame = async (mode: GameMode) => {
   const requestId = ++launchRequestId;
+  const profile = CAMPAIGN_LAUNCH_PROFILE[mode];
+  document.body.dataset.selectedOrigin = profile?.origin ?? (mode === 'travel' ? 'travel' : 'kim-donghyeok');
+  document.body.dataset.launchState = 'booting';
+  if (titleBootStatus && profile) titleBootStatus.textContent = `${profile.label}의 기록을 준비하는 중`;
+  titleScreen?.querySelectorAll<HTMLButtonElement>('[data-title-action$="-new"], [data-title-action$="-continue"]')
+    .forEach((button) => { button.disabled = true; });
   void mobilePwa.requestFullscreenForChrome();
-  document.body.dataset.bootCampaign = mode === 'mudang-new' || mode === 'mudang-continue'
-    ? 'japan'
-    : mode === 'travel'
-      ? 'travel'
-    : mode === 'gwanghae-new' || mode === 'gwanghae-continue'
-      ? 'gwanghae'
-    : mode === 'archer-new' || mode === 'archer-continue'
-      ? 'frontier'
-      : 'mainland';
+  document.body.dataset.bootCampaign = profile?.campaign ?? (mode === 'travel' ? 'travel' : 'mainland');
   document.body.classList.add('game-started');
   titleScreen?.classList.add('is-leaving');
   titleScreen?.setAttribute('aria-hidden', 'true');
   window.setTimeout(() => titleScreen?.setAttribute('hidden', ''), 720);
-  const scene = await ensureGame();
+  let scene: HuntingScene;
+  try {
+    scene = await ensureGame();
+  } catch (error) {
+    if (requestId === launchRequestId) {
+      document.body.dataset.launchState = 'failed';
+      titleScreen?.querySelectorAll<HTMLButtonElement>('[data-title-action$="-new"], [data-title-action$="-continue"]')
+        .forEach((button) => { button.disabled = false; });
+      if (titleBootStatus) titleBootStatus.textContent = '불러오지 못했습니다 · 다시 시도해 주십시오';
+    }
+    console.error(error);
+    return;
+  }
   // Only the most recently chosen protagonist may start after Phaser has
   // finished booting. This makes character selection deterministic on slower
   // devices as well as during rapid taps.
@@ -486,6 +511,7 @@ const launchGame = async (mode: GameMode) => {
     scene.startOnlineMode(name, multiplayerUrl);
     void openOnlineChat(name);
   } else scene.startFreeHunt();
+  document.body.dataset.launchState = 'ready';
 };
 
 chatForm?.addEventListener('submit', async (event) => {

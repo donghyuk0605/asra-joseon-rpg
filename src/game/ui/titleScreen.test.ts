@@ -10,8 +10,8 @@ describe('Asra title screen', () => {
   it('uses the new title and generated historical key art across boot and menu', () => {
     expect(html).toContain('<title>아스라 — 조선 다크 판타지</title>');
     expect(html).toContain('id="title-screen"');
-    expect(html).toContain('/assets/ui/asra-title-keyart-v1.webp');
-    expect(styles).toContain('/assets/ui/asra-title-keyart-mobile-v1.webp');
+    expect(html).toContain('/assets/ui/beta/beta-campaign-keyart-v1.webp');
+    expect(html).toContain('/assets/ui/asra-title-keyart-mobile-v1.webp');
     expect(html).toContain('<h1>아스라</h1>');
   });
 
@@ -53,6 +53,10 @@ describe('Asra title screen', () => {
     expect(html).not.toContain('바로 시작');
     expect(html).not.toContain('data-title-action="hunt"');
     expect(main).toContain("scene.startTravelMode()");
+    expect(main).toContain('document.body.dataset.selectedOrigin');
+    expect(scene).toContain("selectedOrigin === 'frontier-archer'");
+    expect(scene).toContain("selectedOrigin === 'osaka-mudang'");
+    expect(scene).toContain("selectedOrigin === 'gwanghae-prince'");
     expect(scene).toContain('this.hud.toggleWorldMap(true)');
     expect(main).toContain('document.documentElement.requestFullscreen');
     expect(styles).toContain('grid-template-columns: repeat(2, minmax(0, 1fr))');

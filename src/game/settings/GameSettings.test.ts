@@ -31,6 +31,9 @@ describe('game settings', () => {
       damageNumbers: false,
       vibration: false,
       reducedMotion: true,
+      autoLoot: false,
+      highContrastObjectives: true,
+      uiScale: 1.15,
     };
     saveGameSettings(settings, {
       setItem: (key, value) => {

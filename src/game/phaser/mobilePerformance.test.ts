@@ -32,7 +32,8 @@ describe('mobile performance profile', () => {
   });
 
   it('loads Japan-exclusive maps, Yeonhwa and the Shogun only for the Japanese route', () => {
-    expect(main).toContain("document.body.dataset.bootCampaign = mode === 'mudang-new' || mode === 'mudang-continue'");
+    expect(main).toContain("'mudang-new': { origin: 'osaka-mudang', campaign: 'japan'");
+    expect(main).toContain("document.body.dataset.bootCampaign = profile?.campaign");
     expect(scene).toContain("const loadJapanAssets = document.body.dataset.bootCampaign === 'japan'");
     expect(scene).toContain('if (!loadJapanAssets && japanMapKeys.has(campaignMap.key)) continue');
     expect(scene).toContain('if (!loadJapanAssets && japanTransitionKeys.has(transition.key)) continue');

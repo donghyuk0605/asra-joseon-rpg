@@ -215,6 +215,10 @@ export const ASSETS = {
     },
   },
   props: {
+    betaRoadsideProps: {
+      key: 'beta-roadside-props-v1',
+      path: '/assets/environment/beta/beta-roadside-props-v1.webp',
+    },
     episode2VillageProps: {
       key: 'episode2-joseon-village-prop-atlas-v2',
       path: '/assets/environment/props/episode2-joseon-village-prop-atlas-v2.png',

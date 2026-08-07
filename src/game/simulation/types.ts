@@ -36,6 +36,7 @@ export type PlayerOrigin =
   | 'frontier-archer'
   | 'osaka-mudang'
   | 'gwanghae-prince';
+export type PlayerAttributeId = 'strength' | 'technique' | 'vitality' | 'agility' | 'spirit' | 'leadership';
 export type WeaponElement = 'fire' | 'ice' | 'lightning' | 'poison' | 'wind' | 'earth' | 'shadow';
 export type ItemId =
   | 'worn-hwando' | 'frontier-horn-bow' | 'white-birch-bow' | 'iron-horn-warbow' | 'thunderbird-bow' | 'northwind-warbow'
@@ -365,8 +366,8 @@ export type GameEvent =
   | { type: 'archer-volley'; skillId: SkillId; arrows: Array<{ targetId: string; from: Vec2; to: Vec2 }> }
   | { type: 'skill-learned'; skillId: SkillId; rank: number; pointsLeft: number }
   | { type: 'skill-unlocked'; skillId: SkillId; rank: 1; source: SkillUnlockSource }
-  | { type: 'skill-blocked'; skillId: SkillId; reason: 'weapon' | 'cooldown' | 'points' | 'max-rank' | 'locked' | 'passive' }
-  | { type: 'skill-teach-blocked'; skillId: SkillId; reason: 'level' | 'gold' | 'known' | 'source'; requiredLevel?: number; cost?: number }
+  | { type: 'skill-blocked'; skillId: SkillId; reason: 'weapon' | 'cooldown' | 'points' | 'max-rank' | 'locked' | 'passive' | 'prerequisite'; requiredSkill?: SkillId; requiredRank?: number }
+  | { type: 'skill-teach-blocked'; skillId: SkillId; reason: 'level' | 'gold' | 'known' | 'source' | 'prerequisite'; requiredLevel?: number; cost?: number; requiredSkill?: SkillId; requiredRank?: number }
   | { type: 'follower-recruited'; follower: FollowerState; route: RecruitmentRoute; cost: number }
   | { type: 'follower-recruit-blocked'; kind: FollowerKind; reason: 'gold' | 'level' | 'story' | 'skill' | 'known' | 'capacity'; cost?: number; requiredLevel?: number; requiredSkill?: SkillId }
   | { type: 'follower-attack'; followerId: string; targetId: string; damage: number; attackKind: FollowerAttackKind }
@@ -374,7 +375,9 @@ export type GameEvent =
   | { type: 'player-respawn'; region: RegionId }
   | { type: 'quest-complete'; gold: number }
   | { type: 'potion'; healed: number }
-  | { type: 'level-up'; level: number }
+  | { type: 'level-up'; level: number; attributePointsGained?: number }
+  | { type: 'attribute-allocated'; attributeId: PlayerAttributeId; value: number; pointsLeft: number }
+  | { type: 'attributes-reset'; refunded: number; points: number }
   | { type: 'item-drop'; dropId: string; itemId: ItemId; itemName: string }
   | { type: 'item-pickup'; itemId: ItemId; itemName: string }
   | { type: 'inventory-full'; itemName: string }

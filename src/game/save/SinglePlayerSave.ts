@@ -13,6 +13,7 @@ import type {
   SkillId,
 } from '../simulation/types';
 import { normalizeStoryCampaignState } from '../story/StoryCampaign';
+import { normalizeAttributeAllocations } from '../progression/attributes';
 
 export const DEVICE_ID_KEY = 'asra-device-id-v1';
 export const DEVICE_ID_ALIASES_KEY = 'asra-device-id-aliases-v1';
@@ -349,6 +350,8 @@ const migrateSnapshot = (
       ...(groundDrops === undefined ? {} : { groundDrops }),
       skillRanks: normalizeSkillRanks(raw.skillRanks),
       skillPoints: finiteNumber(raw.skillPoints) ? Math.max(0, Math.floor(raw.skillPoints)) : 0,
+      attributeAllocations: normalizeAttributeAllocations(raw.attributeAllocations),
+      attributePoints: finiteNumber(raw.attributePoints) ? Math.max(0, Math.floor(raw.attributePoints)) : undefined,
       ...(followers === undefined ? {} : { followers }),
       highestBossCheckpoint: finiteNumber(raw.highestBossCheckpoint)
         ? Math.max(1, Math.floor(raw.highestBossCheckpoint))

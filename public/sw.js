@@ -1,11 +1,13 @@
 // Bump the shell cache whenever an application release changes the startup
 // flow. Existing installed clients then discard old hashed entry chunks rather
 // than combining a new HTML shell with a previous protagonist-selection build.
-const CACHE_NAME = 'asra-shell-v3';
+const CACHE_NAME = 'asra-shell-v4';
 const APP_SHELL = [
   '/',
   '/guide/',
   '/manifest.webmanifest',
+  '/assets/ui/beta/beta-campaign-keyart-v1.webp',
+  '/assets/ui/beta/beta-panel-material-v1.webp',
   '/assets/ui/asra-title-keyart-mobile-v1.webp',
   '/assets/ui/pwa-icon-192.png',
   '/assets/ui/pwa-icon-512.png',

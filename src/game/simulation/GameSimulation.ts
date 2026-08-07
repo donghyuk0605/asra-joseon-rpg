@@ -35,10 +35,26 @@ import { bossForFloor } from '../bosses/catalog';
 import { BossCombatController, createBossState } from '../bosses/BossCombatController';
 import { containsPatternPoint } from '../bosses/patternGeometry';
 import type { BossState } from '../bosses/types';
-import { ARCHER_SKILL_IDS, MANUAL_SKILL_BY_ITEM, SHAMAN_ACTIVE_SKILL_IDS, SKILL_CATALOG } from '../skills/catalog';
+import {
+  attributePointsEarnedAtLevel,
+  derivedAttributeBonuses,
+  emptyAttributeAllocations,
+  normalizeAttributeAllocations,
+  totalAttributes,
+  type AttributeId,
+  type AttributeValues,
+} from '../progression/attributes';
+import {
+  ARCHER_SKILL_IDS,
+  MANUAL_SKILL_BY_ITEM,
+  SHAMAN_ACTIVE_SKILL_IDS,
+  SKILL_CATALOG,
+  unmetSkillPrerequisite,
+} from '../skills/catalog';
 import { FOLLOWER_CATALOG } from '../followers/catalog';
 import { frontierSectorAt } from '../world/frontier';
 import { campaignStructureWorldObstacles } from '../world/campaignStructures';
+import { betaRoadsidePropWorldObstacles } from '../world/betaRoadsideProps';
 import { japanExpansionWorldObstacles } from '../world/japanExpansion';
 import {
   isJurchenRegion,
@@ -986,6 +1002,8 @@ export type SinglePlayerSnapshot = {
   groundDrops?: GroundDrop[];
   skillRanks: Record<SkillId, number>;
   skillPoints: number;
+  attributeAllocations?: AttributeValues;
+  attributePoints?: number;
   followers?: FollowerState[];
   highestBossCheckpoint: number;
   progress: {
@@ -1083,6 +1101,7 @@ const VILLAGE_FARM_OBSTACLES: readonly FieldObstacle[] = VILLAGE_FARM_PLOTS.map(
 }));
 
 const FIELD_OBSTACLES: readonly FieldObstacle[] = [
+  ...betaRoadsidePropWorldObstacles(),
   // Runtime props.
   { type: 'circle', x: 1120, y: 690, radius: 70 },
   { type: 'circle', x: 315, y: 735, radius: 72 },
@@ -1427,6 +1446,8 @@ export class GameSimulation {
     'iron-constitution': 0,
     insight: 0,
   };
+  readonly attributeAllocations: AttributeValues = emptyAttributeAllocations();
+  attributePoints = attributePointsEarnedAtLevel(4);
   readonly huntKills: Partial<Record<MonsterKind, number>> = {};
   readonly craftedRecipes = new Set<CraftRecipeId>();
   readonly followers: FollowerState[] = [];
@@ -1545,6 +1566,7 @@ export class GameSimulation {
   private movementWaypoint: Vec2 | null = null;
   private routedMovementGoal: Vec2 | null = null;
   private playerMovementStallSeconds = 0;
+  private playerNavigationRecoveries = 0;
   private navigationKnockbackAxis: Vec2 | null = null;
   private obstacleCacheKey = '';
   private obstacleCache: readonly FieldObstacle[] = [];
@@ -1651,6 +1673,8 @@ export class GameSimulation {
       groundDrops: this.groundDrops.map((drop) => ({ ...drop })),
       skillRanks: { ...this.skillRanks },
       skillPoints: this.skillPoints,
+      attributeAllocations: { ...this.attributeAllocations },
+      attributePoints: this.attributePoints,
       followers: this.followers.map((follower) => ({
         ...follower,
         velocity: { ...follower.velocity },
@@ -1975,6 +1999,11 @@ export class GameSimulation {
     this.skillPoints = typeof candidate.skillPoints === 'number' && Number.isFinite(candidate.skillPoints)
       ? Math.max(0, Math.floor(candidate.skillPoints))
       : this.skillPoints;
+    Object.assign(this.attributeAllocations, normalizeAttributeAllocations(candidate.attributeAllocations));
+    this.attributePoints = typeof candidate.attributePoints === 'number' && Number.isFinite(candidate.attributePoints)
+      ? Math.max(0, Math.floor(candidate.attributePoints))
+      : Math.max(0, attributePointsEarnedAtLevel(this.player.level)
+        - Object.values(this.attributeAllocations).reduce((sum, value) => sum + value, 0));
     const recruitmentRoutes = new Set<RecruitmentRoute>([
       'tavern', 'liberation', 'defection', 'hidden-contract', 'invasion', 'bunjo',
     ]);
@@ -2391,6 +2420,7 @@ export class GameSimulation {
     this.skillRanks['great-bow-mastery'] = 1;
     this.skillRanks.whirlwind = 1;
     this.skillPoints = 1;
+    this.resetAttributeProgress();
     this.playerRoute = [];
     this.movementWaypoint = null;
     this.routedMovementGoal = null;
@@ -2485,6 +2515,7 @@ export class GameSimulation {
     this.skillRanks['moon-dash'] = 1;
     this.skillRanks['blade-mastery'] = 1;
     this.skillPoints = 1;
+    this.resetAttributeProgress();
     this.playerRoute = [];
     this.movementWaypoint = null;
     this.routedMovementGoal = null;
@@ -3019,6 +3050,7 @@ export class GameSimulation {
       this.skillCooldowns[skillId] = 0;
     }
     this.skillPoints = 1;
+    this.resetAttributeProgress();
     this.playerRoute = [];
     this.movementWaypoint = null;
     this.routedMovementGoal = null;
@@ -3989,6 +4021,7 @@ export class GameSimulation {
     if (this.player.hp <= 0) return;
     this.playerRoute = [];
     this.playerMovementStallSeconds = 0;
+    this.playerNavigationRecoveries = 0;
     if (isUlleungRegion(this.region)
       && point.y >= REGION_ORIGINS.ulleungvillage.y - 100
       && this.region !== 'ulleungvillage'
@@ -4110,7 +4143,8 @@ export class GameSimulation {
 
   getAttackPower(): number {
     const base = 7 + this.getEquipmentAttackBonus() + this.getSetBonus('attack')
-      + this.getEquippedEnhancement('weapon') * 2 + (this.player.momentumActive > 0 ? 6 : 0);
+      + this.getEquippedEnhancement('weapon') * 2 + this.getDerivedAttributeBonuses().attack
+      + (this.player.momentumActive > 0 ? 6 : 0);
     if (this.isBowEquipped() && this.skillRanks['great-bow-mastery'] > 0) return Math.round(base * 1.2);
     return this.skillRanks['blade-mastery'] > 0 ? Math.round(base * 1.2) : base;
   }
@@ -4190,6 +4224,17 @@ export class GameSimulation {
       this.events.push({ type: 'skill-blocked', skillId, reason: 'locked' });
       return;
     }
+    const prerequisite = unmetSkillPrerequisite(skillId, this.skillRanks);
+    if (prerequisite) {
+      this.events.push({
+        type: 'skill-blocked',
+        skillId,
+        reason: 'prerequisite',
+        requiredSkill: prerequisite.skillId,
+        requiredRank: prerequisite.rank,
+      });
+      return;
+    }
     if (this.skillPoints <= 0) {
       this.events.push({ type: 'skill-blocked', skillId, reason: 'points' });
       return;
@@ -4205,6 +4250,17 @@ export class GameSimulation {
     }
     if (this.skillRanks[skillId] > 0) {
       this.events.push({ type: 'skill-teach-blocked', skillId, reason: 'known' });
+      return false;
+    }
+    const prerequisite = unmetSkillPrerequisite(skillId, this.skillRanks);
+    if (prerequisite) {
+      this.events.push({
+        type: 'skill-teach-blocked',
+        skillId,
+        reason: 'prerequisite',
+        requiredSkill: prerequisite.skillId,
+        requiredRank: prerequisite.rank,
+      });
       return false;
     }
     const requiredLevel = definition.requiredLevel ?? 1;
@@ -4733,15 +4789,62 @@ export class GameSimulation {
   }
 
   getDefense(): number {
-    return this.getEquipmentStatBonus('defenseBonus') + this.getSetBonus('defense') + this.getEquippedEnhancement('armor') * 2;
+    return this.getEquipmentStatBonus('defenseBonus') + this.getSetBonus('defense')
+      + this.getEquippedEnhancement('armor') * 2 + this.getDerivedAttributeBonuses().defense;
   }
 
   getAccuracy(): number {
-    return 82 + this.getEquipmentStatBonus('accuracyBonus');
+    return Math.min(99, 82 + this.getEquipmentStatBonus('accuracyBonus') + this.getDerivedAttributeBonuses().accuracy);
   }
 
   getEvasion(): number {
-    return 3 + this.getEquipmentStatBonus('evasionBonus');
+    return Math.min(25, 3 + this.getEquipmentStatBonus('evasionBonus') + this.getDerivedAttributeBonuses().evasion);
+  }
+
+  getAttributeState(): { values: AttributeValues; allocations: AttributeValues; points: number } {
+    return {
+      values: totalAttributes(this.playerOrigin, this.player.level, this.attributeAllocations),
+      allocations: { ...this.attributeAllocations },
+      points: this.attributePoints,
+    };
+  }
+
+  getDerivedAttributeBonuses() {
+    return derivedAttributeBonuses(this.playerOrigin, this.player.level, this.attributeAllocations);
+  }
+
+  allocateAttribute(attributeId: AttributeId): boolean {
+    if (this.attributePoints <= 0 || this.attributeAllocations[attributeId] >= 40 || this.player.hp <= 0) return false;
+    this.attributeAllocations[attributeId] += 1;
+    this.attributePoints -= 1;
+    if (attributeId === 'vitality') {
+      this.player.maxHp += 8;
+      this.player.hp = Math.min(this.player.maxHp, this.player.hp + 8);
+    }
+    this.events.push({
+      type: 'attribute-allocated',
+      attributeId,
+      value: this.getAttributeState().values[attributeId],
+      pointsLeft: this.attributePoints,
+    });
+    return true;
+  }
+
+  resetAttributes(): boolean {
+    const refunded = Object.values(this.attributeAllocations).reduce((sum, value) => sum + value, 0);
+    if (refunded <= 0 || this.player.hp <= 0 || this.player.targetId || this.pendingMonsterAttacks.length > 0) return false;
+    const hpBonus = this.attributeAllocations.vitality * 8;
+    Object.assign(this.attributeAllocations, emptyAttributeAllocations());
+    this.attributePoints += refunded;
+    this.player.maxHp = Math.max(1, this.player.maxHp - hpBonus);
+    this.player.hp = Math.min(this.player.hp, this.player.maxHp);
+    this.events.push({ type: 'attributes-reset', refunded, points: this.attributePoints });
+    return true;
+  }
+
+  private resetAttributeProgress(): void {
+    Object.assign(this.attributeAllocations, emptyAttributeAllocations());
+    this.attributePoints = attributePointsEarnedAtLevel(this.player.level);
   }
 
   interactLandmark(landmarkId: LandmarkId): boolean {
@@ -5498,7 +5601,10 @@ export class GameSimulation {
         follower.velocity.x = 0;
         follower.velocity.y = 0;
         if (follower.attackCooldown > 0 || follower.actionTimer > 0) continue;
-        const damage = Math.max(1, definition.damage + Math.floor(this.player.level / 3));
+        const damage = Math.max(1, Math.round(
+          (definition.damage + Math.floor(this.player.level / 3))
+          * (1 + this.getDerivedAttributeBonuses().followerPower / 100),
+        ));
         monsterTarget.hp = Math.max(0, monsterTarget.hp - damage);
         monsterTarget.aggro = true;
         monsterTarget.hitStun = Math.max(monsterTarget.hitStun, 0.12);
@@ -5530,7 +5636,10 @@ export class GameSimulation {
         follower.velocity.x = 0;
         follower.velocity.y = 0;
         if (follower.attackCooldown <= 0 && follower.actionTimer <= 0) {
-          const damage = Math.max(1, definition.damage + Math.floor(this.player.level / 3));
+          const damage = Math.max(1, Math.round(
+            (definition.damage + Math.floor(this.player.level / 3))
+            * (1 + this.getDerivedAttributeBonuses().followerPower / 100),
+          ));
           this.damageBoss(damage);
           follower.attackCooldown = follower.kind === 'special-warrior'
             || follower.kind === 'jurchen-captain'
@@ -8002,7 +8111,9 @@ export class GameSimulation {
       this.player.xpToNext = Math.round(this.player.xpToNext * 1.34);
       this.player.maxHp += 24;
       this.player.hp = this.player.maxHp;
-      this.events.push({ type: 'level-up', level: this.player.level });
+      const attributePointsGained = this.player.level % 2 === 0 ? 1 : 0;
+      this.attributePoints += attributePointsGained;
+      this.events.push({ type: 'level-up', level: this.player.level, attributePointsGained });
     }
   }
 
@@ -8116,13 +8227,13 @@ export class GameSimulation {
       itemId = 'moonsteel-hwando';
     } else if (monster.kind === 'wako-captain' && roll < 0.16) {
       itemId = 'ember-hwando';
-    } else if (monster.kind === 'wako-archer' && roll < 0.085) {
+    } else if (monster.kind === 'wako-archer' && roll < 0.12) {
       itemId = 'gale-hwando';
-    } else if (monster.kind === 'bamboo-spirit' && roll < 0.09) {
+    } else if (monster.kind === 'bamboo-spirit' && roll < 0.12) {
       itemId = 'venom-hwando';
-    } else if (monster.kind === 'mine-golem' && roll < 0.1) {
+    } else if (monster.kind === 'mine-golem' && roll < 0.13) {
       itemId = 'earth-hwando';
-    } else if (monster.kind === 'moon-revenant' && roll < 0.09) {
+    } else if (monster.kind === 'moon-revenant' && roll < 0.12) {
       itemId = 'shadow-hwando';
     } else if (
       (monster.kind === 'yeongwol-commander' || monster.kind === 'jeonju-commander')
@@ -8131,14 +8242,18 @@ export class GameSimulation {
       itemId = 'storm-hwando';
     } else if (monster.kind === 'japanese-general' && this.isFrontierArcher() && roll < 0.16) {
       itemId = 'thunderbird-bow';
-    } else if (roll < 0.012) {
+    } else if (roll < 0.028) {
       itemId = Math.random() < 0.5 ? 'weapon-enchant-scroll' : 'armor-enchant-scroll';
-    } else if ((monster.kind === 'bandit' || isGovernmentSoldier(monster.kind) || isWako(monster.kind)) && roll < 0.045) {
+    } else if ((monster.kind === 'bandit' || isGovernmentSoldier(monster.kind) || isWako(monster.kind)) && roll < 0.085) {
       itemId = Math.random() < 0.08 ? 'warden-durumagi' : 'hunter-durumagi';
-    } else if (monster.kind === 'boar' && roll < 0.055) {
+    } else if (monster.kind === 'boar' && roll < 0.1) {
       itemId = Math.random() < 0.06 ? 'silver-tiger-charm' : 'boar-tusk-charm';
-    } else if ((monster.kind === 'dokkaebi' || monster.kind === 'bamboo-spirit') && roll < 0.035) {
+    } else if ((monster.kind === 'dokkaebi' || monster.kind === 'bamboo-spirit') && roll < 0.075) {
       itemId = Math.random() < 0.04 ? 'moonsteel-hwando' : 'dokkaebi-club';
+    }
+    const killCount = this.huntKills[monster.kind] ?? 0;
+    if (!itemId && killCount > 0 && killCount % 8 === 0) {
+      itemId = Math.random() < 0.5 ? 'weapon-enchant-scroll' : 'armor-enchant-scroll';
     }
     if (!itemId) return;
     this.spawnDrop(monster, itemId);
@@ -8425,9 +8540,19 @@ export class GameSimulation {
         ? this.playerMovementStallSeconds + dt
         : 0;
       if (this.playerMovementStallSeconds >= 0.45) {
-        // A direct click may be valid itself while a building or tree blocks
-        // the straight segment. Do not leave the walk animation running
-        // forever against that footprint; stop at the last reachable point.
+        const sidestep = this.playerNavigationRecoveries < 2
+          ? this.findNavigationSidestep(target)
+          : null;
+        if (sidestep) {
+          this.playerRoute.unshift(target);
+          this.movementWaypoint = sidestep;
+          this.routedMovementGoal = this.player.destination;
+          this.playerMovementStallSeconds = 0;
+          this.playerNavigationRecoveries += 1;
+          return;
+        }
+        // If both short detours are blocked, stop at the last reachable point
+        // instead of running forever against a painted foundation.
         this.playerRoute = [];
         this.movementWaypoint = null;
         this.routedMovementGoal = null;
@@ -8451,7 +8576,27 @@ export class GameSimulation {
       this.routedMovementGoal = null;
       this.player.destination = null;
       this.playerMovementStallSeconds = 0;
+      this.playerNavigationRecoveries = 0;
     }
+  }
+
+  private findNavigationSidestep(target: Vec2): Vec2 | null {
+    const dx = target.x - this.player.x;
+    const dy = target.y - this.player.y;
+    const distance = Math.hypot(dx, dy);
+    if (distance < 1) return null;
+    const forward = { x: dx / distance, y: dy / distance };
+    const side = { x: -forward.y, y: forward.x };
+    for (const offset of [76, -76, 112, -112]) {
+      const candidate = this.clampToField({
+        x: this.player.x + side.x * offset + forward.x * 24,
+        y: this.player.y + side.y * offset + forward.y * 24,
+      });
+      if (!this.isPointClearOfObstacles(candidate, PLAYER_COLLISION_RADIUS, this.activeCollisionObstacles())) continue;
+      if (!this.isTravelSegmentClear(this.player, candidate, PLAYER_COLLISION_RADIUS)) continue;
+      return candidate;
+    }
+    return null;
   }
 
   private moveGhostPlayerToward(target: Vec2, speed: number, dt: number): void {

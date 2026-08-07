@@ -1,7 +1,15 @@
-import type { ItemId, SkillId } from '../simulation/types';
+import type { ItemId, PlayerOrigin, SkillId } from '../simulation/types';
 
 export type SkillKind = 'active' | 'passive';
 export type SkillAcquisition = 'starter' | 'training' | 'master' | 'manual' | 'event';
+export type SkillBranch = 'foundation' | 'assault' | 'control' | 'secret';
+export type SkillPrerequisite = Readonly<{ skillId: SkillId; rank: number }>;
+export type SkillTreeMeta = Readonly<{
+  branch: SkillBranch;
+  tier: 0 | 1 | 2 | 3;
+  prerequisites: readonly SkillPrerequisite[];
+  recommendedOrigins: readonly PlayerOrigin[];
+}>;
 
 export type SkillDefinition = {
   id: SkillId;
@@ -255,6 +263,40 @@ export const SKILL_CATALOG: Record<SkillId, SkillDefinition> = {
     manualItemId: 'insight-manual',
   },
 };
+
+const SWORD_ORIGINS: readonly PlayerOrigin[] = ['kim-donghyeok', 'gwanghae-prince'];
+
+export const SKILL_TREE_META: Record<SkillId, SkillTreeMeta> = {
+  whirlwind: { branch: 'foundation', tier: 0, prerequisites: [], recommendedOrigins: SWORD_ORIGINS },
+  'moon-dash': { branch: 'assault', tier: 1, prerequisites: [{ skillId: 'whirlwind', rank: 1 }], recommendedOrigins: SWORD_ORIGINS },
+  'leap-strike': { branch: 'assault', tier: 2, prerequisites: [{ skillId: 'whirlwind', rank: 2 }], recommendedOrigins: SWORD_ORIGINS },
+  'crescent-wave': { branch: 'secret', tier: 3, prerequisites: [{ skillId: 'moon-dash', rank: 1 }], recommendedOrigins: SWORD_ORIGINS },
+  'tidebreaker-step': { branch: 'control', tier: 2, prerequisites: [{ skillId: 'whirlwind', rank: 1 }], recommendedOrigins: SWORD_ORIGINS },
+  'haemosu-volley': { branch: 'foundation', tier: 0, prerequisites: [], recommendedOrigins: ['frontier-archer'] },
+  'falcon-seeker': { branch: 'assault', tier: 1, prerequisites: [{ skillId: 'haemosu-volley', rank: 1 }], recommendedOrigins: ['frontier-archer'] },
+  'iron-cavalry-shot': { branch: 'assault', tier: 2, prerequisites: [{ skillId: 'falcon-seeker', rank: 1 }], recommendedOrigins: ['frontier-archer'] },
+  'crescent-arrow-rain': { branch: 'secret', tier: 3, prerequisites: [{ skillId: 'haemosu-volley', rank: 2 }], recommendedOrigins: ['frontier-archer'] },
+  'beacon-volley': { branch: 'control', tier: 3, prerequisites: [{ skillId: 'iron-cavalry-shot', rank: 1 }], recommendedOrigins: ['frontier-archer'] },
+  'spirit-bell': { branch: 'foundation', tier: 0, prerequisites: [], recommendedOrigins: ['osaka-mudang'] },
+  'talisman-flame': { branch: 'assault', tier: 1, prerequisites: [{ skillId: 'spirit-bell', rank: 1 }], recommendedOrigins: ['osaka-mudang'] },
+  'soul-binding-gut': { branch: 'control', tier: 2, prerequisites: [{ skillId: 'talisman-flame', rank: 1 }], recommendedOrigins: ['osaka-mudang'] },
+  'exile-possession': { branch: 'secret', tier: 3, prerequisites: [{ skillId: 'soul-binding-gut', rank: 1 }], recommendedOrigins: ['osaka-mudang'] },
+  'blade-mastery': { branch: 'foundation', tier: 1, prerequisites: [{ skillId: 'whirlwind', rank: 1 }], recommendedOrigins: SWORD_ORIGINS },
+  'great-bow-mastery': { branch: 'foundation', tier: 1, prerequisites: [{ skillId: 'haemosu-volley', rank: 1 }], recommendedOrigins: ['frontier-archer'] },
+  'iron-constitution': { branch: 'control', tier: 2, prerequisites: [], recommendedOrigins: SWORD_ORIGINS },
+  insight: { branch: 'secret', tier: 2, prerequisites: [], recommendedOrigins: ['kim-donghyeok', 'frontier-archer', 'osaka-mudang', 'gwanghae-prince'] },
+};
+
+export const unmetSkillPrerequisite = (
+  skillId: SkillId,
+  ranks: Readonly<Record<SkillId, number>>,
+): SkillPrerequisite | null => SKILL_TREE_META[skillId].prerequisites.find(
+  (requirement) => ranks[requirement.skillId] < requirement.rank,
+) ?? null;
+
+export const skillPrerequisiteLabel = (skillId: SkillId): string => SKILL_TREE_META[skillId].prerequisites
+  .map((requirement) => `${SKILL_CATALOG[requirement.skillId].shortName} ${requirement.rank}단`)
+  .join(' · ');
 
 export const ACTIVE_SKILL_IDS = (Object.values(SKILL_CATALOG)
   .filter((skill) => skill.kind === 'active')

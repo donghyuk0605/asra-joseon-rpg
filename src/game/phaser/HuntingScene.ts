@@ -4,7 +4,7 @@ import { ITEM_CATALOG } from '../items/catalog';
 import { GameSimulation } from '../simulation/GameSimulation';
 import type {
   BasicAttackStep, FollowerState, GameEvent, GroundDrop, ItemId, LandmarkId, MonsterAiState, MonsterKind, MonsterState,
-  SkillId, WeaponElement,
+  PlayerOrigin, SkillId, WeaponElement,
 } from '../simulation/types';
 import { Hud, type QuestProgress, type StoryProgress } from '../ui/Hud';
 import { withObjectParticle } from '../ui/koreanGrammar';
@@ -109,6 +109,7 @@ import {
   type WorldTerrainSeam,
 } from '../world/worldContinuity';
 import { treeSpeciesFrame, ULLEUNG_EDGE_TREE_SITES, type TreeSpecies } from '../world/treeSpecies';
+import { BETA_ROADSIDE_PROP_PLACEMENTS } from '../world/betaRoadsideProps';
 import { createExtendedRegionMotion } from './extendedRegionMotion';
 import { EPISODE2_REGION_LAYOUTS, isEpisode2Region } from '../world/episode2Regions';
 import { createEpisode2RegionWorld } from './episode2RegionMotion';
@@ -703,6 +704,7 @@ const MONSTER_CORPSE_POSE: Record<MonsterKind, {
 
 export class HuntingScene extends Phaser.Scene {
   private readonly simulation = new GameSimulation(initialRegionForPlaytest());
+  private preconfiguredOrigin: PlayerOrigin | null = null;
   private worldBackground!: Phaser.GameObjects.Image;
   private playerRoot!: Phaser.GameObjects.Container;
   private playerActionRoot!: Phaser.GameObjects.Container;
@@ -883,12 +885,18 @@ export class HuntingScene extends Phaser.Scene {
     this.time.delayedCall(120, () => this.hud.toggleWorldMap(true));
   }
 
+  private consumePreconfiguredOrigin(origin: PlayerOrigin): boolean {
+    if (this.preconfiguredOrigin !== origin) return false;
+    this.preconfiguredOrigin = null;
+    return true;
+  }
+
   startFrontierArcherStory(): void {
     this.gameStarted = true;
     this.gameMode = 'archer';
     this.prologueActive = false;
     this.resetSinglePlayerSave();
-    this.simulation.startFrontierArcherStory();
+    if (!this.consumePreconfiguredOrigin('frontier-archer')) this.simulation.startFrontierArcherStory();
     this.enableSaveWrites();
     this.currentRegion = this.simulation.region;
     this.syncAmbientWorldState(this.simulation.region);
@@ -911,6 +919,7 @@ export class HuntingScene extends Phaser.Scene {
     this.storyNarrativeReady = false;
     this.prologueActive = false;
     this.resetSinglePlayerSave();
+    if (this.consumePreconfiguredOrigin('frontier-archer')) this.simulation.drainEvents();
     this.showSavePresence('하진 저장 기록 확인 중', false);
     void this.resumeFrontierArcherOrStartNew();
   }
@@ -920,7 +929,7 @@ export class HuntingScene extends Phaser.Scene {
     this.gameMode = 'mudang';
     this.prologueActive = false;
     this.resetSinglePlayerSave();
-    this.simulation.startOsakaMudangStory();
+    if (!this.consumePreconfiguredOrigin('osaka-mudang')) this.simulation.startOsakaMudangStory();
     this.enableSaveWrites();
     this.currentRegion = this.simulation.region;
     this.syncAmbientWorldState(this.simulation.region);
@@ -940,6 +949,7 @@ export class HuntingScene extends Phaser.Scene {
     this.storyNarrativeReady = false;
     this.prologueActive = false;
     this.resetSinglePlayerSave();
+    if (this.consumePreconfiguredOrigin('osaka-mudang')) this.simulation.drainEvents();
     this.showSavePresence('연화 저장 기록 확인 중', false);
     void this.resumeOsakaMudangOrStartNew();
   }
@@ -950,7 +960,7 @@ export class HuntingScene extends Phaser.Scene {
     this.storyNarrativeReady = false;
     this.prologueActive = false;
     this.resetSinglePlayerSave();
-    this.simulation.startGwanghaeStory();
+    if (!this.consumePreconfiguredOrigin('gwanghae-prince')) this.simulation.startGwanghaeStory();
     this.enableSaveWrites();
     this.currentRegion = this.simulation.region;
     this.ensureJoseonTownNeighborhood('changdeokgung');
@@ -981,6 +991,7 @@ export class HuntingScene extends Phaser.Scene {
     this.storyNarrativeReady = false;
     this.prologueActive = false;
     this.resetSinglePlayerSave();
+    if (this.consumePreconfiguredOrigin('gwanghae-prince')) this.simulation.drainEvents();
     this.showSavePresence('왕세자 광해의 분조록 확인 중', false);
     void this.resumeGwanghaeOrStartNew();
   }
@@ -1399,6 +1410,11 @@ export class HuntingScene extends Phaser.Scene {
       frameHeight: 384,
       endFrame: 15,
     });
+    this.load.spritesheet(ASSETS.props.betaRoadsideProps.key, ASSETS.props.betaRoadsideProps.path, {
+      frameWidth: 512,
+      frameHeight: 512,
+      endFrame: 5,
+    });
     this.load.image(ASSETS.props.episode2WaterwheelWheel.key, ASSETS.props.episode2WaterwheelWheel.path);
     for (const terrain of Object.values(ASSETS.episode2TerrainBases)) {
       this.load.image(terrain.key, terrain.path);
@@ -1568,6 +1584,18 @@ export class HuntingScene extends Phaser.Scene {
   }
 
   create(): void {
+    const selectedOrigin = document.body.dataset.selectedOrigin;
+    if (selectedOrigin === 'frontier-archer') {
+      this.simulation.startFrontierArcherStory();
+      this.preconfiguredOrigin = selectedOrigin;
+    } else if (selectedOrigin === 'osaka-mudang') {
+      this.simulation.startOsakaMudangStory();
+      this.preconfiguredOrigin = selectedOrigin;
+    } else if (selectedOrigin === 'gwanghae-prince') {
+      this.simulation.startGwanghaeStory();
+      this.preconfiguredOrigin = selectedOrigin;
+    }
+    this.currentRegion = this.simulation.region;
     this.cameras.main.setBackgroundColor('#151711');
     this.add.image(-MAP_WIDTH / 2, VILLAGE_TOP + MAP_HEIGHT / 2, ASSETS.transitions.mistwoodVillage.key)
       .setDisplaySize(MAP_WIDTH, MAP_HEIGHT).setDepth(WORLD_FLOOR_DEPTH + 1);
@@ -1652,6 +1680,7 @@ export class HuntingScene extends Phaser.Scene {
     this.createFrontierCampProps();
     this.time.delayedCall(1800, () => this.loadBossAssetsInBackground());
     this.createVillage();
+    this.createBetaRoadsideProps();
     this.createRegionPortals();
     this.createDungeonEntrance();
     this.captureAmbientWorldTweens();
@@ -1707,6 +1736,8 @@ export class HuntingScene extends Phaser.Scene {
       onSkill: (skillId) => this.simulation.castSkill(skillId),
       onLearnSkill: (skillId) => this.simulation.learnSkill(skillId),
       onMasterTeach: (skillId) => this.simulation.learnSkillFromMaster(skillId),
+      onAllocateAttribute: (attributeId) => this.simulation.allocateAttribute(attributeId),
+      onResetAttributes: () => this.simulation.resetAttributes(),
       onRecruitFollower: (kind) => this.simulation.recruitFollower(kind),
       onCallReinforcements: () => this.simulation.isGwanghaePrince()
         ? this.simulation.callGwanghaeReinforcements()
@@ -1825,6 +1856,8 @@ export class HuntingScene extends Phaser.Scene {
       skillRanks: this.simulation.skillRanks,
       skillCooldowns: this.simulation.skillCooldowns,
       skillPoints: this.simulation.skillPoints,
+      attributes: this.simulation.getAttributeState(),
+      derivedAttributes: this.simulation.getDerivedAttributeBonuses(),
       followers: this.simulation.followers,
       activeWorldEvent: this.simulation.activeWorldEvent,
       huntKills: this.simulation.huntKills,
@@ -2556,6 +2589,8 @@ export class HuntingScene extends Phaser.Scene {
         skillRanks: this.simulation.skillRanks,
         skillCooldowns: this.simulation.skillCooldowns,
         skillPoints: this.simulation.skillPoints,
+        attributes: this.simulation.getAttributeState(),
+        derivedAttributes: this.simulation.getDerivedAttributeBonuses(),
         followers: this.simulation.followers,
         activeWorldEvent: this.simulation.activeWorldEvent,
         huntKills: this.simulation.huntKills,
@@ -7265,6 +7300,33 @@ export class HuntingScene extends Phaser.Scene {
     }
   }
 
+  private createBetaRoadsideProps(): void {
+    for (const prop of BETA_ROADSIDE_PROP_PLACEMENTS) {
+      const origin = REGION_ORIGINS[prop.region];
+      const x = origin.x + prop.x;
+      const y = origin.y + prop.y;
+      const image = this.add.image(x, y, ASSETS.props.betaRoadsideProps.key, prop.frame)
+        .setDisplaySize(prop.size, prop.size)
+        .setOrigin(0.5, 0.9)
+        .setDepth(y - 1);
+      this.registerLazyAmbientObject(image, prop.region);
+      if (prop.frame !== 4) continue;
+      const ember = this.add.circle(x, y - prop.size * 0.3, prop.size * 0.13, 0xe57435, 0.14)
+        .setBlendMode(Phaser.BlendModes.ADD)
+        .setDepth(y);
+      this.registerLazyAmbientObject(ember, prop.region);
+      this.tweens.add({
+        targets: ember,
+        alpha: { from: 0.08, to: 0.22 },
+        scale: { from: 0.84, to: 1.12 },
+        duration: 960,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+    }
+  }
+
   private createVillage(): void {
     const villageTop = VILLAGE_TOP;
 
@@ -9722,6 +9784,12 @@ export class HuntingScene extends Phaser.Scene {
 
   private handleEvent(event: GameEvent): void {
     this.hud.handle(event);
+    if (event.type === 'item-drop' && this.gameSettings.autoLoot) {
+      const drop = this.simulation.groundDrops.find((entry) => entry.id === event.dropId);
+      if (drop && Phaser.Math.Distance.Between(this.simulation.player.x, this.simulation.player.y, drop.x, drop.y) <= 240) {
+        this.simulation.collectDrop(drop.id);
+      }
+    }
     if (event.type === 'gwanghae-militia-rallied') {
       this.alertMarker(
         this.simulation.player.x,
@@ -11779,6 +11847,8 @@ export class HuntingScene extends Phaser.Scene {
     saveGameSettings(this.gameSettings);
     document.body.dataset.graphicsQuality = settings.graphicsQuality;
     document.body.classList.toggle('reduce-game-motion', settings.reducedMotion);
+    document.body.classList.toggle('high-contrast-objectives', settings.highContrastObjectives);
+    document.documentElement.style.setProperty('--game-ui-scale', String(settings.uiScale));
     this.syncAmbientWorldState(this.simulation.region);
     this.hudAccumulator = HUD_UPDATE_INTERVAL;
   }

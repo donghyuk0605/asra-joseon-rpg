@@ -26,7 +26,7 @@ describe('mobile boot loading screen', () => {
     expect(html).toContain('id="boot-progress-fill"');
     expect(html).toContain('aria-valuenow="4"');
     expect(html).toContain('radial-gradient');
-    expect(html).toContain("url('/assets/ui/asra-title-keyart-v1.webp')");
+    expect(html).toContain("url('/assets/ui/beta/beta-campaign-keyart-v1.webp')");
     expect(html).toContain("url('/assets/ui/asra-title-keyart-mobile-v1.webp')");
     expect(html).toContain("url('/assets/ui/wolyeongrok-loading-frame-v1.webp')");
     expect(html).toContain('<strong class="boot-title-logo">아스라</strong>');
