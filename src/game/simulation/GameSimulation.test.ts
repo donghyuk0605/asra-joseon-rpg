@@ -859,6 +859,34 @@ describe('GameSimulation', () => {
     expect(game.groundDrops.filter((drop) => drop.itemId === 'worn-hwando')).toHaveLength(1);
   });
 
+  it('keeps ground loot in its region, expires abandoned loot, and protects a selected drop', () => {
+    const game = new GameSimulation();
+    game.groundDrops.push({
+      id: 'drop-expiring', itemId: 'weapon-enchant-scroll', region: game.region,
+      x: game.player.x + 120, y: game.player.y, remainingSeconds: 0.04,
+    });
+    game.update(0.05);
+    expect(game.groundDrops.some((drop) => drop.id === 'drop-expiring')).toBe(false);
+    expect(game.drainEvents()).toContainEqual(expect.objectContaining({
+      type: 'item-drop-expired', itemId: 'weapon-enchant-scroll', notable: true,
+    }));
+
+    game.groundDrops.push({
+      id: 'drop-selected', itemId: 'worn-hwando', region: game.region,
+      x: game.player.x + 180, y: game.player.y, remainingSeconds: 0.04,
+    });
+    game.collectDrop('drop-selected');
+    game.update(0.05);
+    expect(game.groundDrops.some((drop) => drop.id === 'drop-selected')).toBe(true);
+
+    game.groundDrops.push({
+      id: 'drop-other-region', itemId: 'worn-hwando', region: 'osaka',
+      x: game.player.x, y: game.player.y, remainingSeconds: 10,
+    });
+    game.collectDrop('drop-other-region');
+    expect(game.player.lootTargetId).toBe('drop-selected');
+  });
+
   it('enchants an equipped weapon and increases attack power', () => {
     const game = new GameSimulation();
     game.inventory.push({ instanceId: 'training-sword', itemId: 'worn-hwando' });

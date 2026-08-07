@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { ASSETS, MONSTER_FRAME, PLAYER_ACTION_FRAME } from '../assets/manifest';
-import { ITEM_CATALOG } from '../items/catalog';
+import { ITEM_CATALOG, type ItemDefinition } from '../items/catalog';
 import { GameSimulation } from '../simulation/GameSimulation';
 import type {
   BasicAttackStep, FollowerState, GameEvent, GroundDrop, ItemId, LandmarkId, MonsterAiState, MonsterKind, MonsterState,
@@ -173,11 +173,24 @@ type CorpseView = {
 };
 
 type GroundItemView = {
+  beam: Phaser.GameObjects.Rectangle;
   glow: Phaser.GameObjects.Ellipse;
   icon: Phaser.GameObjects.Image;
   label: Phaser.GameObjects.Text;
   hitZone: Phaser.GameObjects.Zone;
   phase: number;
+};
+
+const GROUND_DROP_RARITY_STYLE: Record<ItemDefinition['rarity'], {
+  color: number;
+  label: string;
+  glyph: string;
+  notable: boolean;
+}> = {
+  낡음: { color: 0x9d9587, label: '#c8c0b2', glyph: '◇', notable: false },
+  일반: { color: 0xc2aa75, label: '#ead9b7', glyph: '◆', notable: false },
+  희귀: { color: 0xe2b756, label: '#f5d47c', glyph: '✦', notable: true },
+  영웅: { color: 0xd86f9a, label: '#ffb3d0', glyph: '✧', notable: true },
 };
 
 type RemotePlayerView = {
@@ -9716,8 +9729,11 @@ export class HuntingScene extends Phaser.Scene {
   }
 
   private syncGroundItems(): void {
-    const activeIds = new Set(this.simulation.groundDrops.map((drop) => drop.id));
-    for (const drop of this.simulation.groundDrops) {
+    const activeDrops = this.simulation.groundDrops.filter((drop) =>
+      !drop.region || drop.region === this.simulation.region);
+    const activeIds = new Set(activeDrops.map((drop) => drop.id));
+    const inventoryFull = this.simulation.inventory.length >= this.simulation.inventoryCapacity;
+    for (const drop of activeDrops) {
       let view = this.groundItemViews.get(drop.id);
       if (!view) {
         view = this.createGroundItemView(drop);
@@ -9726,15 +9742,40 @@ export class HuntingScene extends Phaser.Scene {
       const bob = Math.sin(this.time.now * 0.0045 + view.phase) * 4;
       const selected = this.simulation.player.lootTargetId === drop.id;
       const visible = this.gameMode !== 'travel';
+      const definition = ITEM_CATALOG[drop.itemId];
+      const rarityStyle = GROUND_DROP_RARITY_STYLE[definition.rarity];
+      const distance = Phaser.Math.Distance.Between(
+        this.simulation.player.x,
+        this.simulation.player.y,
+        drop.x,
+        drop.y,
+      );
+      const near = distance <= 240;
+      const remaining = Math.max(0, drop.remainingSeconds ?? 0);
+      const countdown = remaining > 0 && remaining <= 30
+        ? ` · ${Math.ceil(remaining)}초 후 사라짐`
+        : '';
+      const bagStatus = inventoryFull && (near || selected) ? '\n행낭 가득 · 정리 후 습득' : countdown;
+      view.label.setText(`${rarityStyle.glyph} [${definition.rarity}] ${definition.name}${bagStatus}`)
+        .setColor(inventoryFull && near ? '#ffad91' : rarityStyle.label);
+      view.beam.setPosition(drop.x, drop.y - 38).setDepth(drop.y - 3)
+        .setFillStyle(rarityStyle.color, rarityStyle.notable ? (selected ? 0.3 : 0.19) : 0.08)
+        .setScale(selected ? 1.35 : 1, selected ? 1.1 : 1)
+        .setVisible(visible && (rarityStyle.notable || selected));
       view.glow.setPosition(drop.x, drop.y + 4).setDepth(drop.y - 2).setScale(selected ? 1.18 : 1).setVisible(visible);
-      view.icon.setPosition(drop.x, drop.y - 23 + bob).setDepth(drop.y + 3).setVisible(visible);
+      view.glow.setFillStyle(inventoryFull && near ? 0x9a3d2f : rarityStyle.color, selected ? 0.28 : 0.17)
+        .setStrokeStyle(selected ? 2 : 1, inventoryFull && near ? 0xff826b : rarityStyle.color, selected ? 1 : 0.76);
+      view.icon.setPosition(drop.x, drop.y - 23 + bob).setDepth(drop.y + 3)
+        .setAlpha(inventoryFull && near ? 0.72 : 1).setVisible(visible);
       view.label.setPosition(drop.x, drop.y - 56 + bob).setDepth(drop.y + 4)
-        .setVisible(visible && (selected || Math.sin(this.time.now * 0.002 + view.phase) > -0.35));
+        .setVisible(visible && (selected || near || rarityStyle.notable
+          || Math.sin(this.time.now * 0.002 + view.phase) > 0.25));
       view.hitZone.setPosition(drop.x, drop.y - 22).setDepth(drop.y + 5).setVisible(visible);
       if (view.hitZone.input) view.hitZone.input.enabled = visible;
     }
     for (const [id, view] of this.groundItemViews) {
       if (activeIds.has(id)) continue;
+      view.beam.destroy();
       view.glow.destroy();
       view.icon.destroy();
       view.label.destroy();
@@ -9763,12 +9804,16 @@ export class HuntingScene extends Phaser.Scene {
 
   private createGroundItemView(drop: GroundDrop): GroundItemView {
     const definition = ITEM_CATALOG[drop.itemId];
-    const glow = this.add.ellipse(drop.x, drop.y + 3, 55, 20, definition.rarity === '희귀' ? 0xd2a44d : 0xb99559, 0.17)
-      .setStrokeStyle(1, definition.rarity === '희귀' ? 0xf1c965 : 0xb99a65, 0.7);
-    const icon = this.add.image(drop.x, drop.y - 22, definition.iconKey).setDisplaySize(38, 38);
-    const label = this.add.text(drop.x, drop.y - 56, definition.name, {
-      fontFamily: 'serif', fontSize: '11px', color: definition.rarity === '희귀' ? '#f1cc72' : '#e5d5b4',
+    const rarityStyle = GROUND_DROP_RARITY_STYLE[definition.rarity];
+    const beam = this.add.rectangle(drop.x, drop.y - 38, 5, 88, rarityStyle.color, rarityStyle.notable ? 0.19 : 0.08);
+    const glow = this.add.ellipse(drop.x, drop.y + 3, 58, 21, rarityStyle.color, 0.17)
+      .setStrokeStyle(1, rarityStyle.color, 0.76);
+    const iconSize = rarityStyle.notable ? 42 : 38;
+    const icon = this.add.image(drop.x, drop.y - 22, definition.iconKey).setDisplaySize(iconSize, iconSize);
+    const label = this.add.text(drop.x, drop.y - 56, `${rarityStyle.glyph} [${definition.rarity}] ${definition.name}`, {
+      fontFamily: 'serif', fontSize: rarityStyle.notable ? '12px' : '11px', color: rarityStyle.label,
       stroke: '#1b120c', strokeThickness: 4,
+      align: 'center', lineSpacing: 3,
     }).setOrigin(0.5);
     const hitZone = this.add.zone(drop.x, drop.y - 20, 78, 82).setInteractive({ useHandCursor: true });
     hitZone.setData('dropId', drop.id);
@@ -9778,15 +9823,16 @@ export class HuntingScene extends Phaser.Scene {
       this.simulation.collectDrop(drop.id);
     });
     hitZone.on('pointerover', () => glow.setStrokeStyle(2, 0xf0cf83, 1));
-    hitZone.on('pointerout', () => glow.setStrokeStyle(1, definition.rarity === '희귀' ? 0xf1c965 : 0xb99a65, 0.7));
-    return { glow, icon, label, hitZone, phase: Number(drop.id.split('-')[1]) * 1.7 };
+    hitZone.on('pointerout', () => glow.setStrokeStyle(1, rarityStyle.color, 0.76));
+    return { beam, glow, icon, label, hitZone, phase: Number(drop.id.split('-')[1]) * 1.7 };
   }
 
   private handleEvent(event: GameEvent): void {
     this.hud.handle(event);
     if (event.type === 'item-drop' && this.gameSettings.autoLoot) {
       const drop = this.simulation.groundDrops.find((entry) => entry.id === event.dropId);
-      if (drop && Phaser.Math.Distance.Between(this.simulation.player.x, this.simulation.player.y, drop.x, drop.y) <= 240) {
+      if (drop && this.simulation.inventory.length < this.simulation.inventoryCapacity
+        && Phaser.Math.Distance.Between(this.simulation.player.x, this.simulation.player.y, drop.x, drop.y) <= 240) {
         this.simulation.collectDrop(drop.id);
       }
     }

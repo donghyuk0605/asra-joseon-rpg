@@ -9,6 +9,7 @@ import type {
 import { CENTRAL_WORLD_HEIGHT, MAP_HEIGHT, MAP_WIDTH, REGION_ORIGINS, VILLAGE_TOP } from '../world/layout';
 import {
   EPISODE2_REGION_IDS,
+  REGIONS,
   type JapanRegionId,
   type JurchenExpansionRegionId,
   type PyongyangRegionId,
@@ -1940,7 +1941,13 @@ export class GameSimulation {
       ) return false;
       restoredDropIds.add(drop.id);
       return true;
-    }).map((drop) => ({ ...drop }));
+    }).map((drop) => ({
+      ...drop,
+      region: drop.region && drop.region in REGIONS ? drop.region : candidate.region,
+      remainingSeconds: typeof drop.remainingSeconds === 'number' && Number.isFinite(drop.remainingSeconds)
+        ? Math.max(1, drop.remainingSeconds)
+        : this.groundDropLifetime(drop.itemId),
+    }));
     this.groundDrops.splice(0, this.groundDrops.length, ...restoredDrops);
     this.dropCounter = restoredDrops.reduce((next, drop) => {
       const match = /^drop-(\d+)$/.exec(drop.id);
@@ -4100,7 +4107,8 @@ export class GameSimulation {
   }
 
   collectDrop(id: string): void {
-    if (this.player.hp <= 0 || !this.groundDrops.some((drop) => drop.id === id)) return;
+    const drop = this.groundDrops.find((entry) => entry.id === id);
+    if (this.player.hp <= 0 || !drop || (drop.region && drop.region !== this.region)) return;
     this.playerActive = true;
     this.player.targetId = null;
     this.player.destination = null;
@@ -5001,6 +5009,7 @@ export class GameSimulation {
       }
       return;
     }
+    this.updateGroundDropLifetimes(dt);
     if (this.region === 'tangeumdae' && !this.tangeumCleared && !this.tangeumArrivalAnnounced) {
       this.tangeumArrivalAnnounced = true;
       const progress = this.getTangeumBattleProgress();
@@ -5798,7 +5807,7 @@ export class GameSimulation {
 
   private updateLootCollection(dt: number): void {
     const drop = this.groundDrops.find((entry) => entry.id === this.player.lootTargetId);
-    if (!drop) {
+    if (!drop || (drop.region && drop.region !== this.region)) {
       this.player.lootTargetId = null;
       return;
     }
@@ -8118,6 +8127,10 @@ export class GameSimulation {
   }
 
   private dropItem(monster: MonsterState): void {
+    // The Shogun reward is authored in killMonster as one weapon and one armor
+    // scroll. Do not let the generic roll add a third copy to that fixed pair.
+    if (monster.kind === 'japanese-shogun') return;
+
     // The escape deliberately begins bare-handed. The first defeated gaoler
     // always drops a confiscated damaged sword, teaching loot and equipment
     // before weapon skills become part of the combat loop.
@@ -8267,11 +8280,41 @@ export class GameSimulation {
     const drop: GroundDrop = {
       id: `drop-${this.dropCounter++}`,
       itemId,
+      region: this.region,
+      remainingSeconds: this.groundDropLifetime(itemId),
       x,
       y,
     };
     this.groundDrops.push(drop);
     this.events.push({ type: 'item-drop', dropId: drop.id, itemId, itemName: ITEM_CATALOG[itemId].name });
+  }
+
+  private groundDropLifetime(itemId: ItemId): number {
+    const rarity = ITEM_CATALOG[itemId].rarity;
+    if (rarity === '영웅') return 420;
+    if (rarity === '희귀') return 240;
+    if (rarity === '일반') return 120;
+    return 90;
+  }
+
+  private updateGroundDropLifetimes(dt: number): void {
+    for (let index = this.groundDrops.length - 1; index >= 0; index -= 1) {
+      const drop = this.groundDrops[index];
+      if (drop.remainingSeconds === undefined) drop.remainingSeconds = this.groundDropLifetime(drop.itemId);
+      if (this.player.lootTargetId === drop.id) continue;
+      drop.remainingSeconds = Math.max(0, drop.remainingSeconds - dt);
+      if (drop.remainingSeconds > 0) continue;
+      this.groundDrops.splice(index, 1);
+      if (drop.region === this.region || !drop.region) {
+        const definition = ITEM_CATALOG[drop.itemId];
+        this.events.push({
+          type: 'item-drop-expired',
+          itemId: drop.itemId,
+          itemName: definition.name,
+          notable: definition.rarity === '희귀' || definition.rarity === '영웅',
+        });
+      }
+    }
   }
 
   private getEquipmentAttackBonus(): number {

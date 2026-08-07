@@ -6,8 +6,11 @@ import {
   TRAVEL_ATLAS_GROUPS,
   TRAVEL_ATLAS_REGION_IDS,
   WORLD_MAP_NODES,
+  WORLD_MAP_ROUTES,
+  worldMapItinerary,
   worldMapNodeKind,
   worldMapNodeForRegion,
+  worldMapRouteGeometry,
 } from './worldMap';
 import { EPISODE2_CLUSTERS } from './episode2Regions';
 
@@ -72,6 +75,50 @@ describe('large-city world map travel', () => {
       ['ulleung', 7],
       ['osaka', 8],
     ]);
+  });
+
+  it('builds every drawn route from valid connected nodes and finds a recommended itinerary', () => {
+    const nodeIds = new Set(WORLD_MAP_NODES.map((node) => node.id));
+    expect(new Set(WORLD_MAP_ROUTES.map((route) => route.id)).size).toBe(WORLD_MAP_ROUTES.length);
+    for (const route of WORLD_MAP_ROUTES) {
+      expect(nodeIds.has(route.from)).toBe(true);
+      expect(nodeIds.has(route.to)).toBe(true);
+      expect(route.from).not.toBe(route.to);
+      expect(route.travelDays).toBeGreaterThan(0);
+      const geometry = worldMapRouteGeometry(route);
+      expect(geometry.length).toBeGreaterThan(0);
+      expect(Number.isFinite(geometry.angle)).toBe(true);
+    }
+
+    const itinerary = worldMapItinerary('jurchen', 'osaka');
+    expect(itinerary).not.toBeNull();
+    expect(itinerary?.nodes[0]?.id).toBe('jurchen');
+    expect(itinerary?.nodes.at(-1)?.id).toBe('osaka');
+    expect(itinerary?.routes.length).toBeGreaterThan(5);
+    expect(itinerary?.travelDays).toBe(
+      itinerary?.routes.reduce((total, route) => total + route.travelDays, 0),
+    );
+
+    for (const node of WORLD_MAP_NODES) {
+      expect(worldMapItinerary('hanseong', node.id), node.id).not.toBeNull();
+    }
+    expect(worldMapItinerary('hanseong', 'hanseong')).toEqual({
+      nodes: [expect.objectContaining({ id: 'hanseong' })],
+      routes: [],
+      travelDays: 0,
+    });
+  });
+
+  it('assigns every surface region to exactly one macro-map node', () => {
+    const surfaceRegions = Object.keys(REGIONS).filter((region) => region !== 'dungeon') as Array<keyof typeof REGIONS>;
+    const assignedRegions = WORLD_MAP_NODES.flatMap((node) => [...node.regions]);
+    expect(new Set(assignedRegions).size).toBe(assignedRegions.length);
+    for (const region of surfaceRegions) {
+      expect(worldMapNodeForRegion(region), region).not.toBeNull();
+    }
+    expect(worldMapNodeForRegion('tangeumdae')?.id).toBe('chungju');
+    expect(worldMapNodeForRegion('village')?.id).toBe('yeongwol');
+    expect(worldMapNodeForRegion('ganghwado')?.id).toBe('hanseong');
   });
 
   it('unlocks only visited city hubs and persists them in save data', () => {

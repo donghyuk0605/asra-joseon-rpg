@@ -25,6 +25,22 @@ export type WorldMapNode = {
 
 export type WorldMapTravelResult = 'traveled' | 'locked' | 'combat' | 'dungeon' | 'same';
 
+export type WorldMapRouteMode = 'road' | 'mountain' | 'sea' | 'outpost';
+export type WorldMapRoute = {
+  id: string;
+  from: string;
+  to: string;
+  mode: WorldMapRouteMode;
+  label: string;
+  travelDays: number;
+};
+
+export type WorldMapItinerary = {
+  nodes: WorldMapNode[];
+  routes: WorldMapRoute[];
+  travelDays: number;
+};
+
 export type TravelAtlasGroup = {
   id: string;
   label: string;
@@ -93,6 +109,8 @@ export const WORLD_MAP_NODES = [
       'gyeongbokgate',
       'gyeongbokcourt',
       'gyeongbokinner',
+      'namhansanseong',
+      'ganghwado',
     ],
     mapX: 47,
     mapY: 53,
@@ -122,7 +140,7 @@ export const WORLD_MAP_NODES = [
     routeLabel: '강원 산길',
     travelDays: 2,
     destination: 'yeongwol',
-    regions: ['mistwood', 'yeongwol', 'yeongwolhq'],
+    regions: ['solgogae', 'village', 'mistwood', 'yeongwol', 'yeongwolhq', 'minepass', 'moonfield'],
     mapX: 53,
     mapY: 59,
     arrivalY: 820,
@@ -152,7 +170,7 @@ export const WORLD_MAP_NODES = [
     routeLabel: '영남 대로',
     travelDays: 4,
     destination: 'busanjin',
-    regions: ['busanjin', 'tangeumdae'],
+    regions: ['busanjin'],
     mapX: 54,
     mapY: 76,
     arrivalY: 820,
@@ -222,7 +240,7 @@ export const WORLD_MAP_NODES = [
     routeLabel: '남한강 뱃길',
     travelDays: 2,
     destination: 'chungju',
-    regions: ['chungju'],
+    regions: ['chungju', 'tangeumdae'],
     mapX: 53,
     mapY: 65,
     arrivalY: 820,
@@ -312,6 +330,122 @@ export const WORLD_MAP_NODES = [
     arrivalY: 820,
   })),
 ] as const satisfies readonly WorldMapNode[];
+
+/**
+ * The macro travel graph is the single source of truth for both the atlas lines
+ * and the recommended route shown in the command card.
+ */
+export const WORLD_MAP_ROUTES = [
+  { id: 'jurchen-yalu', from: 'jurchen', to: 'yalu', mode: 'mountain', label: '장백산 남행로', travelDays: 2 },
+  { id: 'yalu-northwest', from: 'yalu', to: 'episode2-northwest-road', mode: 'outpost', label: '용만 변경로', travelDays: 1 },
+  { id: 'northwest-pyongyang', from: 'episode2-northwest-road', to: 'pyongyang', mode: 'road', label: '서북 대로', travelDays: 1 },
+  { id: 'yalu-pyongyang', from: 'yalu', to: 'pyongyang', mode: 'road', label: '압록 역로', travelDays: 2 },
+  { id: 'pyongyang-gaeseong', from: 'pyongyang', to: 'gaeseong', mode: 'road', label: '평양·송도 대로', travelDays: 2 },
+  { id: 'pyongyang-haeju', from: 'pyongyang', to: 'haeju', mode: 'outpost', label: '황해 염전로', travelDays: 2 },
+  { id: 'gaeseong-hanseong', from: 'gaeseong', to: 'hanseong', mode: 'road', label: '송도 역로', travelDays: 1 },
+  { id: 'haeju-hanseong', from: 'haeju', to: 'hanseong', mode: 'outpost', label: '서해 봉수로', travelDays: 2 },
+  { id: 'haeju-west-coast', from: 'haeju', to: 'episode2-west-coast', mode: 'sea', label: '서해 조운 북로', travelDays: 2 },
+  { id: 'hanseong-suwon', from: 'hanseong', to: 'suwon', mode: 'road', label: '수원 역로', travelDays: 1 },
+  { id: 'hanseong-wonju', from: 'hanseong', to: 'wonju', mode: 'mountain', label: '치악 산길', travelDays: 2 },
+  { id: 'hanseong-yeongwol', from: 'hanseong', to: 'yeongwol', mode: 'mountain', label: '강원 내륙로', travelDays: 2 },
+  { id: 'hanseong-mountain', from: 'hanseong', to: 'episode2-mountain-road', mode: 'mountain', label: '관동 고갯길', travelDays: 2 },
+  { id: 'suwon-chungju', from: 'suwon', to: 'chungju', mode: 'road', label: '남한강 역로', travelDays: 2 },
+  { id: 'suwon-central-river', from: 'suwon', to: 'episode2-central-river', mode: 'outpost', label: '중부 강나루길', travelDays: 2 },
+  { id: 'suwon-west-coast', from: 'suwon', to: 'episode2-west-coast', mode: 'outpost', label: '남양 조운로', travelDays: 2 },
+  { id: 'wonju-yeongwol', from: 'wonju', to: 'yeongwol', mode: 'mountain', label: '영월 산길', travelDays: 1 },
+  { id: 'wonju-gangneung', from: 'wonju', to: 'gangneung', mode: 'mountain', label: '대관령 고갯길', travelDays: 2 },
+  { id: 'wonju-mountain', from: 'wonju', to: 'episode2-mountain-road', mode: 'outpost', label: '동부 봉수로', travelDays: 1 },
+  { id: 'mountain-gangneung', from: 'episode2-mountain-road', to: 'gangneung', mode: 'mountain', label: '관동 해맞이길', travelDays: 1 },
+  { id: 'gangneung-ulleung', from: 'gangneung', to: 'ulleung', mode: 'sea', label: '동해 도해로', travelDays: 2 },
+  { id: 'chungju-andong', from: 'chungju', to: 'andong', mode: 'road', label: '영남 내륙로', travelDays: 2 },
+  { id: 'chungju-central-river', from: 'chungju', to: 'episode2-central-river', mode: 'outpost', label: '남한강 수로', travelDays: 1 },
+  { id: 'central-river-jeonju', from: 'episode2-central-river', to: 'jeonju', mode: 'road', label: '금강 호남로', travelDays: 2 },
+  { id: 'central-river-yeongnam', from: 'episode2-central-river', to: 'episode2-yeongnam-road', mode: 'outpost', label: '중부 군영로', travelDays: 2 },
+  { id: 'west-coast-jeonju', from: 'episode2-west-coast', to: 'jeonju', mode: 'road', label: '전라 조운로', travelDays: 2 },
+  { id: 'west-coast-honam', from: 'episode2-west-coast', to: 'episode2-honam-road', mode: 'sea', label: '서해 조운 남로', travelDays: 2 },
+  { id: 'jeonju-honam', from: 'jeonju', to: 'episode2-honam-road', mode: 'outpost', label: '영산강 남행로', travelDays: 1 },
+  { id: 'jeonju-busan', from: 'jeonju', to: 'busan', mode: 'road', label: '호남·영남 대로', travelDays: 3 },
+  { id: 'andong-yeongnam', from: 'andong', to: 'episode2-yeongnam-road', mode: 'outpost', label: '낙동강 군로', travelDays: 1 },
+  { id: 'honam-yeongnam', from: 'episode2-honam-road', to: 'episode2-yeongnam-road', mode: 'road', label: '남부 횡단로', travelDays: 2 },
+  { id: 'yeongnam-busan', from: 'episode2-yeongnam-road', to: 'busan', mode: 'road', label: '부산진 군로', travelDays: 1 },
+  { id: 'busan-geoje', from: 'busan', to: 'geoje', mode: 'sea', label: '견내량 수군로', travelDays: 1 },
+  { id: 'busan-ulleung', from: 'busan', to: 'ulleung', mode: 'sea', label: '동해 뱃길', travelDays: 3 },
+  { id: 'busan-osaka', from: 'busan', to: 'osaka', mode: 'sea', label: '왜국 원정 해로', travelDays: 7 },
+] as const satisfies readonly WorldMapRoute[];
+
+const worldMapNodeById = new Map<string, WorldMapNode>(
+  WORLD_MAP_NODES.map((node) => [node.id, node]),
+);
+
+export const worldMapRouteGeometry = (route: WorldMapRoute): {
+  x: number;
+  y: number;
+  length: number;
+  angle: number;
+} => {
+  const from = worldMapNodeById.get(route.from);
+  const to = worldMapNodeById.get(route.to);
+  if (!from || !to) throw new Error(`Unknown world-map route endpoint: ${route.id}`);
+  const dx = to.mapX - from.mapX;
+  // The map stage is 3:2; convert vertical percentage to stage-width units.
+  const dy = (to.mapY - from.mapY) * (2 / 3);
+  return {
+    x: from.mapX,
+    y: from.mapY,
+    length: Math.hypot(dx, dy),
+    angle: Math.atan2(dy, dx) * (180 / Math.PI),
+  };
+};
+
+export const worldMapItinerary = (fromId: string, toId: string): WorldMapItinerary | null => {
+  const from = worldMapNodeById.get(fromId);
+  const to = worldMapNodeById.get(toId);
+  if (!from || !to) return null;
+  if (fromId === toId) return { nodes: [from], routes: [], travelDays: 0 };
+
+  const distance = new Map<string, number>([[fromId, 0]]);
+  const previous = new Map<string, { nodeId: string; route: WorldMapRoute }>();
+  const pending = new Set(WORLD_MAP_NODES.map((node) => node.id));
+  while (pending.size) {
+    let currentId: string | null = null;
+    let currentDistance = Number.POSITIVE_INFINITY;
+    for (const nodeId of pending) {
+      const candidate = distance.get(nodeId) ?? Number.POSITIVE_INFINITY;
+      if (candidate < currentDistance) {
+        currentId = nodeId;
+        currentDistance = candidate;
+      }
+    }
+    if (currentId === null || !Number.isFinite(currentDistance)) break;
+    pending.delete(currentId);
+    if (currentId === toId) break;
+
+    for (const route of WORLD_MAP_ROUTES) {
+      const neighborId = route.from === currentId ? route.to : route.to === currentId ? route.from : null;
+      if (!neighborId || !pending.has(neighborId)) continue;
+      const candidate = currentDistance + route.travelDays;
+      if (candidate < (distance.get(neighborId) ?? Number.POSITIVE_INFINITY)) {
+        distance.set(neighborId, candidate);
+        previous.set(neighborId, { nodeId: currentId, route });
+      }
+    }
+  }
+
+  if (!previous.has(toId)) return null;
+  const nodes: WorldMapNode[] = [to];
+  const routes: WorldMapRoute[] = [];
+  let cursor = toId;
+  while (cursor !== fromId) {
+    const step = previous.get(cursor);
+    if (!step) return null;
+    routes.unshift(step.route);
+    const node = worldMapNodeById.get(step.nodeId);
+    if (!node) return null;
+    nodes.unshift(node);
+    cursor = step.nodeId;
+  }
+  return { nodes, routes, travelDays: distance.get(toId) ?? 0 };
+};
 
 export const TRAVEL_ATLAS_GROUPS = [
   {

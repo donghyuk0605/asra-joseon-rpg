@@ -118,6 +118,10 @@ export type EquipmentState = Record<EquipmentSlot, string | null>;
 export type GroundDrop = Vec2 & {
   id: string;
   itemId: ItemId;
+  /** Legacy saves omitted the region; imports bind those drops to the saved region. */
+  region?: RegionId;
+  /** Remaining field lifetime. Undefined is accepted for legacy saves and tests. */
+  remainingSeconds?: number;
 };
 
 export type PlayerState = Vec2 & {
@@ -380,6 +384,7 @@ export type GameEvent =
   | { type: 'attributes-reset'; refunded: number; points: number }
   | { type: 'item-drop'; dropId: string; itemId: ItemId; itemName: string }
   | { type: 'item-pickup'; itemId: ItemId; itemName: string }
+  | { type: 'item-drop-expired'; itemId: ItemId; itemName: string; notable: boolean }
   | { type: 'inventory-full'; itemName: string }
   | { type: 'shop-purchase'; offer: ShopOfferId; name: string; gold: number }
   | { type: 'shop-blocked'; offer: ShopOfferId; reason: 'gold' | 'inventory' | 'equipment' | 'health' }

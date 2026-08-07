@@ -20,7 +20,10 @@ describe('full world map UI', () => {
     expect(hud).toContain('<strong>역참</strong><strong>장시</strong><strong>안전지대</strong>');
     expect(hud).toContain('<strong>보급</strong><strong>봉화</strong><strong>사냥</strong>');
     expect(hud).toContain('ASSETS.extendedRegionBackgrounds.wonju.path');
-    expect(styles).toContain('.world-map-route[data-route="outpost"]');
+    expect(hud).toContain('WORLD_MAP_ROUTES.map((route)');
+    expect(hud).toContain('data-route-id="${route.id}"');
+    expect(styles).toContain('.world-map-route[data-route-mode="outpost"]');
+    expect(styles).toContain('.world-map-route.is-itinerary');
   });
 
   it('renders the capital and strongholds with explicit atlas frames and war state', () => {

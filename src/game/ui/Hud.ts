@@ -31,8 +31,11 @@ import {
   TRAVEL_ATLAS_GROUPS,
   TRAVEL_ATLAS_REGION_IDS,
   WORLD_MAP_NODES,
+  WORLD_MAP_ROUTES,
+  worldMapItinerary,
   worldMapNodeKind,
   worldMapNodeForRegion,
+  worldMapRouteGeometry,
   type WorldMapTravelResult,
 } from '../world/worldMap';
 import type { FactionWarSnapshot } from '../world/factionWar';
@@ -1164,14 +1167,23 @@ export class Hud {
     const selectedNode = worldMapNodeForRegion(destination);
     const unlocked = this.travelMode
       || snapshot.worldMapUnlocked.includes(selectedNode?.destination ?? destination);
-    const current = snapshot.region === destination;
+    const current = snapshot.region === destination
+      || Boolean(currentWorldNode && selectedNode && currentWorldNode.id === selectedNode.id);
     const gwanghaeRoyalRoad = !this.travelMode && snapshot.playerOrigin === 'gwanghae-prince';
     const atlasGroup = TRAVEL_ATLAS_GROUPS.find((group) =>
       (group.regions as readonly RegionId[]).includes(destination));
-    const routeLabel = selectedNode?.routeLabel ?? atlasGroup?.label ?? '지방 답사로';
+    const itinerary = currentWorldNode && selectedNode
+      ? worldMapItinerary(currentWorldNode.id, selectedNode.id)
+      : null;
+    const routeLabel = itinerary
+      ? itinerary.routes.length
+        ? itinerary.nodes.map((node) => node.label).join(' → ')
+        : '현재 거점 내부'
+      : selectedNode?.routeLabel ?? atlasGroup?.label ?? '지방 답사로';
     const travelTime = this.travelMode
       ? '찰나의 유령 도약'
-      : selectedNode ? `예상 ${selectedNode.travelDays}일` : '현지 역로 확인';
+      : itinerary ? itinerary.travelDays > 0 ? `예상 ${itinerary.travelDays}일` : '이동 없음'
+        : selectedNode ? `예상 ${selectedNode.travelDays}일` : '현지 역로 확인';
     const stronghold = selectedNode && (!this.travelMode || selectedNode.destination === destination)
       ? snapshot.factionWar.strongholds.find((entry) => entry.id === selectedNode.id)
       : null;
@@ -1223,7 +1235,14 @@ export class Hud {
     }
 
     const stage = this.root.querySelector<HTMLElement>('.world-map-canvas');
-    if (stage) stage.dataset.selectedNode = selectedNode?.id ?? '';
+    if (stage) {
+      stage.dataset.selectedNode = selectedNode?.id ?? '';
+      stage.dataset.hasItinerary = itinerary?.routes.length ? 'true' : 'false';
+      const activeRouteIds = new Set(itinerary?.routes.map((route) => route.id) ?? []);
+      stage.querySelectorAll<HTMLElement>('.world-map-route').forEach((route) => {
+        route.classList.toggle('is-itinerary', activeRouteIds.has(route.dataset.routeId ?? ''));
+      });
+    }
     this.root.querySelectorAll<HTMLButtonElement>('[data-world-region], [data-travel-region]').forEach((button) => {
       const buttonDestination = (button.dataset.worldRegion ?? button.dataset.travelRegion) as RegionId;
       const buttonNode = button.dataset.worldRegion ? worldMapNodeForRegion(buttonDestination) : null;
@@ -2268,8 +2287,9 @@ export class Hud {
       if (follower && event.damage >= 16) this.addFeed(`${follower.name}의 협공 · ${event.damage} 피해`);
     }
     if (event.type === 'item-drop') this.addFeed(`${event.itemName}이(가) 바닥에 떨어졌다.`);
-    if (event.type === 'item-pickup') this.addFeed(`${event.itemName} 습득 — 가방에 보관했다.`);
-    if (event.type === 'inventory-full') this.addFeed(`가방이 가득 차 ${event.itemName}을 줍지 못했다.`);
+    if (event.type === 'item-pickup') this.addFeed(`${event.itemName} 습득 — 행낭에 보관했다.`);
+    if (event.type === 'item-drop-expired' && event.notable) this.addFeed(`전리품 소멸 · ${event.itemName}을 제때 줍지 못했다.`);
+    if (event.type === 'inventory-full') this.addFeed(`행낭이 가득 차 ${event.itemName}을 줍지 못했다.`);
     if (event.type === 'shop-purchase') this.addFeed(`${event.name} 구입 · 엽전 -${event.gold}`);
     if (event.type === 'shop-blocked') this.addFeed(event.reason === 'gold'
       ? '엽전이 부족하다.'
@@ -2719,6 +2739,17 @@ export class Hud {
   }
 
   private template(): string {
+    const worldMapRoutes = WORLD_MAP_ROUTES.map((route) => {
+      const geometry = worldMapRouteGeometry(route);
+      return `<div
+        class="world-map-route"
+        data-route-id="${route.id}"
+        data-route-mode="${route.mode}"
+        title="${route.label} · ${route.travelDays}일"
+        style="--route-x:${geometry.x}%;--route-y:${geometry.y}%;--route-length:${geometry.length}%;--route-angle:${geometry.angle}deg;"
+        aria-hidden="true"
+      ></div>`;
+    }).join('');
     const landmarkMapNodes = WORLD_MAP_NODES
       .filter((node) => 'landmarkFrame' in node)
       .map((node) => {
@@ -2989,18 +3020,7 @@ export class Hud {
             <div class="world-map-canvas" aria-label="조선과 주변 전장의 군사 거점 지도">
               <img src="/assets/ui/joseon-regional-world-map-v1.webp" alt="조선, 만주, 일본 오사카를 잇는 고지도">
               <div class="world-map-cartouche" aria-hidden="true"><span>大東輿行</span><b>천하 행군도</b><small>육로 · 해로 · 성곽</small></div>
-              <div class="world-map-route route-north-a" data-route="north" style="--route-x:23%;--route-y:18%;--route-length:18%;--route-angle:37deg;"></div>
-              <div class="world-map-route route-north-b" data-route="north" style="--route-x:36%;--route-y:29%;--route-length:14%;--route-angle:42deg;"></div>
-              <div class="world-map-route route-north-c" data-route="north" style="--route-x:43%;--route-y:40%;--route-length:14%;--route-angle:73deg;"></div>
-              <div class="world-map-route route-central" data-route="central" style="--route-x:47%;--route-y:53%;--route-length:9%;--route-angle:45deg;"></div>
-              <div class="world-map-route route-honam" data-route="south" style="--route-x:47%;--route-y:53%;--route-length:17%;--route-angle:107deg;"></div>
-              <div class="world-map-route route-yeongnam" data-route="south" style="--route-x:47%;--route-y:53%;--route-length:24%;--route-angle:73deg;"></div>
-              <div class="world-map-route route-east-sea" data-route="sea" style="--route-x:54%;--route-y:76%;--route-length:22%;--route-angle:-52deg;"></div>
-              <div class="world-map-route route-japan-sea" data-route="japan" style="--route-x:54%;--route-y:76%;--route-length:28%;--route-angle:0deg;"></div>
-              <div class="world-map-route route-new-west" data-route="outpost" style="--route-x:30%;--route-y:45%;--route-length:14%;--route-angle:4deg;"></div>
-              <div class="world-map-route route-new-mountain" data-route="outpost" style="--route-x:48%;--route-y:51%;--route-length:11%;--route-angle:-18deg;"></div>
-              <div class="world-map-route route-new-east" data-route="outpost" style="--route-x:57%;--route-y:48%;--route-length:11%;--route-angle:-28deg;"></div>
-              <div class="world-map-route route-new-south" data-route="outpost" style="--route-x:55%;--route-y:78%;--route-length:15%;--route-angle:38deg;"></div>
+              ${worldMapRoutes}
               ${landmarkMapNodes}
               ${settlementMapPins}
             </div>

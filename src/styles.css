@@ -4400,10 +4400,11 @@ body.world-map-open { overflow: hidden; }
   z-index: 3;
   border-top: 2px dashed rgba(100, 48, 29, .42);
   opacity: .62;
+  transform-origin: left center;
   transition: opacity .2s ease, filter .2s ease, border-color .2s ease;
 }
-.world-map-route[data-route="sea"],
-.world-map-route[data-route="japan"] { border-color: rgba(34, 76, 82, .52); }
+.world-map-route[data-route-mode="sea"] { border-color: rgba(34, 76, 82, .52); }
+.world-map-route[data-route-mode="mountain"] { border-top-style: dotted; }
 .world-map-route::after {
   content: "";
   position: absolute;
@@ -4416,25 +4417,13 @@ body.world-map-open { overflow: hidden; }
   opacity: 0;
   box-shadow: 0 0 8px rgba(226, 185, 98, .8);
 }
-.world-map-canvas[data-selected-node="jurchen"] [data-route="north"],
-.world-map-canvas[data-selected-node="yalu"] [data-route="north"],
-.world-map-canvas[data-selected-node="pyongyang"] [data-route="north"],
-.world-map-canvas[data-selected-node="gaeseong"] [data-route="north"],
-.world-map-canvas[data-selected-node="hanseong"] [data-route="north"],
-.world-map-canvas[data-selected-node="hanseong"] [data-route="central"],
-.world-map-canvas[data-selected-node="yeongwol"] [data-route="central"],
-.world-map-canvas[data-selected-node="jeonju"] [data-route="south"],
-.world-map-canvas[data-selected-node="suwon"] [data-route="south"],
-.world-map-canvas[data-selected-node="chungju"] [data-route="south"],
-.world-map-canvas[data-selected-node="andong"] [data-route="south"],
-.world-map-canvas[data-selected-node="busan"] [data-route="south"],
-.world-map-canvas[data-selected-node="ulleung"] [data-route="sea"],
-.world-map-canvas[data-selected-node="osaka"] [data-route="japan"] {
+.world-map-canvas[data-has-itinerary="true"] .world-map-route { opacity: .2; }
+.world-map-route.is-itinerary {
   border-color: #d1a254;
   opacity: 1;
   filter: drop-shadow(0 0 4px rgba(226, 180, 90, .75));
 }
-.world-map-canvas[data-selected-node] .world-map-route::after {
+.world-map-route.is-itinerary::after {
   animation: world-map-route-scout 2.1s linear infinite;
 }
 @keyframes world-map-route-scout {
@@ -5236,17 +5225,14 @@ body.world-map-open { overflow: hidden; }
 }
 
 /* Newly opened mountain and coastal outposts use their own route language. */
-.world-map-route[data-route="outpost"] {
+.world-map-route[data-route-mode="outpost"] {
   border-top-style: solid;
   border-top-width: 2px;
   border-color: rgba(76, 127, 116, .72);
   opacity: .72;
 }
-.world-map-route[data-route="outpost"]::after { background: #8ad0b0; }
-.world-map-canvas[data-selected-node="haeju"] [data-route="outpost"],
-.world-map-canvas[data-selected-node="wonju"] [data-route="outpost"],
-.world-map-canvas[data-selected-node="gangneung"] [data-route="outpost"],
-.world-map-canvas[data-selected-node="geoje"] [data-route="outpost"] {
+.world-map-route[data-route-mode="outpost"]::after { background: #8ad0b0; }
+.world-map-route[data-route-mode="outpost"].is-itinerary {
   border-color: #8dd4bd;
   opacity: 1;
   filter: drop-shadow(0 0 5px rgba(92, 203, 172, .78));
