@@ -5573,3 +5573,113 @@ body.high-contrast-objectives .field-guide {
     margin: 0;
   }
 }
+
+/* PvP Battlefield Styles */
+.online-battlefield__content {
+  display: flex;
+  gap: 24px;
+  height: 100%;
+}
+.online-battlefield__sidebar {
+  flex: 0 0 300px;
+  background: var(--stone-900);
+  border: 1px solid var(--stone-800);
+  padding: 16px;
+  border-radius: 8px;
+}
+.online-battlefield__form label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--stone-400);
+}
+.online-battlefield__form input {
+  width: 100%;
+  padding: 8px;
+  background: var(--stone-950);
+  border: 1px solid var(--stone-700);
+  color: #fff;
+  border-radius: 4px;
+}
+.pvp-fighter-select {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pvp-fighter-select button {
+  padding: 8px;
+  background: var(--stone-800);
+  border: 1px solid var(--stone-700);
+  color: var(--stone-300);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.pvp-fighter-select button.is-selected {
+  background: var(--stone-700);
+  color: #fff;
+  border-color: var(--stone-500);
+}
+.online-battlefield__form button[data-pvp-action] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.online-battlefield__form button.is-secondary {
+  background: var(--stone-800);
+  color: var(--stone-300);
+}
+.online-battlefield__rooms {
+  flex: 1;
+  background: var(--stone-900);
+  border: 1px solid var(--stone-800);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-y: auto;
+}
+.pvp-room-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pvp-room-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--stone-800);
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+.pvp-room-card span {
+  display: flex;
+  flex-direction: column;
+}
+.pvp-room-card strong {
+  font-size: 16px;
+  color: #fff;
+}
+.pvp-room-card small {
+  font-size: 12px;
+  color: var(--stone-400);
+}
+.pvp-room-card button {
+  padding: 8px 16px;
+  background: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.pvp-room-card em {
+  font-size: 12px;
+  color: #fbbf24;
+  font-style: normal;
+}

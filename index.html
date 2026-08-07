@@ -154,6 +154,9 @@
           <button type="button" data-online-tab="market" aria-pressed="false">
             <i>市</i><span><small>TRADE BOARD</small><b>거래 제안소</b><em>장비 예약·취소</em></span>
           </button>
+          <button type="button" data-online-tab="battlefield" aria-pressed="false">
+            <i>野</i><span><small>BATTLEFIELD</small><b>울릉 전장</b><em>오픈 필드 대전</em></span>
+          </button>
           <aside>
             <small>성채 규율</small>
             <p>결투의 체력·피해·승패는 서버가 판정합니다.</p>
@@ -248,6 +251,41 @@
               <p data-market-form-status>등록한 제안은 다른 접속자에게 즉시 보입니다.</p>
               <button type="submit"><small>POST OFFER</small><b>장부에 제안 올리기</b></button>
             </form>
+          </section>
+
+          <section class="online-battlefield" data-online-panel="battlefield" aria-label="오픈 필드 전장" hidden>
+            <header class="online-panel-heading">
+              <div><small>鬱陵 戰場 · FIREBASE RTDB</small><h2>울릉 해안 전장</h2><p>실제 필드에서 상대방과 만나 대전합니다. 기존에 육성한 캐릭터와 장비가 그대로 적용됩니다.</p></div>
+              <span class="online-battlefield__status"><small>전장 상태</small><b data-pvp-status>대기 중</b></span>
+            </header>
+
+            <div class="online-battlefield__content">
+              <aside class="online-battlefield__sidebar">
+                <small>CREATE ROOM</small>
+                <strong>전장 만들기</strong>
+                <p>방 이름을 정하고 전장을 엽니다.</p>
+                <div class="online-battlefield__form">
+                  <label><span>전장 이름</span><input type="text" data-pvp-room-name-input maxlength="20" placeholder="방 이름을 입력하세요"></label>
+                  <label><span>상대에게 보일 외형</span>
+                    <div class="pvp-fighter-select">
+                      <button type="button" data-pvp-fighter="donghyeok" class="is-selected">김동혁</button>
+                      <button type="button" data-pvp-fighter="hajin">하진</button>
+                      <button type="button" data-pvp-fighter="yeonhwa">연화</button>
+                      <button type="button" data-pvp-fighter="gwanghae">광해군</button>
+                    </div>
+                  </label>
+                  <button type="button" data-pvp-action="create-room">전장 만들기</button>
+                  <button type="button" data-pvp-action="leave-room" class="is-secondary">방 나가기</button>
+                </div>
+              </aside>
+
+              <section class="online-battlefield__rooms">
+                <header><span><small>OPEN BATTLEFIELDS</small><b>열린 전장 목록</b></span><button type="button" data-pvp-action="refresh-rooms"><i>↻</i></button></header>
+                <ul class="pvp-room-list" data-pvp-room-list>
+                  <li class="pvp-room-empty"><span>열린 전장이 없습니다</span><small>방을 만들어 상대를 기다리십시오</small></li>
+                </ul>
+              </section>
+            </div>
           </section>
         </main>
       </section>
