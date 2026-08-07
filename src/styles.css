@@ -5574,112 +5574,214 @@ body.high-contrast-objectives .field-guide {
   }
 }
 
-/* PvP Battlefield Styles */
-.online-battlefield__content {
-  display: flex;
-  gap: 24px;
-  height: 100%;
+/* PvP Battlefield Styles (Dark Joseon Traditional Theme) */
+.online-battlefield {
+  min-height: 100%;
+  padding: clamp(14px, 2.2vw, 30px);
+  animation: online-panel-in .24s ease-out both;
 }
-.online-battlefield__sidebar {
-  flex: 0 0 300px;
-  background: var(--stone-900);
-  border: 1px solid var(--stone-800);
-  padding: 16px;
-  border-radius: 8px;
+.online-battlefield[hidden] {
+  display: none;
+}
+.online-battlefield__status {
+  display: grid;
+  align-content: center;
+  text-align: right;
+}
+.online-battlefield__status small {
+  color: #9c7c49;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+.online-battlefield__status b {
+  color: #d9c9a8;
+  font: 700 14px "Nanum Myeongjo", serif;
+}
+.online-battlefield__content {
+  display: grid;
+  grid-template-columns: minmax(250px, 320px) 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 14px;
+}
+.online-battlefield__sidebar, .online-battlefield__rooms {
+  border: 1px solid rgba(155, 128, 77, .35);
+  background: linear-gradient(145deg, rgba(11, 16, 13, .94), rgba(6, 9, 7, .95));
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .32);
+  padding: 18px 20px;
+}
+.online-battlefield__sidebar small {
+  color: #9c7c49;
+  font-size: 8px;
+  letter-spacing: .16em;
+  display: block;
+}
+.online-battlefield__sidebar strong {
+  color: #f0dfb9;
+  font: 900 20px "Nanum Myeongjo", serif;
+  display: block;
+  margin: 4px 0 6px;
+}
+.online-battlefield__sidebar p {
+  color: #8c8f85;
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0 0 14px;
 }
 .online-battlefield__form label {
   display: block;
-  margin-top: 12px;
-  margin-bottom: 4px;
-  font-size: 14px;
-  color: var(--stone-400);
+  margin-bottom: 12px;
+}
+.online-battlefield__form label > span {
+  display: block;
+  color: #baa983;
+  font-size: 11px;
+  margin-bottom: 5px;
 }
 .online-battlefield__form input {
   width: 100%;
-  padding: 8px;
-  background: var(--stone-950);
-  border: 1px solid var(--stone-700);
-  color: #fff;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border: 1px solid #51452f;
+  background: #090b08;
+  color: #ded0ae;
+  font: 13px "Nanum Myeongjo", serif;
+  box-sizing: border-box;
+}
+.online-battlefield__form input:focus {
+  outline: none;
+  border-color: #b28748;
 }
 .pvp-fighter-select {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 6px;
 }
 .pvp-fighter-select button {
-  padding: 8px;
-  background: var(--stone-800);
-  border: 1px solid var(--stone-700);
-  color: var(--stone-300);
-  border-radius: 4px;
+  padding: 7px;
+  border: 1px solid #4a3e2a;
+  background: linear-gradient(#201c15, #11110c);
+  color: #8a7f6c;
+  font: 700 12px "Nanum Myeongjo", serif;
   cursor: pointer;
+  transition: all .15s ease;
+}
+.pvp-fighter-select button:hover {
+  border-color: #9c7c49;
+  color: #c7b897;
 }
 .pvp-fighter-select button.is-selected {
-  background: var(--stone-700);
-  color: #fff;
-  border-color: var(--stone-500);
+  border-color: #b28748;
+  background: linear-gradient(#4a321f, #24170e);
+  color: #f0dfb9;
+  box-shadow: inset 0 0 8px rgba(178, 135, 72, .3);
 }
 .online-battlefield__form button[data-pvp-action] {
   width: 100%;
-  padding: 12px;
-  margin-top: 8px;
-  background: #3b82f6;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
+  padding: 11px;
+  margin-top: 10px;
+  border: 1px solid #8a6535;
+  background: linear-gradient(#5b3721, #2c2117);
+  color: #f0d59d;
+  font: 900 14px "Nanum Myeongjo", serif;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: all .15s ease;
+}
+.online-battlefield__form button[data-pvp-action]:hover {
+  border-color: #b28748;
+  color: #fff;
+  filter: brightness(1.15);
 }
 .online-battlefield__form button.is-secondary {
-  background: var(--stone-800);
-  color: var(--stone-300);
+  background: linear-gradient(#29251c, #15150f);
+  border-color: #51452f;
+  color: #9c8e73;
 }
-.online-battlefield__rooms {
-  flex: 1;
-  background: var(--stone-900);
-  border: 1px solid var(--stone-800);
-  border-radius: 8px;
-  padding: 16px;
-  overflow-y: auto;
+.online-battlefield__form button.is-secondary:hover {
+  border-color: #7a6847;
+  color: #ded0ae;
+}
+.online-battlefield__rooms header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(155, 128, 77, .25);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.online-battlefield__rooms header span {
+  display: grid;
+}
+.online-battlefield__rooms header small {
+  color: #9c7c49;
+  font-size: 8px;
+  letter-spacing: .14em;
+}
+.online-battlefield__rooms header b {
+  color: #f0dfb9;
+  font: 900 18px "Nanum Myeongjo", serif;
+}
+.online-battlefield__rooms header button {
+  padding: 5px 10px;
+  background: #15150f;
+  border: 1px solid #51452f;
+  color: #baa983;
+  cursor: pointer;
 }
 .pvp-room-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  gap: 8px;
 }
 .pvp-room-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
-  background: var(--stone-800);
-  margin-bottom: 8px;
-  border-radius: 4px;
+  padding: 12px 16px;
+  border: 1px solid rgba(138, 101, 53, .4);
+  background: linear-gradient(90deg, rgba(25, 20, 14, .85), rgba(16, 13, 9, .95));
 }
-.pvp-room-card span {
-  display: flex;
-  flex-direction: column;
+.pvp-room-card span strong {
+  display: block;
+  color: #f0dfb9;
+  font: 700 15px "Nanum Myeongjo", serif;
 }
-.pvp-room-card strong {
-  font-size: 16px;
-  color: #fff;
-}
-.pvp-room-card small {
-  font-size: 12px;
-  color: var(--stone-400);
+.pvp-room-card span small {
+  color: #8c8f85;
+  font-size: 11px;
 }
 .pvp-room-card button {
-  padding: 8px 16px;
-  background: #10b981;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
+  padding: 7px 16px;
+  border: 1px solid #8a6535;
+  background: linear-gradient(#5b3721, #2c2117);
+  color: #f0d59d;
+  font: 700 12px "Nanum Myeongjo", serif;
   cursor: pointer;
 }
+.pvp-room-card button:hover {
+  border-color: #b28748;
+  color: #fff;
+}
 .pvp-room-card em {
-  font-size: 12px;
-  color: #fbbf24;
+  color: #b89454;
+  font: 700 12px "Nanum Myeongjo", serif;
   font-style: normal;
+}
+.pvp-room-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #7f887e;
+}
+.pvp-room-empty span {
+  display: block;
+  color: #a89a7c;
+  font: 700 16px "Nanum Myeongjo", serif;
+  margin-bottom: 4px;
+}
+@media (max-width: 768px) {
+  .online-battlefield__content {
+    grid-template-columns: 1fr;
+  }
 }

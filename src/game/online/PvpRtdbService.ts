@@ -78,6 +78,18 @@ export class PvpRtdbService {
     };
   }
 
+  /** 특정 방 1개의 변화(게스트 참가 등)를 실시간 감지합니다. */
+  subscribeRoom(roomId: string, callback: (room: PvpRoomInfo | null) => void): () => void {
+    const roomRef = doc(this.db, ROOMS_COLLECTION, roomId);
+    return onSnapshot(roomRef, (snapshot) => {
+      if (!snapshot.exists()) {
+        callback(null);
+        return;
+      }
+      callback({ id: snapshot.id, ...(snapshot.data() as Omit<PvpRoomInfo, 'id'>) });
+    }, () => callback(null));
+  }
+
   /** 방을 만들고 roomId를 반환합니다. */
   async createRoom(
     roomName: string,

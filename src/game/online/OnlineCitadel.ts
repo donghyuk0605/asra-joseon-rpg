@@ -271,7 +271,7 @@ export class OnlineCitadel {
       button.setAttribute('aria-pressed', String(active));
     });
     if (tab === 'market' && this.market) void this.refreshMarket();
-    if (tab === 'battlefield') this.client?.requestPvpRoomList();
+    if (tab === 'battlefield') this.startPvpRoomSubscription();
   }
 
   private setConnectionStatus(
@@ -815,6 +815,26 @@ export class OnlineCitadel {
         const roomId = await this.pvpService.createRoom(roomName, uid, this.playerName, this.pvpSelectedFighterId);
         this.pvpMyRoomId = roomId;
         this.text('[data-pvp-status]', `방 생성됨 · ${roomName} — 상대를 기다리는 중`);
+
+        // 호스트: 상대 참가 감지 구독
+        const unsub = this.pvpService.subscribeRoom(roomId, (room) => {
+          if (room && room.guestUid) {
+            unsub();
+            const opponentUid = room.guestUid;
+            const opponentName = room.guestName ?? '상대';
+            const opponentFighterId = room.guestFighterId ?? 'donghyeok';
+            void this.pvpService.registerPosition(roomId, uid);
+            this.pvpMyRoomId = '';
+            this.options.onPvpFieldEnter?.({
+              roomId,
+              selfUid: uid,
+              selfFighterId: this.pvpSelectedFighterId,
+              opponentUid,
+              opponentName,
+              opponentFighterId,
+            });
+          }
+        });
       } catch (err) {
         this.text('[data-pvp-status]', err instanceof Error ? err.message : '방을 만들지 못했습니다');
       }

@@ -135,6 +135,12 @@ import {
   normalizeStoryCampaignState,
   type StoryCampaignState,
 } from '../story/StoryCampaign';
+import {
+  monsterElementEffectMultiplier,
+  monsterGuaranteedSignatureDrop,
+  monsterLootPityInterval,
+  rollStandardMonsterLoot,
+} from '../combat/monsterIntel';
 
 const followerAttackKind = (kind: FollowerKind): FollowerAttackKind => {
   if (kind === 'jurchen-bowguard' || kind === 'gwanghae-archer') return 'arrow';
@@ -8218,13 +8224,7 @@ export class GameSimulation {
         return;
       }
     }
-    const regionalSignatureDrops: Partial<Record<MonsterKind, ItemId>> = {
-      'wonju-bear': 'chiaksan-claw-knife',
-      'gangneung-haetae': 'haetae-ward-charm',
-      'haeju-crane': 'crane-feather-talisman',
-      'geoje-sea-wraith': 'sea-salt-amulet',
-    };
-    const signatureDrop = regionalSignatureDrops[monster.kind];
+    const signatureDrop = monsterGuaranteedSignatureDrop(monster.kind);
     if (signatureDrop && !this.ownsItem(signatureDrop)) {
       this.spawnDrop(monster, signatureDrop);
       return;
@@ -8242,36 +8242,15 @@ export class GameSimulation {
       this.spawnDrop(monster, itemId);
       return;
     }
-    if (monster.kind === 'ulleung-magistrate') {
-      itemId = 'moonsteel-hwando';
-    } else if (monster.kind === 'wako-captain' && roll < 0.16) {
-      itemId = 'ember-hwando';
-    } else if (monster.kind === 'wako-archer' && roll < 0.12) {
-      itemId = 'gale-hwando';
-    } else if (monster.kind === 'bamboo-spirit' && roll < 0.12) {
-      itemId = 'venom-hwando';
-    } else if (monster.kind === 'mine-golem' && roll < 0.13) {
-      itemId = 'earth-hwando';
-    } else if (monster.kind === 'moon-revenant' && roll < 0.12) {
-      itemId = 'shadow-hwando';
-    } else if (
-      (monster.kind === 'yeongwol-commander' || monster.kind === 'jeonju-commander')
-      && roll < 0.12
-    ) {
-      itemId = 'storm-hwando';
-    } else if (monster.kind === 'japanese-general' && this.isFrontierArcher() && roll < 0.16) {
-      itemId = 'thunderbird-bow';
-    } else if (roll < 0.028) {
-      itemId = Math.random() < 0.5 ? 'weapon-enchant-scroll' : 'armor-enchant-scroll';
-    } else if ((monster.kind === 'bandit' || isGovernmentSoldier(monster.kind) || isWako(monster.kind)) && roll < 0.085) {
-      itemId = Math.random() < 0.08 ? 'warden-durumagi' : 'hunter-durumagi';
-    } else if (monster.kind === 'boar' && roll < 0.1) {
-      itemId = Math.random() < 0.06 ? 'silver-tiger-charm' : 'boar-tusk-charm';
-    } else if ((monster.kind === 'dokkaebi' || monster.kind === 'bamboo-spirit') && roll < 0.075) {
-      itemId = Math.random() < 0.04 ? 'moonsteel-hwando' : 'dokkaebi-club';
-    }
+    itemId = rollStandardMonsterLoot(
+      monster.kind,
+      roll,
+      () => Math.random(),
+      this.getPlayerOrigin(),
+    );
     const killCount = this.huntKills[monster.kind] ?? 0;
-    if (!itemId && killCount > 0 && killCount % 8 === 0) {
+    const pityInterval = monsterLootPityInterval(monster.kind);
+    if (!itemId && pityInterval && killCount > 0 && killCount % pityInterval === 0) {
       itemId = Math.random() < 0.5 ? 'weapon-enchant-scroll' : 'armor-enchant-scroll';
     }
     if (!itemId) return;
