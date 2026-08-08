@@ -2372,6 +2372,9 @@ export class Hud {
       defeatOverlay?.classList.remove('is-visible');
       defeatOverlay?.setAttribute('aria-hidden', 'true');
     }
+    if (event.type === 'movement-blocked') {
+      this.addFeed('이동 불가 · 장애물에 막혔습니다. 표시된 지점 바깥을 다시 선택하십시오.');
+    }
     if (event.type === 'skill-cast') this.addFeed(`${SKILL_CATALOG[event.skillId].name} ${event.rank}단 발동`);
     if (event.type === 'skill-impact') this.addFeed(`${event.targets}개 대상에게 ${event.damage} 피해`);
     if (event.type === 'skill-learned') this.addFeed(`무공 강화 성공 · ${SKILL_CATALOG[event.skillId].name} ${event.rank}단`);

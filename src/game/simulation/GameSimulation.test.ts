@@ -1563,10 +1563,13 @@ describe('GameSimulation', () => {
   it('projects clicks out of scenery and clears an unreachable straight-line walk goal', () => {
     const projected = new GameSimulation('village');
     const innCenter = { x: 300, y: VILLAGE_TOP + 246 };
-    projected.moveTo(innCenter);
+    const projectedPlan = projected.moveTo(innCenter)!;
     const isRoutePointClear = (projected as unknown as {
       isRoutePointClear: (point: { x: number; y: number }, bodyRadius: number) => boolean;
     }).isRoutePointClear.bind(projected);
+    expect(projectedPlan.requested).toEqual(innCenter);
+    expect(projectedPlan.destination).toEqual(projected.getMovementGoal());
+    expect(projectedPlan.adjusted).toBe(true);
     expect(projected.getMovementGoal()).not.toEqual(innCenter);
     expect(isRoutePointClear(projected.getMovementGoal()!, 20)).toBe(true);
 
@@ -1578,11 +1581,16 @@ describe('GameSimulation', () => {
     stalled.player.x = 700;
     stalled.player.y = VILLAGE_TOP + 246;
     stalled.moveTo({ x: 50, y: VILLAGE_TOP + 246 });
+    stalled.drainEvents();
     expect(stalled.getMovementGoal()).toEqual({ x: 50, y: VILLAGE_TOP + 246 });
     for (let step = 0; step < 160 && stalled.player.destination; step += 1) stalled.update(0.05);
 
     expect(stalled.player.destination).toBeNull();
     expect(stalled.player.x).toBeGreaterThanOrEqual(524);
+    expect(stalled.drainEvents()).toContainEqual(expect.objectContaining({
+      type: 'movement-blocked',
+      goal: { x: 50, y: VILLAGE_TOP + 246 },
+    }));
   });
 
   it('keeps every regional monster population resident at distinct world coordinates', () => {

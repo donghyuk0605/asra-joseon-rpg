@@ -4,7 +4,7 @@ import { ITEM_CATALOG, type ItemDefinition } from '../items/catalog';
 import { GameSimulation } from '../simulation/GameSimulation';
 import type {
   BasicAttackStep, FollowerState, GameEvent, GroundDrop, ItemId, LandmarkId, MonsterAiState, MonsterKind, MonsterState,
-  PlayerOrigin, SkillId, WeaponElement,
+  MovementPlan, PlayerOrigin, SkillId, WeaponElement,
 } from '../simulation/types';
 import { Hud, type QuestProgress, type StoryProgress } from '../ui/Hud';
 import { withObjectParticle } from '../ui/koreanGrammar';
@@ -731,6 +731,8 @@ export class HuntingScene extends Phaser.Scene {
   private travelGhostAura: Phaser.GameObjects.Ellipse | null = null;
   private travelGhostCore: Phaser.GameObjects.Ellipse | null = null;
   private destinationMark!: Phaser.GameObjects.Arc;
+  private requestedDestinationMark!: Phaser.GameObjects.Arc;
+  private blockedDestinationMark!: Phaser.GameObjects.Container;
   private monsterViews = new Map<string, MonsterView>();
   private followerViews = new Map<string, FollowerView>();
   private bossView: BossView | null = null;
@@ -904,6 +906,91 @@ export class HuntingScene extends Phaser.Scene {
     this.destinationMark.setStrokeStyle(2, 0x91efff, 0.95);
     this.showSavePresence('유령 여행 · 전투와 기록 없음', false);
     this.time.delayedCall(120, () => this.hud.toggleWorldMap(true));
+  }
+
+  private showMovementPlan(plan: MovementPlan): void {
+    const feedback = plan.adjusted ? 'projected' : plan.routed ? 'routed' : 'direct';
+    document.body.dataset.movementFeedback = feedback;
+    document.body.dataset.movementDestination = `${Math.round(plan.destination.x)},${Math.round(plan.destination.y)}`;
+    this.tweens.killTweensOf(this.destinationMark);
+    this.tweens.killTweensOf(this.requestedDestinationMark);
+    this.tweens.killTweensOf(this.blockedDestinationMark);
+    this.blockedDestinationMark.setVisible(false);
+
+    if (plan.adjusted) {
+      this.requestedDestinationMark
+        .setStrokeStyle(1, 0xb98c73, 0.82)
+        .setPosition(plan.requested.x, plan.requested.y)
+        .setVisible(true)
+        .setScale(0.58)
+        .setAlpha(0.92);
+      this.tweens.add({
+        targets: this.requestedDestinationMark,
+        scale: 1.18,
+        alpha: 0,
+        duration: 680,
+        ease: 'Sine.easeOut',
+        onComplete: () => this.requestedDestinationMark.setVisible(false),
+      });
+    } else {
+      this.requestedDestinationMark.setVisible(false);
+    }
+
+    const color = plan.adjusted ? 0x79d5de : plan.routed ? 0xdca85e : 0xd7b66c;
+    this.destinationMark
+      .setStrokeStyle(2, color, 0.96)
+      .setPosition(plan.destination.x, plan.destination.y)
+      .setVisible(true)
+      .setScale(0.62)
+      .setAlpha(1);
+    this.tweens.add({
+      targets: this.destinationMark,
+      scale: plan.routed ? 1.75 : 1.5,
+      alpha: 0,
+      duration: plan.routed ? 620 : 480,
+      ease: 'Sine.easeOut',
+      onComplete: () => this.destinationMark.setVisible(false),
+    });
+  }
+
+  private showMovementReroute(via: { x: number; y: number }, attempt: number): void {
+    document.body.dataset.movementFeedback = 'rerouted';
+    document.body.dataset.movementRerouteAttempt = String(attempt);
+    this.tweens.killTweensOf(this.requestedDestinationMark);
+    this.requestedDestinationMark
+      .setStrokeStyle(2, 0xe1a65a, 0.94)
+      .setPosition(via.x, via.y)
+      .setVisible(true)
+      .setScale(0.65)
+      .setAlpha(1);
+    this.tweens.add({
+      targets: this.requestedDestinationMark,
+      scale: 1.38,
+      alpha: 0,
+      duration: 560,
+      ease: 'Sine.easeOut',
+      onComplete: () => this.requestedDestinationMark.setVisible(false),
+    });
+  }
+
+  private showMovementBlocked(at: { x: number; y: number }): void {
+    document.body.dataset.movementFeedback = 'blocked';
+    document.body.dataset.movementBlockedAt = `${Math.round(at.x)},${Math.round(at.y)}`;
+    this.tweens.killTweensOf(this.blockedDestinationMark);
+    this.blockedDestinationMark
+      .setPosition(at.x, at.y)
+      .setVisible(true)
+      .setScale(0.62)
+      .setAlpha(1);
+    this.tweens.add({
+      targets: this.blockedDestinationMark,
+      scale: 1.55,
+      alpha: 0,
+      duration: 1800,
+      ease: 'Sine.easeOut',
+      onComplete: () => this.blockedDestinationMark.setVisible(false),
+    });
+    this.alertMarker(at.x, at.y - 44, '길이 막혔습니다 · 다른 지점을 선택하십시오', 2000);
   }
 
   private consumePreconfiguredOrigin(origin: PlayerOrigin): boolean {
@@ -1792,7 +1879,20 @@ export class HuntingScene extends Phaser.Scene {
 
     this.positionUlleungContinuityPlaytest();
     this.positionWorldContinuityPlaytest();
+    this.positionNavigationFeedbackPlaytest();
     this.destinationMark = this.add.circle(0, 0, 15, 0x000000, 0).setStrokeStyle(2, 0xd7b66c, 0.9).setVisible(false).setDepth(1900);
+    this.requestedDestinationMark = this.add.circle(0, 0, 9, 0x1c1812, 0.16)
+      .setStrokeStyle(1, 0xb98c73, 0.82)
+      .setVisible(false)
+      .setDepth(1899);
+    const blockedRing = this.add.circle(0, 0, 13, 0x461b17, 0.16)
+      .setStrokeStyle(2, 0xe06b57, 0.96);
+    const blockedCross = this.add.graphics();
+    blockedCross.lineStyle(3, 0xffb19d, 0.96).beginPath()
+      .moveTo(-7, -7).lineTo(7, 7).moveTo(7, -7).lineTo(-7, 7).strokePath();
+    this.blockedDestinationMark = this.add.container(0, 0, [blockedRing, blockedCross])
+      .setVisible(false)
+      .setDepth(1901);
     this.playerShadow = this.add.ellipse(0, 5, 58, 18, 0x090a07, 0.42);
     this.playerSprite = this.add.sprite(0, 0, ASSETS.playerUnequipped.key, 0)
       .setScale(PLAYER_SCALE).setOrigin(0.5, 0.97);
@@ -1854,6 +1954,8 @@ export class HuntingScene extends Phaser.Scene {
       onInventoryToggle: (open) => {
         this.menuOpen = open;
         this.destinationMark.setVisible(false);
+        this.requestedDestinationMark.setVisible(false);
+        this.blockedDestinationMark.setVisible(false);
         if (open) {
           this.tweens.pauseAll();
           this.anims.pauseAll();
@@ -1882,6 +1984,8 @@ export class HuntingScene extends Phaser.Scene {
     this.storyDirector = new StoryDirector({
       onOpenChange: (open) => {
         this.destinationMark.setVisible(false);
+        this.requestedDestinationMark.setVisible(false);
+        this.blockedDestinationMark.setVisible(false);
         if (open) {
           this.tweens.pauseAll();
           this.anims.pauseAll();
@@ -1998,16 +2102,15 @@ export class HuntingScene extends Phaser.Scene {
       this.combatAudio.prime();
       if (objects.some((object) => object.getData('monsterId') || object.getData('dropId') || object.getData('villageNpc') || object.getData('dungeonAction'))) return;
       const point = { x: pointer.worldX, y: pointer.worldY };
-      this.simulation.moveTo(point);
+      const movementPlan = this.simulation.moveTo(point);
+      if (!movementPlan) return;
       this.attackLock = 0;
       this.skillVisualNonce += 1;
       this.skillWorldMotion = null;
       this.tweens.killTweensOf(this.playerActionRoot);
       this.playerActionRoot.setPosition(0, 0).setRotation(0).setScale(1).setAlpha(1);
       this.playerSprite.stop();
-      const destination = this.simulation.getMovementGoal() ?? point;
-      this.destinationMark.setPosition(destination.x, destination.y).setVisible(true).setScale(0.6).setAlpha(1);
-      this.tweens.add({ targets: this.destinationMark, scale: 1.5, alpha: 0, duration: 450, onComplete: () => this.destinationMark.setVisible(false) });
+      this.showMovementPlan(movementPlan);
     });
 
     this.input.keyboard?.on('keydown-TWO', () => {
@@ -7004,6 +7107,18 @@ export class HuntingScene extends Phaser.Scene {
     this.simulation.player.destination = null;
   }
 
+  private positionNavigationFeedbackPlaytest(): void {
+    if (!import.meta.env.DEV) return;
+    const mode = new URLSearchParams(window.location.search).get('navqa');
+    if (mode !== 'blocked' || this.simulation.region !== 'village') return;
+    this.simulation.player.x = 700;
+    this.simulation.player.y = VILLAGE_TOP + 246;
+    document.body.dataset.navigationQa = 'blocked';
+    this.time.delayedCall(700, () => {
+      this.simulation.moveTo({ x: 50, y: VILLAGE_TOP + 246 });
+    });
+  }
+
   private createUlleungAdventureProps(): void {
     const props: Array<{
       id: LandmarkId;
@@ -10771,6 +10886,12 @@ export class HuntingScene extends Phaser.Scene {
       this.resetPlayerView();
       this.playerRoot.setAlpha(0.25);
       this.tweens.add({ targets: this.playerRoot, alpha: 1, duration: 650, ease: 'Sine.easeInOut' });
+    }
+    if (event.type === 'movement-rerouted') {
+      this.showMovementReroute(event.via, event.attempt);
+    }
+    if (event.type === 'movement-blocked') {
+      this.showMovementBlocked(event.at);
     }
     if (event.type === 'player-quickstep') {
       const angle = this.simulation.player.facing + Math.PI;

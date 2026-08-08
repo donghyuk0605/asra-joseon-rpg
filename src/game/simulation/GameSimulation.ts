@@ -3,7 +3,7 @@ import type {
   BasicAttackStep, CraftRecipeId, EquipmentSlot, EquipmentState, GameEvent, GroundDrop, InventoryItem, ItemId,
   ActiveWorldEvent, FollowerAttackKind, FollowerKind, FollowerState, LandmarkId, MonsterKind, MonsterState,
   MonsterTacticalRole, PlayerState,
-  PlayerOrigin, RecruitmentRoute, SkillId, Vec2, WorldEventKind, ShopOfferId, SkillUnlockSource, WeaponElement,
+  MovementPlan, PlayerOrigin, RecruitmentRoute, SkillId, Vec2, WorldEventKind, ShopOfferId, SkillUnlockSource, WeaponElement,
   GwanghaeMilitiaRallyBlockedReason, GwanghaePathChoiceBlockedReason,
 } from './types';
 import { CENTRAL_WORLD_HEIGHT, MAP_HEIGHT, MAP_WIDTH, REGION_ORIGINS, VILLAGE_TOP } from '../world/layout';
@@ -4030,8 +4030,8 @@ export class GameSimulation {
     this.events.push({ type: 'dungeon-floor-changed', floor: layout.floor, maxFloor: layout.maxFloor, title: layout.title });
   }
 
-  moveTo(point: Vec2): void {
-    if (this.player.hp <= 0) return;
+  moveTo(point: Vec2): MovementPlan | null {
+    if (this.player.hp <= 0) return null;
     this.playerRoute = [];
     this.playerMovementStallSeconds = 0;
     this.playerNavigationRecoveries = 0;
@@ -4040,7 +4040,7 @@ export class GameSimulation {
       && this.region !== 'ulleungvillage'
       && !this.canEnterUlleungGovernment()) {
       this.requestGovernmentEntry();
-      return;
+      return null;
     }
     this.playerActive = true;
     this.player.targetId = null;
@@ -4063,11 +4063,22 @@ export class GameSimulation {
       this.movementWaypoint = this.playerRoute.shift() ?? destination;
       this.player.destination = destination;
       this.routedMovementGoal = destination;
-      return;
+      return {
+        requested: { ...point },
+        destination: { ...destination },
+        adjusted: Math.hypot(destination.x - point.x, destination.y - point.y) > 1,
+        routed: true,
+      };
     }
     this.movementWaypoint = destination;
     this.player.destination = destination;
     this.routedMovementGoal = destination;
+    return {
+      requested: { ...point },
+      destination: { ...destination },
+      adjusted: Math.hypot(destination.x - point.x, destination.y - point.y) > 1,
+      routed: false,
+    };
   }
 
   getMovementGoal(): Vec2 | null {
@@ -8597,20 +8608,34 @@ export class GameSimulation {
           ? this.findNavigationSidestep(target)
           : null;
         if (sidestep) {
+          const blockedAt = { x: this.player.x, y: this.player.y };
+          const goal = { ...this.player.destination };
+          const attempt = this.playerNavigationRecoveries + 1;
           this.playerRoute.unshift(target);
           this.movementWaypoint = sidestep;
           this.routedMovementGoal = this.player.destination;
           this.playerMovementStallSeconds = 0;
-          this.playerNavigationRecoveries += 1;
+          this.playerNavigationRecoveries = attempt;
+          this.events.push({
+            type: 'movement-rerouted',
+            at: blockedAt,
+            via: { ...sidestep },
+            goal,
+            attempt,
+          });
           return;
         }
         // If both short detours are blocked, stop at the last reachable point
         // instead of running forever against a painted foundation.
+        const blockedAt = { x: this.player.x, y: this.player.y };
+        const goal = { ...this.player.destination };
+        const recoveries = this.playerNavigationRecoveries;
         this.playerRoute = [];
         this.movementWaypoint = null;
         this.routedMovementGoal = null;
         this.player.destination = null;
         this.playerMovementStallSeconds = 0;
+        this.events.push({ type: 'movement-blocked', at: blockedAt, goal, recoveries });
         return;
       }
     } else {

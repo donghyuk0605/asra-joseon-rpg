@@ -7,6 +7,12 @@ import type {
 import type { BossState } from '../bosses/types';
 
 export type Vec2 = { x: number; y: number };
+export type MovementPlan = Readonly<{
+  requested: Vec2;
+  destination: Vec2;
+  adjusted: boolean;
+  routed: boolean;
+}>;
 export type MonsterKind =
   | 'osaka-overseer' | 'osaka-ronin' | 'osaka-gunner'
   | 'ulleung-hare' | 'ulleung-water-deer' | 'ulleung-sangun' | 'ulleung-guard' | 'ulleung-veteran' | 'ulleung-archer' | 'ulleung-executioner' | 'ulleung-captain' | 'ulleung-magistrate'
@@ -361,6 +367,8 @@ export type GameEvent =
   | { type: 'monster-respawn'; monsterId: string }
   | { type: 'player-hit'; damage: number }
   | { type: 'player-quickstep'; from: Vec2; to: Vec2 }
+  | { type: 'movement-rerouted'; at: Vec2; via: Vec2; goal: Vec2; attempt: number }
+  | { type: 'movement-blocked'; at: Vec2; goal: Vec2; recoveries: number }
   | { type: 'perfect-dodge'; momentum: number }
   | { type: 'combat-combo'; count: number; momentum: number }
   | { type: 'momentum-burst'; duration: number }
