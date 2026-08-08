@@ -4085,6 +4085,20 @@ export class GameSimulation {
     return this.player.destination ? { ...this.player.destination } : null;
   }
 
+  beginWorldInteraction(): boolean {
+    if (this.player.hp <= 0) return false;
+    this.playerActive = true;
+    this.playerRoute = [];
+    this.movementWaypoint = null;
+    this.routedMovementGoal = null;
+    this.player.destination = null;
+    this.player.targetId = null;
+    this.player.lootTargetId = null;
+    this.pendingPlayerAttack = null;
+    this.resetBasicAttackChain();
+    return true;
+  }
+
   selectMonster(id: string): void {
     if (this.player.hp <= 0) return;
     const monster = this.monsters.find((entry) => entry.id === id && entry.alive);

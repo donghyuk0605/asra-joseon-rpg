@@ -1593,6 +1593,22 @@ describe('GameSimulation', () => {
     }));
   });
 
+  it('stops movement, combat and loot pursuit before a world interaction opens', () => {
+    const game = new GameSimulation('solgogae');
+    const monster = game.monsters.find((entry) => entry.region === 'solgogae' && entry.alive)!;
+    game.selectMonster(monster.id);
+    game.moveTo({ x: game.player.x + 240, y: game.player.y });
+    game.player.lootTargetId = 'stale-drop';
+
+    expect(game.beginWorldInteraction()).toBe(true);
+    expect(game.getMovementGoal()).toBeNull();
+    expect(game.player.targetId).toBeNull();
+    expect(game.player.lootTargetId).toBeNull();
+
+    game.player.hp = 0;
+    expect(game.beginWorldInteraction()).toBe(false);
+  });
+
   it('keeps every regional monster population resident at distinct world coordinates', () => {
     const game = new GameSimulation();
     expect(game.monsters).toHaveLength(627 + EPISODE2_REGION_IDS.length * 5);

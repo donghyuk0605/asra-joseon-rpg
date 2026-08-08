@@ -32,6 +32,7 @@ describe('game settings', () => {
       vibration: false,
       reducedMotion: true,
       autoLoot: false,
+      objectiveTracking: false,
       highContrastObjectives: true,
       uiScale: 1.15,
     };

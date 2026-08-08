@@ -7,6 +7,15 @@ import type {
   MovementPlan, PlayerOrigin, SkillId, WeaponElement,
 } from '../simulation/types';
 import { Hud, type QuestProgress, type StoryProgress } from '../ui/Hud';
+import {
+  approachPoint,
+  LOOT_INTERACTION_DISCOVERY_DISTANCE,
+  LOOT_INTERACTION_READY_DISTANCE,
+  NPC_INTERACTION_DISCOVERY_DISTANCE,
+  NPC_INTERACTION_READY_DISTANCE,
+  resolveNearestInteraction,
+  type InteractionCandidate,
+} from '../input/contextInteraction';
 import { withObjectParticle } from '../ui/koreanGrammar';
 import { directionToFrame } from './direction';
 import { CombatAudio } from './CombatAudio';
@@ -235,6 +244,10 @@ type VillageNpcView = {
   forgeGlow?: Phaser.GameObjects.Ellipse;
   service?: 'market' | 'forge' | 'inn';
 };
+
+type SceneContextInteraction =
+  | { kind: 'npc'; id: string; npc: VillageNpcView; distance: number; ready: boolean }
+  | { kind: 'loot'; id: string; drop: GroundDrop; distance: number; ready: boolean };
 
 type FarmPlotView = {
   id: string;
@@ -756,6 +769,7 @@ export class HuntingScene extends Phaser.Scene {
   private gameSettings = loadGameSettings();
   private saveInFlight = false;
   private saveQueued = false;
+  private saveQueuedManual = false;
   private heavyRenderAccumulator = 0;
   private perfProbeAccumulator = 0;
   private ambientWorldTweens: Array<{ tween: Phaser.Tweens.Tween; region: RegionId | null }> = [];
@@ -766,6 +780,7 @@ export class HuntingScene extends Phaser.Scene {
   private readonly mobileProfile = window.matchMedia('(pointer: coarse)').matches
     || Math.min(window.innerWidth, window.innerHeight) <= 900;
   private villageNpcs: VillageNpcView[] = [];
+  private pendingNpcInteractionId: string | null = null;
   private farmPlots = new Map<string, FarmPlotView>();
   private readonly joseonTownBackgrounds = new Map<JoseonTownRegionId, Phaser.GameObjects.Image>();
   private readonly joseonTownBackgroundLoads = new Set<JoseonTownRegionId>();
@@ -1367,6 +1382,7 @@ export class HuntingScene extends Phaser.Scene {
     this.saveReadyForWrites = false;
     this.saveInFlight = false;
     this.saveQueued = false;
+    this.saveQueuedManual = false;
     this.autosaveAccumulator = 0;
   }
 
@@ -1435,20 +1451,21 @@ export class HuntingScene extends Phaser.Scene {
     if (label) label.textContent = message;
   }
 
-  private saveSinglePlayer(): void {
+  private saveSinglePlayer(manual = false): void {
     if (!this.canWriteSinglePlayerSave()) return;
     if (this.saveInFlight) {
       this.saveQueued = true;
+      this.saveQueuedManual ||= manual;
       return;
     }
     this.saveInFlight = true;
-    this.showSavePresence('저장 중…', false);
+    this.showSavePresence(manual ? '수동 저장 중…' : '저장 중…', false);
     const snapshot = this.simulation.exportSinglePlayerSnapshot();
     void this.getSinglePlayerSave().then((saveService) => saveService.saveDetailed(snapshot)).then((result) => {
       if (result.status === 'cloud') {
-        this.showSavePresence('자동 저장됨', true);
+        this.showSavePresence(manual ? '수동 저장됨' : '자동 저장됨', true);
       } else if (result.status === 'local') {
-        this.showSavePresence('기기 저장됨 · 클라우드 재시도', true);
+        this.showSavePresence(manual ? '수동 기기 저장됨 · 클라우드 재시도' : '기기 저장됨 · 클라우드 재시도', true);
       } else if (result.status === 'conflict') {
         this.showSavePresence('다른 탭의 최신 저장 유지', false);
       } else {
@@ -1459,8 +1476,10 @@ export class HuntingScene extends Phaser.Scene {
     }).finally(() => {
       this.saveInFlight = false;
       if (this.saveQueued) {
+        const queuedManual = this.saveQueuedManual;
         this.saveQueued = false;
-        this.saveSinglePlayer();
+        this.saveQueuedManual = false;
+        this.saveSinglePlayer(queuedManual);
       }
     });
   }
@@ -1953,6 +1972,7 @@ export class HuntingScene extends Phaser.Scene {
       onUseItem: (instanceId) => this.simulation.useItem(instanceId),
       onInventoryToggle: (open) => {
         this.menuOpen = open;
+        if (open) this.hud.setContextInteraction(null);
         this.destinationMark.setVisible(false);
         this.requestedDestinationMark.setVisible(false);
         this.blockedDestinationMark.setVisible(false);
@@ -1979,8 +1999,11 @@ export class HuntingScene extends Phaser.Scene {
       },
       onTravelExit: () => window.location.reload(),
       onReplayStory: () => this.replayCurrentStoryBeat(),
+      onContextInteract: () => this.useContextInteraction(),
+      onManualSave: () => this.saveSinglePlayer(true),
       onSettingsChange: (settings) => this.applyGameSettings(settings),
     });
+    this.positionContextInteractionPlaytest();
     this.storyDirector = new StoryDirector({
       onOpenChange: (open) => {
         this.destinationMark.setVisible(false);
@@ -2101,6 +2124,7 @@ export class HuntingScene extends Phaser.Scene {
       }
       this.combatAudio.prime();
       if (objects.some((object) => object.getData('monsterId') || object.getData('dropId') || object.getData('villageNpc') || object.getData('dungeonAction'))) return;
+      this.pendingNpcInteractionId = null;
       const point = { x: pointer.worldX, y: pointer.worldY };
       const movementPlan = this.simulation.moveTo(point);
       if (!movementPlan) return;
@@ -2130,6 +2154,16 @@ export class HuntingScene extends Phaser.Scene {
     });
     this.input.keyboard?.on('keydown-M', (event: KeyboardEvent) => {
       if (!event.repeat && !this.isGameplayInputLocked()) this.hud.toggleWorldMap();
+    });
+    this.input.keyboard?.on('keydown-F', (event: KeyboardEvent) => {
+      const focused = document.activeElement;
+      const typing = focused instanceof HTMLInputElement
+        || focused instanceof HTMLTextAreaElement
+        || focused instanceof HTMLSelectElement
+        || (focused instanceof HTMLElement && focused.isContentEditable);
+      if (!event.repeat && !typing && !this.isGameplayInputLocked() && this.gameMode !== 'travel') {
+        this.useContextInteraction();
+      }
     });
     const skillKeys = ['keydown-Q', 'keydown-W', 'keydown-E', 'keydown-R', 'keydown-T'];
     for (const [index, key] of skillKeys.entries()) this.input.keyboard?.on(key, () => {
@@ -2210,6 +2244,7 @@ export class HuntingScene extends Phaser.Scene {
       return;
     }
     if (this.menuOpen) {
+      this.hud.setContextInteraction(null);
       this.flushEventsAndHud(delta);
       return;
     }
@@ -2244,6 +2279,7 @@ export class HuntingScene extends Phaser.Scene {
     }
     this.syncBoss();
     this.syncGroundItems();
+    this.syncContextInteraction();
     this.syncCorpses(delta);
     this.flushEventsAndHud(delta);
     if (import.meta.env.DEV && new URLSearchParams(window.location.search).get('perfqa') === '1') {
@@ -2263,6 +2299,8 @@ export class HuntingScene extends Phaser.Scene {
   private playOpeningPrologue(): void {
     if (this.prologueActive) return;
     this.prologueActive = true;
+    this.pendingNpcInteractionId = null;
+    this.hud.setContextInteraction(null);
     const hudRoot = document.querySelector<HTMLElement>('#hud');
     hudRoot?.classList.add('is-cinematic');
     this.playerRoot.setVisible(false);
@@ -8252,7 +8290,7 @@ export class HuntingScene extends Phaser.Scene {
     zone.on('pointerdown', (_pointer: Phaser.Input.Pointer, _lx: number, _ly: number, event: Phaser.Types.Input.EventData) => {
       event.stopPropagation();
       if (this.isGameplayInputLocked()) return;
-      this.interactWithVillageNpc(npc);
+      this.queueVillageNpcInteraction(npc);
     });
   }
 
@@ -8456,6 +8494,147 @@ export class HuntingScene extends Phaser.Scene {
     npc.hitZone.setPosition(npc.root.x, npc.root.y - 38).setDepth(npc.root.y + 3);
   }
 
+  private villageNpcService(npc: VillageNpcView): 'market' | 'forge' | 'inn' | null {
+    return npc.service ?? (npc.id === 'merchant'
+      || npc.id === 'ulleung-healer'
+      || npc.id === 'japan-osaka-fishmonger'
+      || npc.id === 'japan-castle-merchant'
+      || npc.id === 'japan-castle-rice-seller'
+      ? 'market'
+      : npc.id === 'blacksmith' || npc.id === 'japan-blacksmith'
+        ? 'forge'
+        : npc.id === 'innkeeper'
+          ? 'inn'
+          : null);
+  }
+
+  private resolveContextInteraction(): SceneContextInteraction | null {
+    if (!this.gameStarted || this.gameMode === 'travel' || this.isGameplayInputLocked()) return null;
+    const player = this.simulation.player;
+    const currentRegion = this.simulation.region;
+    const candidates: Array<InteractionCandidate<'npc' | 'loot'>> = [];
+    for (const npc of this.villageNpcs) {
+      const npcRegion = this.regionAtWorldPoint(npc.root.x, npc.root.y);
+      if (!npc.root.visible || (npcRegion !== null && npcRegion !== currentRegion)) continue;
+      candidates.push({
+        kind: 'npc',
+        id: npc.id,
+        point: { x: npc.root.x, y: npc.root.y },
+        readyDistance: NPC_INTERACTION_READY_DISTANCE,
+        discoveryDistance: NPC_INTERACTION_DISCOVERY_DISTANCE,
+      });
+    }
+    for (const drop of this.simulation.groundDrops) {
+      if (drop.region && drop.region !== currentRegion) continue;
+      candidates.push({
+        kind: 'loot',
+        id: drop.id,
+        point: drop,
+        readyDistance: LOOT_INTERACTION_READY_DISTANCE,
+        discoveryDistance: LOOT_INTERACTION_DISCOVERY_DISTANCE,
+        priority: this.simulation.player.lootTargetId === drop.id ? 1 : 0,
+      });
+    }
+    const resolved = resolveNearestInteraction(player, candidates, this.pendingNpcInteractionId);
+    if (!resolved) {
+      this.pendingNpcInteractionId = null;
+      return null;
+    }
+    if (resolved.kind === 'npc') {
+      const npc = this.villageNpcs.find((entry) => entry.id === resolved.id);
+      if (!npc) return null;
+      return { kind: 'npc', id: resolved.id, npc, distance: resolved.distance, ready: resolved.ready };
+    }
+    const drop = this.simulation.groundDrops.find((entry) => entry.id === resolved.id);
+    return drop
+      ? { kind: 'loot', id: resolved.id, drop, distance: resolved.distance, ready: resolved.ready }
+      : null;
+  }
+
+  private syncContextInteraction(): void {
+    const interaction = this.resolveContextInteraction();
+    if (!interaction) {
+      this.hud.setContextInteraction(null);
+      return;
+    }
+    if (interaction.kind === 'npc' && interaction.id === this.pendingNpcInteractionId && interaction.ready) {
+      this.pendingNpcInteractionId = null;
+      if (this.simulation.beginWorldInteraction()) this.interactWithVillageNpc(interaction.npc);
+      this.hud.setContextInteraction(null);
+      return;
+    }
+    if (interaction.kind === 'npc') {
+      const service = this.villageNpcService(interaction.npc);
+      const rally = interaction.npc.rallyMarker?.text.includes('의병');
+      this.hud.setContextInteraction({
+        kind: 'npc',
+        title: interaction.npc.name,
+        detail: service === 'market' ? '장터·보급품'
+          : service === 'forge' ? '대장간·제작과 강화'
+            : service === 'inn' ? '주막·휴식과 동료'
+              : rally ? '의병 규합·이야기' : '주민과 대화',
+        distance: interaction.distance,
+        ready: interaction.ready,
+      });
+      return;
+    }
+    const definition = ITEM_CATALOG[interaction.drop.itemId];
+    this.hud.setContextInteraction({
+      kind: 'loot',
+      title: definition.name,
+      detail: `${definition.rarity} 전리품 · ${this.simulation.inventory.length}/${this.simulation.inventoryCapacity}칸`,
+      distance: interaction.distance,
+      ready: interaction.ready,
+    });
+  }
+
+  private useContextInteraction(): void {
+    const interaction = this.resolveContextInteraction();
+    if (!interaction) return;
+    if (interaction.kind === 'loot') {
+      this.pendingNpcInteractionId = null;
+      this.simulation.collectDrop(interaction.id);
+      return;
+    }
+    this.queueVillageNpcInteraction(interaction.npc, interaction.ready);
+  }
+
+  private queueVillageNpcInteraction(npc: VillageNpcView, ready?: boolean): void {
+    const distance = Phaser.Math.Distance.Between(
+      this.simulation.player.x,
+      this.simulation.player.y,
+      npc.root.x,
+      npc.root.y,
+    );
+    if (ready ?? distance <= NPC_INTERACTION_READY_DISTANCE) {
+      this.pendingNpcInteractionId = null;
+      if (this.simulation.beginWorldInteraction()) this.interactWithVillageNpc(npc);
+      return;
+    }
+    this.pendingNpcInteractionId = npc.id;
+    const destination = approachPoint(
+      this.simulation.player,
+      { x: npc.root.x, y: npc.root.y },
+      NPC_INTERACTION_READY_DISTANCE - 18,
+    );
+    const movementPlan = this.simulation.moveTo(destination);
+    if (movementPlan) this.showMovementPlan(movementPlan);
+  }
+
+  private positionContextInteractionPlaytest(): void {
+    if (!import.meta.env.DEV || new URLSearchParams(window.location.search).get('interactionqa') !== 'npc') return;
+    const npc = this.villageNpcs.find((entry) => entry.id === 'merchant')
+      ?? this.villageNpcs.find((entry) => this.villageNpcService(entry) !== null);
+    if (!npc) return;
+    this.simulation.player.x = npc.root.x - 170;
+    this.simulation.player.y = npc.root.y;
+    this.simulation.player.destination = null;
+    this.simulation.player.targetId = null;
+    this.playerRoot.setPosition(this.simulation.player.x, this.simulation.player.y);
+    this.lastPlayerSimulationPosition = { x: this.simulation.player.x, y: this.simulation.player.y };
+    document.body.dataset.interactionQa = npc.id;
+  }
+
   private interactWithVillageNpc(npc: VillageNpcView): void {
     npc.pauseMs = 2700;
     npc.facing = Math.atan2(this.simulation.player.y - npc.root.y, this.simulation.player.x - npc.root.x);
@@ -8507,17 +8686,7 @@ export class HuntingScene extends Phaser.Scene {
       }
     }
     this.showNpcDialogue(npc.root.x, npc.root.y - 116, npc.name, interactionDialogue);
-    const service = npc.service ?? (npc.id === 'merchant'
-      || npc.id === 'ulleung-healer'
-      || npc.id === 'japan-osaka-fishmonger'
-      || npc.id === 'japan-castle-merchant'
-      || npc.id === 'japan-castle-rice-seller'
-      ? 'market'
-      : npc.id === 'blacksmith' || npc.id === 'japan-blacksmith'
-        ? 'forge'
-        : npc.id === 'innkeeper'
-          ? 'inn'
-          : null);
+    const service = this.villageNpcService(npc);
     if (service && !rallyContact) this.time.delayedCall(260, () => this.hud.openVillageService(service));
   }
 
@@ -8892,6 +9061,7 @@ export class HuntingScene extends Phaser.Scene {
     hitZone.on('pointerdown', (_pointer: Phaser.Input.Pointer, _x: number, _y: number, event: Phaser.Types.Input.EventData) => {
       event.stopPropagation();
       if (this.isGameplayInputLocked()) return;
+      this.pendingNpcInteractionId = null;
       this.simulation.selectMonster(monster.id);
     });
     hitZone.on('pointerover', () => ring.setStrokeStyle(2, friendly ? 0x9ce4d6 : 0xe1c180, 0.8));
@@ -9860,7 +10030,10 @@ export class HuntingScene extends Phaser.Scene {
     hitZone.setData('monsterId', boss.id);
     hitZone.on('pointerdown', (_pointer: Phaser.Input.Pointer, _x: number, _y: number, event: Phaser.Types.Input.EventData) => {
       event.stopPropagation();
-      if (!this.menuOpen) this.simulation.selectBoss();
+      if (!this.menuOpen) {
+        this.pendingNpcInteractionId = null;
+        this.simulation.selectBoss();
+      }
     });
     hitZone.on('pointerover', () => ring.setStrokeStyle(4, 0xffd77c, 1));
     hitZone.on('pointerout', () => ring.setStrokeStyle(3, 0xe4ae58, 0.88));
@@ -10004,6 +10177,7 @@ export class HuntingScene extends Phaser.Scene {
     hitZone.on('pointerdown', (_pointer: Phaser.Input.Pointer, _x: number, _y: number, event: Phaser.Types.Input.EventData) => {
       event.stopPropagation();
       if (this.menuOpen || this.gameMode === 'travel') return;
+      this.pendingNpcInteractionId = null;
       this.simulation.collectDrop(drop.id);
     });
     hitZone.on('pointerover', () => glow.setStrokeStyle(2, 0xf0cf83, 1));
@@ -10891,8 +11065,10 @@ export class HuntingScene extends Phaser.Scene {
       this.showMovementReroute(event.via, event.attempt);
     }
     if (event.type === 'movement-blocked') {
+      this.pendingNpcInteractionId = null;
       this.showMovementBlocked(event.at);
     }
+    if (event.type === 'region-changed') this.pendingNpcInteractionId = null;
     if (event.type === 'player-quickstep') {
       const angle = this.simulation.player.facing + Math.PI;
       for (let index = 0; index < 3; index += 1) {
@@ -12127,6 +12303,7 @@ export class HuntingScene extends Phaser.Scene {
     saveGameSettings(this.gameSettings);
     document.body.dataset.graphicsQuality = settings.graphicsQuality;
     document.body.classList.toggle('reduce-game-motion', settings.reducedMotion);
+    document.body.classList.toggle('objectives-hidden', !settings.objectiveTracking);
     document.body.classList.toggle('high-contrast-objectives', settings.highContrastObjectives);
     document.documentElement.style.setProperty('--game-ui-scale', String(settings.uiScale));
     this.syncAmbientWorldState(this.simulation.region);

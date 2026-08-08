@@ -62,6 +62,13 @@ type InventorySort = 'recent' | 'type';
 type InventoryMobileTab = 'equipment' | 'bag' | 'stats';
 type WorldMapSidebarTab = 'settlements' | 'war';
 export type VillageService = 'market' | 'forge' | 'inn';
+export type ContextInteractionPrompt = Readonly<{
+  kind: 'npc' | 'loot';
+  title: string;
+  detail: string;
+  distance: number;
+  ready: boolean;
+}>;
 
 type TargetStatusView = {
   id: 'burn' | 'frost' | 'shock' | 'poison' | 'gust' | 'stone' | 'shadow';
@@ -647,6 +654,8 @@ type HudActions = {
   onWorldTravel: (region: RegionId) => WorldMapTravelResult;
   onTravelExit: () => void;
   onReplayStory: () => void;
+  onContextInteract: () => void;
+  onManualSave: () => void;
   onSettingsChange: (settings: GameSettings) => void;
 };
 
@@ -677,6 +686,7 @@ export class Hud {
   private minimapExitRegion: RegionId | null = null;
   private targetStatusSignature = '';
   private targetIntelSignature = '';
+  private contextInteractionSignature = '';
   private readonly abortController = new AbortController();
 
   constructor(root: HTMLElement, private readonly actions: HudActions) {
@@ -699,6 +709,11 @@ export class Hud {
     this.root.querySelector<HTMLButtonElement>('[data-action="inventory-backdrop"]')?.addEventListener('click', () => this.toggleInventory(false), { signal });
     this.root.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
+      if (target.closest('[data-action="context-interact"]')) {
+        event.stopPropagation();
+        this.actions.onContextInteract();
+        return;
+      }
       if (target.closest('[data-action="skill-tree"]')) {
         event.stopPropagation();
         this.toggleSkillTree();
@@ -763,6 +778,10 @@ export class Hud {
         this.togglePause(false);
         return;
       }
+      if (target.closest('[data-action="manual-save"]')) {
+        this.actions.onManualSave();
+        return;
+      }
       if (target.closest('[data-action="pause-fullscreen"]')) {
         if (document.fullscreenElement) void document.exitFullscreen();
         else void document.documentElement.requestFullscreen?.();
@@ -780,7 +799,7 @@ export class Hud {
       if (settingButton?.dataset.setting && this.snapshot) {
         const key = settingButton.dataset.setting as keyof Pick<
           GameSettings,
-          'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion' | 'autoLoot' | 'highContrastObjectives'
+          'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion' | 'autoLoot' | 'objectiveTracking' | 'highContrastObjectives'
         >;
         this.actions.onSettingsChange({ ...this.snapshot.settings, [key]: !this.snapshot.settings[key] });
         return;
@@ -900,10 +919,39 @@ export class Hud {
     document.body.classList.remove('world-map-open');
     document.body.classList.remove('pause-open');
     document.body.classList.remove('travel-mode');
+    delete document.body.dataset.contextInteraction;
+    delete document.body.dataset.contextInteractionReady;
+  }
+
+  setContextInteraction(prompt: ContextInteractionPrompt | null): void {
+    const signature = prompt ? JSON.stringify(prompt) : '';
+    if (signature === this.contextInteractionSignature) return;
+    this.contextInteractionSignature = signature;
+    const root = this.root.querySelector<HTMLButtonElement>('[data-id="context-interaction"]');
+    if (!root) return;
+    root.classList.toggle('is-visible', Boolean(prompt));
+    root.classList.toggle('is-ready', Boolean(prompt?.ready));
+    root.setAttribute('aria-hidden', String(!prompt));
+    root.disabled = !prompt;
+    if (!prompt) {
+      delete document.body.dataset.contextInteraction;
+      delete document.body.dataset.contextInteractionReady;
+      return;
+    }
+    root.dataset.kind = prompt.kind;
+    document.body.dataset.contextInteraction = `${prompt.kind}:${prompt.title}`;
+    document.body.dataset.contextInteractionReady = String(prompt.ready);
+    this.text('context-interaction-title', prompt.title);
+    this.text('context-interaction-detail', prompt.detail);
+    this.text('context-interaction-distance', prompt.ready ? '사용 가능' : `${Math.max(1, Math.ceil(prompt.distance / 10))}보`);
+    this.text('context-interaction-action', prompt.ready
+      ? prompt.kind === 'npc' ? '대화·이용' : '전리품 줍기'
+      : '가까이 가기');
   }
 
   setTravelMode(enabled: boolean): void {
     if (enabled) {
+      this.setContextInteraction(null);
       if (this.inventoryOpen) this.toggleInventory(false);
       if (this.skillTreeOpen) this.toggleSkillTree(false);
       if (this.shopOpen) this.toggleShop(false);
@@ -2550,7 +2598,7 @@ export class Hud {
     for (const button of this.root.querySelectorAll<HTMLButtonElement>('[data-setting]')) {
       const key = button.dataset.setting as keyof Pick<
         GameSettings,
-        'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion' | 'autoLoot' | 'highContrastObjectives'
+        'cameraShake' | 'damageNumbers' | 'vibration' | 'reducedMotion' | 'autoLoot' | 'objectiveTracking' | 'highContrastObjectives'
       >;
       const active = settings[key];
       button.classList.toggle('is-active', active);
@@ -3067,6 +3115,13 @@ export class Hud {
         <em data-id="mobile-route-distance">32보</em>
       </section>
 
+      <button class="context-interaction" data-id="context-interaction" data-action="context-interact" data-kind="npc" aria-hidden="true" disabled>
+        <kbd>F</kbd>
+        <span><small data-id="context-interaction-detail">가까운 상호작용</small><b data-id="context-interaction-title">주민</b></span>
+        <em data-id="context-interaction-action">대화·이용</em>
+        <i data-id="context-interaction-distance">사용 가능</i>
+      </button>
+
       <section class="player-panel ornate-panel">
         <div class="portrait" aria-label="캐릭터 초상"><img class="player-portrait-image" src="" alt=""><i></i></div>
         <div class="player-info">
@@ -3513,6 +3568,7 @@ export class Hud {
           <button data-setting="vibration" aria-pressed="true"><span><b>모바일 진동</b><small>피격과 처치 촉각 반응</small></span><em>켜짐</em></button>
           <button data-setting="reducedMotion" aria-pressed="false"><span><b>동작 줄이기</b><small>흔들림과 반복 연출 최소화</small></span><em>꺼짐</em></button>
           <button data-setting="autoLoot" aria-pressed="true"><span><b>근거리 자동 줍기</b><small>240보 안의 전리품을 자동 추적</small></span><em>켜짐</em></button>
+          <button data-setting="objectiveTracking" aria-pressed="true"><span><b>현재 목표 추적</b><small>주 목표와 진행도를 화면에 고정</small></span><em>켜짐</em></button>
           <button data-setting="highContrastObjectives" aria-pressed="false"><span><b>목표 고대비</b><small>목표·위험 문구를 더 선명하게</small></span><em>꺼짐</em></button>
         </section>
         <section class="ui-scale-settings" aria-label="인터페이스 크기">
@@ -3525,6 +3581,7 @@ export class Hud {
         </section>
         <footer>
           <button data-action="pause-fullscreen"><span>전체 화면</span><small>몰입형 화면 전환</small></button>
+          <button data-action="manual-save"><span>지금 저장</span><small>기기 저장 후 클라우드 동기화</small></button>
           <button class="pause-resume" data-action="pause-resume"><span>계속하기</span><small>ESC</small></button>
         </footer>
       </section>

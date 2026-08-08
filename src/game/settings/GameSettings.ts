@@ -8,6 +8,7 @@ export type GameSettings = {
   vibration: boolean;
   reducedMotion: boolean;
   autoLoot: boolean;
+  objectiveTracking: boolean;
   highContrastObjectives: boolean;
   uiScale: UiScale;
 };
@@ -21,6 +22,7 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   vibration: true,
   reducedMotion: false,
   autoLoot: true,
+  objectiveTracking: true,
   highContrastObjectives: false,
   uiScale: 1,
 };
@@ -40,6 +42,9 @@ export function loadGameSettings(storage: Pick<Storage, 'getItem'> = window.loca
       vibration: typeof parsed.vibration === 'boolean' ? parsed.vibration : DEFAULT_GAME_SETTINGS.vibration,
       reducedMotion: typeof parsed.reducedMotion === 'boolean' ? parsed.reducedMotion : DEFAULT_GAME_SETTINGS.reducedMotion,
       autoLoot: typeof parsed.autoLoot === 'boolean' ? parsed.autoLoot : DEFAULT_GAME_SETTINGS.autoLoot,
+      objectiveTracking: typeof parsed.objectiveTracking === 'boolean'
+        ? parsed.objectiveTracking
+        : DEFAULT_GAME_SETTINGS.objectiveTracking,
       highContrastObjectives: typeof parsed.highContrastObjectives === 'boolean'
         ? parsed.highContrastObjectives
         : DEFAULT_GAME_SETTINGS.highContrastObjectives,

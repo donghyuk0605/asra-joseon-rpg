@@ -3957,6 +3957,18 @@ body.reduce-game-motion *, body.reduce-game-motion *::before, body.reduce-game-m
     height: 31px;
   }
 }
+
+.pause-panel > footer { grid-template-columns: .8fr 1fr 1.15fr; }
+.pause-panel > footer [data-action="manual-save"] {
+  border-color: rgba(111, 145, 107, .72);
+  color: #d6e3c9;
+  background: linear-gradient(#253126, #141a14);
+}
+body.objectives-hidden .quest-chip { display: none; }
+@media (max-width: 600px) {
+  .pause-panel > footer { grid-template-columns: 1fr 1fr; }
+  .pause-panel > footer [data-action="manual-save"] { grid-column: 1 / -1; grid-row: 1; }
+}
 @media (max-width: 900px) {
   .menu-seal.inventory-seal {
     position: fixed;
@@ -5857,5 +5869,87 @@ body.high-contrast-objectives .field-guide {
 @media (max-width: 768px) {
   .online-battlefield__content {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Beta total reform: one proximity-driven interaction language for NPCs and loot. */
+.context-interaction {
+  position: absolute;
+  z-index: 18;
+  left: 50%;
+  bottom: 118px;
+  width: min(390px, calc(100vw - 32px));
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  grid-template-rows: 1fr auto;
+  gap: 1px 10px;
+  align-items: center;
+  padding: 8px 11px;
+  transform: translate(-50%, 12px);
+  border: 1px solid rgba(177, 145, 82, .54);
+  color: #d9cfba;
+  background: linear-gradient(100deg, rgba(28, 25, 19, .96), rgba(8, 12, 10, .94));
+  box-shadow: inset 0 0 0 2px rgba(3, 6, 5, .66), 0 10px 26px rgba(0, 0, 0, .48);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease, border-color .16s ease;
+}
+.context-interaction.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+.context-interaction.is-ready {
+  border-color: rgba(224, 184, 98, .86);
+  background: linear-gradient(100deg, rgba(60, 43, 25, .97), rgba(10, 16, 12, .96));
+}
+.context-interaction[data-kind="loot"] { border-color: rgba(119, 172, 154, .72); }
+.context-interaction kbd {
+  grid-row: 1 / 3;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #9a7b43;
+  color: #f2d58f;
+  background: #12140f;
+  font: 800 14px var(--ui-font);
+  box-shadow: inset 0 0 8px rgba(209, 160, 73, .14);
+}
+.context-interaction > span { min-width: 0; display: grid; text-align: left; }
+.context-interaction > span small { color: #8f9489; font: 8px var(--ui-font); letter-spacing: .08em; }
+.context-interaction > span b { overflow: hidden; color: #eee1c5; font: 800 13px var(--ui-font); text-overflow: ellipsis; white-space: nowrap; }
+.context-interaction > em { color: #d5b36d; font: normal 10px var(--ui-font); white-space: nowrap; }
+.context-interaction > i { grid-column: 2 / 4; color: #8f9b8d; font: normal 8px var(--ui-font); text-align: left; }
+#hud.is-travel-mode .context-interaction,
+body.inventory-open .context-interaction,
+body.skill-tree-open .context-interaction,
+body.shop-open .context-interaction,
+body.story-journal-open .context-interaction,
+body.world-map-open .context-interaction,
+body.pause-open .context-interaction { display: none; }
+
+@media (max-width: 700px) {
+  .context-interaction {
+    bottom: max(89px, calc(env(safe-area-inset-bottom) + 78px));
+    width: min(290px, calc(100vw - 24px));
+    min-height: 51px;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    padding: 7px 9px;
+  }
+  .context-interaction kbd { width: 31px; height: 31px; font-size: 11px; }
+  .context-interaction kbd::after { content: "·탭"; font-size: 7px; }
+  .context-interaction > span b { font-size: 11px; }
+  .context-interaction > em { font-size: 9px; }
+}
+
+@media (max-width: 900px) and (max-height: 540px) and (orientation: landscape) {
+  .context-interaction {
+    bottom: max(58px, calc(env(safe-area-inset-bottom) + 54px));
+    width: min(310px, calc(100vw - 150px));
+    min-height: 46px;
   }
 }
