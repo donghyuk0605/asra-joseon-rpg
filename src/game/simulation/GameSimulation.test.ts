@@ -872,6 +872,44 @@ describe('GameSimulation', () => {
     expect(game.groundDrops.filter((drop) => drop.itemId === 'worn-hwando')).toHaveLength(1);
   });
 
+  it('spawns a deterministic nearby item drop for visual playtests', () => {
+    const game = new GameSimulation();
+    const drop = game.spawnItemDropForPlaytest('hwangju-moonsteel-spear');
+
+    expect(drop).toMatchObject({
+      itemId: 'hwangju-moonsteel-spear',
+      region: game.region,
+      x: game.player.x + 92,
+      y: game.player.y + 4,
+    });
+    expect(drop.remainingSeconds).toBeGreaterThan(0);
+    expect(game.groundDrops).toContain(drop);
+    expect(game.drainEvents()).toContainEqual(expect.objectContaining({
+      type: 'item-drop',
+      dropId: drop.id,
+      itemId: 'hwangju-moonsteel-spear',
+    }));
+  });
+
+  it('prepares a nearby live monster for action and death presentation playtests', () => {
+    const game = new GameSimulation('solgogae');
+    const monster = game.prepareMonsterForPlaytest('bandit', 37);
+
+    expect(monster).toMatchObject({
+      kind: 'bandit',
+      region: 'solgogae',
+      x: game.player.x + 96,
+      y: game.player.y - 4,
+      hp: 37,
+      alive: true,
+      aggro: true,
+      aiState: 'alert',
+      attackCooldown: 0,
+    });
+    expect(game.player.targetId).toBe(monster?.id);
+    expect(game.prepareMonsterForPlaytest('episode2-red-fox')).toBeNull();
+  });
+
   it('keeps ground loot in its region, expires abandoned loot, and protects a selected drop', () => {
     const game = new GameSimulation();
     game.groundDrops.push({

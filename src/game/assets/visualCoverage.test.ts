@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ITEM_CATALOG } from '../items/catalog';
@@ -56,5 +56,41 @@ describe('graphics reformation visual coverage ledger', () => {
     for (const coverage of PROP_VISUAL_COVERAGE) {
       expect(existsSync(publicFile(coverage.asset.path)), coverage.id).toBe(true);
     }
+  });
+
+  it('keeps only intentional icon-to-world duplicates in the public asset tree', () => {
+    const generated = JSON.parse(readFileSync(
+      resolve(process.cwd(), 'docs/graphics/visual-coverage.generated.json'),
+      'utf8',
+    )) as {
+      summary: { missingReferencedPaths: number };
+      duplicateContentGroups: Array<{ files: Array<{ path: string }> }>;
+      unreferencedPublicFiles: Array<{ path: string }>;
+    };
+    expect(generated.summary.missingReferencedPaths).toBe(0);
+    expect(generated.duplicateContentGroups).toHaveLength(3);
+    for (const group of generated.duplicateContentGroups) {
+      expect(group.files.map((file) => file.path).sort()).toEqual([
+        expect.stringMatching(/^\/assets\/items\/.+-v1\.png$/),
+        expect.stringMatching(/^\/assets\/weapons\/.+-world-v1\.png$/),
+      ]);
+    }
+
+    const retiredPublicPaths = [
+      '/assets/bosses/chain-miner-actions-v2.png',
+      '/assets/bosses/chain-miner-actions-v3.png',
+      '/assets/monsters/boar-actions.png',
+      '/assets/monsters/wonju-bear-actions-v1-normalized.png',
+      '/assets/environment/transitions/joseon-changdeokgung-unjongga-v1.webp',
+      '/assets/environment/transitions/joseon-chungju-andong-v1.webp',
+      '/assets/environment/transitions/joseon-gaeseong-changdeokgung-v1.webp',
+      '/assets/environment/transitions/joseon-sungnyemun-suwon-v1.webp',
+      '/assets/environment/transitions/joseon-suwon-chungju-v1.webp',
+      '/assets/environment/transitions/joseon-unjongga-sungnyemun-v1.webp',
+    ];
+    for (const path of retiredPublicPaths) expect(existsSync(publicFile(path)), path).toBe(false);
+    expect(existsSync(resolve(process.cwd(), 'assets/legacy/bosses/chain-miner-actions-v2.png'))).toBe(true);
+    expect(existsSync(resolve(process.cwd(), 'assets/legacy/monsters/boar-actions.png'))).toBe(true);
+    expect(existsSync(resolve(process.cwd(), 'assets/legacy/monsters/wonju-bear-actions-v1-normalized.png'))).toBe(true);
   });
 });

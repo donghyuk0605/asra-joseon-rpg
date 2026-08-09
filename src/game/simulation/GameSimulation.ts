@@ -3603,6 +3603,28 @@ export class GameSimulation {
     for (const node of WORLD_MAP_NODES) this.visitedRegions.add(node.destination);
     return true;
   }
+
+  spawnItemDropForPlaytest(itemId: ItemId): GroundDrop {
+    this.spawnDropAt(this.player.x + 92, this.player.y + 4, itemId);
+    return this.groundDrops[this.groundDrops.length - 1];
+  }
+
+  prepareMonsterForPlaytest(kind: MonsterKind, remainingHp?: number): MonsterState | null {
+    const monster = this.monsters.find((entry) => entry.region === this.region && entry.kind === kind);
+    if (!monster) return null;
+    monster.x = this.player.x + 96;
+    monster.y = this.player.y - 4;
+    monster.hp = Math.min(monster.maxHp, Math.max(1, Math.round(remainingHp ?? monster.maxHp)));
+    monster.alive = true;
+    monster.aggro = true;
+    monster.aiState = 'alert';
+    monster.attackCooldown = 0;
+    monster.actionTimer = 0;
+    monster.hitStun = 0;
+    monster.velocity = { x: 0, y: 0 };
+    this.selectMonster(monster.id);
+    return monster;
+  }
   enableTravelMode(): void {
     this.travelModeEnabled = true;
     for (const region of TRAVEL_ATLAS_REGION_IDS) this.visitedRegions.add(region);

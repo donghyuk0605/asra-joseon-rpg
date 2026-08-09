@@ -13,9 +13,9 @@
 | 공유 외형 몬스터 | 34종 |
 | 아이템 / 장착 월드 외형 공백 | 60종 / 27종 |
 | 등록된 환경 객체 자산 | 34개 |
-| 배포 자산 | 460개 · 301.0MB |
-| 미참조 배포 자산 | 138개 |
-| 동일 내용 중복 | 11묶음 · 3.3MB 회수 가능 |
+| 배포 자산 | 450개 · 296.1MB |
+| 미참조 배포 자산 | 128개 |
+| 동일 내용 중복 | 3묶음 · 50.1KB 회수 가능 |
 | 코드 렌더 도형 / 고정 실물 후보 | 130곳 / 0곳 |
 | 존재하지 않는 참조 | 0개 |
 
@@ -23,11 +23,11 @@
 
 | 영역 | 파일 | 용량 |
 | --- | --- | --- |
-| environment | 209 | 174.1MB |
-| monsters | 36 | 39.4MB |
-| characters | 57 | 36.3MB |
+| environment | 203 | 173.4MB |
+| monsters | 34 | 36.7MB |
+| characters | 57 | 36.2MB |
 | ui | 46 | 31.0MB |
-| bosses | 13 | 15.6MB |
+| bosses | 11 | 14.1MB |
 | items | 77 | 3.1MB |
 | fx | 4 | 1.2MB |
 | weapons | 18 | 303.5KB |
@@ -87,14 +87,6 @@
 
 ## 동일 내용 중복 자산
 
-- 1.9MB: `/assets/monsters/wonju-bear-actions-v1-normalized.png`, `/assets/monsters/wonju-bear-actions-v1.png`
-- 717.2KB: `/assets/bosses/chain-miner-actions-v1.png`, `/assets/bosses/chain-miner-actions-v3.png`
-- 131.9KB: `/assets/environment/transitions/joseon-sungnyemun-suwon-v1.webp`, `/assets/environment/transitions/joseon-sungnyemun-suwon-v2.webp`
-- 117.6KB: `/assets/environment/transitions/joseon-unjongga-sungnyemun-v1.webp`, `/assets/environment/transitions/joseon-unjongga-sungnyemun-v2.webp`
-- 112.8KB: `/assets/environment/transitions/joseon-suwon-chungju-v1.webp`, `/assets/environment/transitions/joseon-suwon-chungju-v2.webp`
-- 109.7KB: `/assets/environment/transitions/joseon-gaeseong-changdeokgung-v1.webp`, `/assets/environment/transitions/joseon-gaeseong-changdeokgung-v2.webp`
-- 107.3KB: `/assets/environment/transitions/joseon-changdeokgung-unjongga-v1.webp`, `/assets/environment/transitions/joseon-changdeokgung-unjongga-v2.webp`
-- 104.6KB: `/assets/environment/transitions/joseon-chungju-andong-v1.webp`, `/assets/environment/transitions/joseon-chungju-andong-v2.webp`
 - 17.7KB: `/assets/items/frost-hwando-v1.png`, `/assets/weapons/frost-hwando-world-v1.png`
 - 17.3KB: `/assets/items/storm-hwando-v1.png`, `/assets/weapons/storm-hwando-world-v1.png`
 - 15.2KB: `/assets/items/ember-hwando-v1.png`, `/assets/weapons/ember-hwando-world-v1.png`
@@ -108,7 +100,6 @@
 - `/assets/characters/joseon-hero-warden-weapon-ready-layer`: `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.webp`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp`
 - `/assets/environment/props/joseon-farm-plot-stages`: `/assets/environment/props/joseon-farm-plot-stages-v1.png`, `/assets/environment/props/joseon-farm-plot-stages-v2.png`, `/assets/environment/props/joseon-farm-plot-stages-v3.png`, `/assets/environment/props/joseon-farm-plot-stages-v4.png`
 - `/assets/environment/ulleung-government-district`: `/assets/environment/ulleung-government-district-v1.png`, `/assets/environment/ulleung-government-district-v2.png`, `/assets/environment/ulleung-government-district-v3.png`, `/assets/environment/ulleung-government-district-v3.webp`
-- `/assets/bosses/chain-miner-actions`: `/assets/bosses/chain-miner-actions-v1.png`, `/assets/bosses/chain-miner-actions-v2.png`, `/assets/bosses/chain-miner-actions-v3.png`
 - `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer`: `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp`
 - `/assets/environment/generated/gangneung-gyeongpo`: `/assets/environment/generated/gangneung-gyeongpo-v1.webp`, `/assets/environment/generated/gangneung-gyeongpo-v2.webp`, `/assets/environment/generated/gangneung-gyeongpo-v3.webp`
 - `/assets/environment/generated/geoje-naval-strait`: `/assets/environment/generated/geoje-naval-strait-v1.webp`, `/assets/environment/generated/geoje-naval-strait-v2.webp`, `/assets/environment/generated/geoje-naval-strait-v3.webp`
@@ -143,12 +134,6 @@
 - `/assets/environment/props/world-seam-road-atlas`: `/assets/environment/props/world-seam-road-atlas-v3.png`, `/assets/environment/props/world-seam-road-atlas-v4.png`
 - `/assets/environment/tiles/japan-ground-tile`: `/assets/environment/tiles/japan-ground-tile-v1.webp`, `/assets/environment/tiles/japan-ground-tile-v2.webp`
 - `/assets/environment/tiles/northern-ground-tile`: `/assets/environment/tiles/northern-ground-tile-v1.webp`, `/assets/environment/tiles/northern-ground-tile-v2.webp`
-- `/assets/environment/transitions/joseon-changdeokgung-unjongga`: `/assets/environment/transitions/joseon-changdeokgung-unjongga-v1.webp`, `/assets/environment/transitions/joseon-changdeokgung-unjongga-v2.webp`
-- `/assets/environment/transitions/joseon-chungju-andong`: `/assets/environment/transitions/joseon-chungju-andong-v1.webp`, `/assets/environment/transitions/joseon-chungju-andong-v2.webp`
-- `/assets/environment/transitions/joseon-gaeseong-changdeokgung`: `/assets/environment/transitions/joseon-gaeseong-changdeokgung-v1.webp`, `/assets/environment/transitions/joseon-gaeseong-changdeokgung-v2.webp`
-- `/assets/environment/transitions/joseon-sungnyemun-suwon`: `/assets/environment/transitions/joseon-sungnyemun-suwon-v1.webp`, `/assets/environment/transitions/joseon-sungnyemun-suwon-v2.webp`
-- `/assets/environment/transitions/joseon-suwon-chungju`: `/assets/environment/transitions/joseon-suwon-chungju-v1.webp`, `/assets/environment/transitions/joseon-suwon-chungju-v2.webp`
-- `/assets/environment/transitions/joseon-unjongga-sungnyemun`: `/assets/environment/transitions/joseon-unjongga-sungnyemun-v1.webp`, `/assets/environment/transitions/joseon-unjongga-sungnyemun-v2.webp`
 - `/assets/environment/ulleung-coast-meadow-blend`: `/assets/environment/ulleung-coast-meadow-blend-v2.webp`, `/assets/environment/ulleung-coast-meadow-blend-v3.webp`
 - `/assets/environment/ulleung-coastal-forest`: `/assets/environment/ulleung-coastal-forest-v1.png`, `/assets/environment/ulleung-coastal-forest-v1.webp`
 - `/assets/environment/ulleung-highland-ridge`: `/assets/environment/ulleung-highland-ridge-v1.png`, `/assets/environment/ulleung-highland-ridge-v1.webp`
@@ -180,7 +165,6 @@
 - `/assets/items/saltfield-ritual-knife`: `/assets/items/saltfield-ritual-knife-v1.svg`, `/assets/items/saltfield-ritual-knife-v2.png`
 - `/assets/items/sea-salt-amulet`: `/assets/items/sea-salt-amulet-v1.svg`, `/assets/items/sea-salt-amulet-v2.png`
 - `/assets/items/worn-hwando`: `/assets/items/worn-hwando-v3.png`, `/assets/items/worn-hwando-v4.png`
-- `/assets/monsters/boar-actions`: `/assets/monsters/boar-actions.png`, `/assets/monsters/boar-actions.webp`
 - `/assets/ui/asra-title-keyart`: `/assets/ui/asra-title-keyart-v1.png`, `/assets/ui/asra-title-keyart-v1.webp`
 - `/assets/ui/asra-title-keyart-mobile`: `/assets/ui/asra-title-keyart-mobile-v1.png`, `/assets/ui/asra-title-keyart-mobile-v1.webp`
 - `/assets/ui/beta/beta-campaign-keyart`: `/assets/ui/beta/beta-campaign-keyart-v1.png`, `/assets/ui/beta/beta-campaign-keyart-v1.webp`
@@ -191,8 +175,6 @@
 
 ## 미참조 배포 자산
 
-- `/assets/bosses/chain-miner-actions-v2.png` (735.8KB)
-- `/assets/bosses/chain-miner-actions-v3.png` (717.2KB)
 - `/assets/characters/harlan-frontier-archer-actions-v1.png` (739.1KB)
 - `/assets/characters/joseon-hero-armor-layer-v1.png` (479.3KB)
 - `/assets/characters/joseon-hero-armor-layer-v2.png` (386.6KB)
@@ -262,12 +244,6 @@
 - `/assets/environment/props/yeongwol-structure-props-v1.png` (1.3MB)
 - `/assets/environment/tiles/japan-ground-tile-v1.webp` (59.8KB)
 - `/assets/environment/tiles/northern-ground-tile-v1.webp` (76.6KB)
-- `/assets/environment/transitions/joseon-changdeokgung-unjongga-v1.webp` (107.3KB)
-- `/assets/environment/transitions/joseon-chungju-andong-v1.webp` (104.6KB)
-- `/assets/environment/transitions/joseon-gaeseong-changdeokgung-v1.webp` (109.7KB)
-- `/assets/environment/transitions/joseon-sungnyemun-suwon-v1.webp` (131.9KB)
-- `/assets/environment/transitions/joseon-suwon-chungju-v1.webp` (112.8KB)
-- `/assets/environment/transitions/joseon-unjongga-sungnyemun-v1.webp` (117.6KB)
 - `/assets/environment/ulleung-coast-hunt-seam-v1.webp` (182.7KB)
 - `/assets/environment/ulleung-coast-meadow-blend-v2.webp` (559.8KB)
 - `/assets/environment/ulleung-coast-meadow-seam-v1.webp` (228.1KB)
@@ -314,8 +290,6 @@
 - `/assets/items/saltfield-ritual-knife-v1.svg` (826B)
 - `/assets/items/sea-salt-amulet-v1.svg` (811B)
 - `/assets/items/worn-hwando-v3.png` (23.6KB)
-- `/assets/monsters/boar-actions.png` (1.1MB)
-- `/assets/monsters/wonju-bear-actions-v1-normalized.png` (1.9MB)
 - `/assets/ui/asra-title-keyart-mobile-v1.png` (2.2MB)
 - `/assets/ui/asra-title-keyart-v1.png` (2.1MB)
 - `/assets/ui/beta/beta-campaign-keyart-v1.png` (2.1MB)

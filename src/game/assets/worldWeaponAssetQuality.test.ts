@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { ASSETS } from './manifest';
 
@@ -30,4 +31,17 @@ describe('beta world weapon image set', () => {
     expect(result.status, result.stderr || result.stdout).toBe(0);
     expect(result.stdout).toContain('Validated 8 distinct 256px world weapons');
   }, 20_000);
+
+  it('gives gauntlets, short blades and the long spear physically distinct runtime sizes', () => {
+    const scene = readFileSync(new URL('../phaser/HuntingScene.ts', import.meta.url), 'utf8');
+    expect(scene).toContain("'bear-claw-gauntlet': 0.45");
+    expect(scene).toContain("'hwangju-moonsteel-spear': 1.8");
+    expect(scene).toContain('attachment.scale * displayScale');
+  });
+
+  it('exposes a deterministic development drop path for icon-to-ground QA', () => {
+    const scene = readFileSync(new URL('../phaser/HuntingScene.ts', import.meta.url), 'utf8');
+    expect(scene).toContain("playtestParams.get('drop')");
+    expect(scene).toContain('this.simulation.spawnItemDropForPlaytest(requestedDropId as ItemId)');
+  });
 });

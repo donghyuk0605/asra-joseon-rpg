@@ -422,6 +422,17 @@ const MONSTER_TINT: Partial<Record<MonsterKind, number>> = {
   'episode2-stone-dokkaebi': 0xe1d4b7,
 };
 
+const PLAYER_WEAPON_DISPLAY_SCALE: Partial<Record<ItemId, number>> = {
+  'bear-claw-gauntlet': 0.45,
+  'chiaksan-claw-knife': 0.72,
+  'saltfield-ritual-knife': 0.68,
+  'geoje-anchor-hwando': 1,
+  'hwangju-moonsteel-spear': 1.8,
+  'pyeongchang-leopard-knife': 0.72,
+  'cheongju-kiln-hwando': 1,
+  'gunsan-drowned-blade': 0.72,
+};
+
 const COMBAT_CURSOR = `url("${ASSETS.combatCursor.path}") 6 6, crosshair`;
 const RANGED_MONSTER_KINDS: ReadonlySet<MonsterKind> = new Set([
   'osaka-gunner', 'ulleung-archer', 'yeongwol-archer', 'jeonju-archer', 'wako-archer',
@@ -1955,6 +1966,19 @@ export class HuntingScene extends Phaser.Scene {
                 : requestedElement === 'earth' ? 'earth-hwando'
                   : requestedElement === 'shadow' ? 'shadow-hwando' : null);
       if (playtestWeapon) this.toggleDevEquipment(playtestWeapon);
+      const requestedDropId = playtestParams.get('drop');
+      if (requestedDropId && requestedDropId in ITEM_CATALOG) {
+        this.gameSettings = { ...this.gameSettings, autoLoot: false };
+        this.simulation.spawnItemDropForPlaytest(requestedDropId as ItemId);
+      }
+      const requestedEnemyKind = playtestParams.get('enemy');
+      if (requestedEnemyKind && requestedEnemyKind in ASSETS.monsters) {
+        const requestedEnemyHp = Number(playtestParams.get('enemyhp'));
+        this.simulation.prepareMonsterForPlaytest(
+          requestedEnemyKind as MonsterKind,
+          Number.isFinite(requestedEnemyHp) && requestedEnemyHp > 0 ? requestedEnemyHp : undefined,
+        );
+      }
       if (playtestParams.get('armor') === 'tiger') {
         this.toggleDevEquipment('tiger-pelt-armor');
       }
@@ -9455,6 +9479,7 @@ export class HuntingScene extends Phaser.Scene {
     }
     const weaponPose = weaponReady && column >= 4 ? 'attack' : 'carry';
     const attachment = weaponAttachmentForFrame(row, flip, column, weaponPose);
+    const displayScale = PLAYER_WEAPON_DISPLAY_SCALE[weapon.id] ?? 1;
     if (attachment.behindBody) {
       this.playerActionRoot.moveBelow(this.playerWeaponAura, this.playerSprite);
       this.playerActionRoot.moveBelow(this.playerWeaponSprite, this.playerSprite);
@@ -9468,7 +9493,7 @@ export class HuntingScene extends Phaser.Scene {
       .setVisible(true)
       .setPosition(this.playerSprite.x + attachment.x, this.playerSprite.y + attachment.y)
       .setRotation(this.playerSprite.rotation + attachment.rotation)
-      .setScale(attachment.scale)
+      .setScale(attachment.scale * displayScale)
       .setOrigin(
         weaponAsset.grip.x / PLAYER_ACTION_FRAME.width,
         weaponAsset.grip.y / PLAYER_ACTION_FRAME.height,
@@ -9486,7 +9511,7 @@ export class HuntingScene extends Phaser.Scene {
       .setVisible(Boolean(weapon.element))
       .setPosition(this.playerSprite.x + attachment.x, this.playerSprite.y + attachment.y)
       .setRotation(this.playerSprite.rotation + attachment.rotation)
-      .setScale(attachment.scale * (1.04 + Math.sin(this.time.now * 0.009) * 0.025))
+      .setScale(attachment.scale * displayScale * (1.04 + Math.sin(this.time.now * 0.009) * 0.025))
       .setOrigin(
         weaponAsset.grip.x / PLAYER_ACTION_FRAME.width,
         weaponAsset.grip.y / PLAYER_ACTION_FRAME.height,

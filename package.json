@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "audit:graphics": "vite-node scripts/generate_graphics_coverage.ts",
+    "audit:graphics": "vite-node scripts/generate_graphics_coverage.ts && python3 scripts/audit_monster_atlases.py",
+    "audit:monsters": "python3 scripts/audit_monster_atlases.py --check",
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "node scripts/prune_dist_assets.mjs && node scripts/build_guide_host.mjs",
