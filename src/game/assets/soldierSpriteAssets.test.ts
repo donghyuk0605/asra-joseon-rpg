@@ -21,20 +21,22 @@ describe('Joseon soldier role sprite assets', () => {
     roleAssets.forEach((asset) => assertNormalizedAtlas(asset.path));
   });
 
-  it('shares role-correct atlases across the mainland armies without reverting to bandit art', () => {
-    expect(ASSETS.monsters['yeongwol-spearman']).toEqual(ASSETS.monsters['ulleung-veteran']);
-    expect(ASSETS.monsters['yeongwol-archer']).toEqual(ASSETS.monsters['ulleung-archer']);
-    expect(ASSETS.monsters['yeongwol-commander']).toEqual(ASSETS.monsters['ulleung-captain']);
-    expect(ASSETS.monsters['jeonju-spearman']).toEqual(ASSETS.monsters['ulleung-veteran']);
-    expect(ASSETS.monsters['jeonju-archer']).toEqual(ASSETS.monsters['ulleung-archer']);
-    expect(ASSETS.monsters['jeonju-commander']).toEqual(ASSETS.monsters['ulleung-captain']);
+  it('ships region-specific mainland army atlases without reverting to bandit art', () => {
+    const regional = [
+      ASSETS.monsters['ulleung-veteran'], ASSETS.monsters['yeongwol-spearman'], ASSETS.monsters['jeonju-spearman'],
+      ASSETS.monsters['ulleung-archer'], ASSETS.monsters['yeongwol-archer'], ASSETS.monsters['jeonju-archer'],
+      ASSETS.monsters['ulleung-captain'], ASSETS.monsters['yeongwol-commander'], ASSETS.monsters['jeonju-commander'],
+    ];
+    expect(new Set(regional.map((asset) => asset.key)).size).toBe(regional.length);
+    expect(regional.every((asset) => !/bandit/.test(asset.path))).toBe(true);
+    regional.forEach((asset) => assertNormalizedAtlas(asset.path));
   });
 
   it('gives shield formations and sickle militia their own normalized silhouettes', () => {
     const shield = ASSETS.monsters['jeonju-shield'];
     const militia = ASSETS.monsters['jeonju-militia-sickle'];
-    expect(shield.path).toBe('/assets/monsters/joseon-shield-guard-actions-v1.png');
-    expect(ASSETS.monsters['yeongwol-shield']).toEqual(shield);
+    expect(shield.path).toBe('/assets/monsters/jeonju-shield-actions-v1.png');
+    expect(ASSETS.monsters['yeongwol-shield'].key).not.toBe(shield.key);
     expect(shield.key).not.toBe(ASSETS.monsters['jeonju-swordsman'].key);
     expect(militia.path).toBe('/assets/characters/joseon-peasant-militia-actions-v1.png');
     expect(militia.key).not.toBe(ASSETS.monsters.bandit.key);
@@ -65,9 +67,14 @@ describe('Jurchen frontier role sprite assets', () => {
   });
 
   it('keeps the opposing Joseon border line on Joseon role atlases', () => {
-    expect(ASSETS.monsters['joseon-border-spearman']).toEqual(ASSETS.monsters['ulleung-veteran']);
-    expect(ASSETS.monsters['joseon-border-archer']).toEqual(ASSETS.monsters['ulleung-archer']);
-    expect(ASSETS.monsters['joseon-border-commander']).toEqual(ASSETS.monsters['ulleung-captain']);
+    const border = [
+      ASSETS.monsters['joseon-border-swordsman'],
+      ASSETS.monsters['joseon-border-spearman'],
+      ASSETS.monsters['joseon-border-archer'],
+      ASSETS.monsters['joseon-border-commander'],
+    ];
+    expect(new Set(border.map((asset) => asset.key)).size).toBe(border.length);
+    border.forEach((asset) => assertNormalizedAtlas(asset.path));
   });
 });
 
@@ -77,9 +84,9 @@ describe('Japanese campaign role sprite assets', () => {
     const archer = ASSETS.monsters['wako-archer'];
     const captain = ASSETS.monsters['wako-captain'];
 
-    expect(raider).toEqual(ASSETS.monsters['japanese-swordsman']);
-    expect(archer).toEqual(ASSETS.monsters['japanese-archer']);
-    expect(captain).toEqual(ASSETS.monsters['japanese-general']);
+    expect(raider.key).not.toBe(ASSETS.monsters['japanese-swordsman'].key);
+    expect(archer.key).not.toBe(ASSETS.monsters['japanese-archer'].key);
+    expect(captain.key).not.toBe(ASSETS.monsters['japanese-general'].key);
     expect(new Set([raider.key, archer.key, captain.key]).size).toBe(3);
     [raider, archer, captain].forEach((asset) => assertNormalizedAtlas(asset.path));
   });

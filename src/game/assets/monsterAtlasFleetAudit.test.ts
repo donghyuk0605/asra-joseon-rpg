@@ -33,11 +33,11 @@ describe('active monster atlas fleet', () => {
   it('keeps all sixty-one monster mappings on compliant forty-frame atlases', () => {
     expect(audit.summary).toMatchObject({
       monsterKinds: 61,
-      uniqueAtlases: 38,
-      totalFrames: 1_520,
+      uniqueAtlases: 61,
+      totalFrames: 2_440,
       emptyFrames: 0,
-      footlineFrames: 1_520,
-      compliantAtlases: 38,
+      footlineFrames: 2_440,
+      compliantAtlases: 61,
       violatingAtlases: 0,
     });
     for (const atlas of audit.atlases) {
@@ -67,6 +67,6 @@ describe('active monster atlas fleet', () => {
       encoding: 'utf8',
     });
     expect(result.status, result.stderr || result.stdout).toBe(0);
-    expect(result.stdout).toContain('active atlases=38 changed files=0 normalized frames=0');
+    expect(result.stdout).toContain('active atlases=61 changed files=0 normalized frames=0');
   }, 20_000);
 });

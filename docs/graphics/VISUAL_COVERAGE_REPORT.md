@@ -9,11 +9,11 @@
 | 지역 대응 | 81개 |
 | 전용 배경 지역 | 46개 |
 | 모듈 조합 지역 | 35개 |
-| 몬스터 종류 / 실제 시각 키 | 61종 / 38개 |
-| 공유 외형 몬스터 | 34종 |
+| 몬스터 종류 / 실제 시각 키 | 61종 / 61개 |
+| 공유 외형 몬스터 | 0종 |
 | 아이템 / 장착 월드 외형 공백 | 60종 / 0종 |
 | 등록된 환경 객체 자산 | 34개 |
-| 배포 자산 | 501개 · 311.0MB |
+| 배포 자산 | 524개 · 327.1MB |
 | 미참조 배포 자산 | 132개 |
 | 동일 내용 중복 | 3묶음 · 50.1KB 회수 가능 |
 | 코드 렌더 도형 / 고정 실물 후보 | 130곳 / 0곳 |
@@ -24,8 +24,8 @@
 | 영역 | 파일 | 용량 |
 | --- | --- | --- |
 | environment | 203 | 173.4MB |
+| monsters | 57 | 52.7MB |
 | characters | 86 | 50.1MB |
-| monsters | 34 | 36.7MB |
 | ui | 46 | 31.0MB |
 | bosses | 11 | 14.1MB |
 | items | 77 | 3.1MB |
@@ -37,17 +37,6 @@
 
 | 시각 키 | 공유 수 | 몬스터 |
 | --- | --- | --- |
-| ulleung-guard-actions-v1 | 6 | ulleung-guard, ulleung-executioner, yeongwol-swordsman, jeonju-swordsman, joseon-border-swordsman, royal-guard |
-| japanese-swordsman-actions-v1 | 4 | osaka-overseer, osaka-ronin, wako-raider, japanese-swordsman |
-| joseon-archer-actions-v1 | 4 | ulleung-archer, yeongwol-archer, jeonju-archer, joseon-border-archer |
-| joseon-pododaejang-actions-v1 | 4 | ulleung-captain, yeongwol-commander, jeonju-commander, joseon-border-commander |
-| joseon-spearman-actions-v1 | 4 | ulleung-veteran, yeongwol-spearman, jeonju-spearman, joseon-border-spearman |
-| boar-actions | 2 | japanese-wild-boar, boar |
-| japanese-archer-actions-v1 | 2 | wako-archer, japanese-archer |
-| japanese-general-actions-v1 | 2 | wako-captain, japanese-general |
-| japanese-gunner-actions-v1 | 2 | osaka-gunner, japanese-gunner |
-| joseon-shield-guard-actions-v1 | 2 | yeongwol-shield, jeonju-shield |
-| ulleung-water-deer-actions-v1 | 2 | ulleung-water-deer, japanese-sika-deer |
 
 ## 장착 월드 외형 공백
 

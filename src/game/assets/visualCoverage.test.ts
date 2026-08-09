@@ -28,13 +28,15 @@ describe('graphics reformation visual coverage ledger', () => {
       + VISUAL_COVERAGE_SUMMARY.modularRegionCompositions).toBe(81);
   });
 
-  it('tracks all monster kinds and exposes every shared silhouette group', () => {
+  it('tracks all monster kinds with one dedicated active visual identity each', () => {
     expect(Object.keys(ASSETS.monsters)).toHaveLength(61);
     expect(Object.keys(MONSTER_VISUAL_COVERAGE)).toEqual(Object.keys(ASSETS.monsters));
-    expect(MONSTER_ASSET_REUSE_GROUPS.some((group) => group.count >= 5)).toBe(true);
+    expect(MONSTER_ASSET_REUSE_GROUPS).toHaveLength(0);
+    expect(VISUAL_COVERAGE_SUMMARY.uniqueMonsterAssets).toBe(61);
+    expect(VISUAL_COVERAGE_SUMMARY.sharedMonsterKinds).toBe(0);
     for (const coverage of Object.values(MONSTER_VISUAL_COVERAGE)) {
       expect(existsSync(publicFile(coverage.asset.path)), coverage.kind).toBe(true);
-      expect(coverage.sharedBy).toContain(coverage.kind);
+      expect(coverage.sharedBy).toEqual([coverage.kind]);
     }
   });
 

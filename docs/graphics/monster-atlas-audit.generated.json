@@ -12,20 +12,17 @@
   },
   "summary": {
     "monsterKinds": 61,
-    "uniqueAtlases": 38,
-    "totalFrames": 1520,
+    "uniqueAtlases": 61,
+    "totalFrames": 2440,
     "emptyFrames": 0,
-    "footlineFrames": 1520,
-    "compliantAtlases": 38,
+    "footlineFrames": 2440,
+    "compliantAtlases": 61,
     "violatingAtlases": 0,
-    "sharedAtlasGroups": 11,
-    "dedicatedAtlases": 27
+    "sharedAtlasGroups": 0,
+    "dedicatedAtlases": 61
   },
   "reuseDistribution": {
-    "1": 27,
-    "2": 6,
-    "4": 4,
-    "6": 1
+    "1": 61
   },
   "atlases": [
     {
@@ -1856,8 +1853,7 @@
       "assetKey": "boar-actions",
       "path": "/assets/monsters/boar-actions.webp",
       "kinds": [
-        "boar",
-        "japanese-wild-boar"
+        "boar"
       ],
       "dimensions": {
         "width": 2048,
@@ -4593,8 +4589,7 @@
       "assetKey": "japanese-archer-actions-v1",
       "path": "/assets/monsters/japanese-archer-actions-v1.png",
       "kinds": [
-        "japanese-archer",
-        "wako-archer"
+        "japanese-archer"
       ],
       "dimensions": {
         "width": 2048,
@@ -4898,8 +4893,7 @@
       "assetKey": "japanese-general-actions-v1",
       "path": "/assets/monsters/japanese-general-actions-v1.png",
       "kinds": [
-        "japanese-general",
-        "wako-captain"
+        "japanese-general"
       ],
       "dimensions": {
         "width": 2048,
@@ -5203,8 +5197,7 @@
       "assetKey": "japanese-gunner-actions-v1",
       "path": "/assets/monsters/japanese-gunner-actions-v1.png",
       "kinds": [
-        "japanese-gunner",
-        "osaka-gunner"
+        "japanese-gunner"
       ],
       "dimensions": {
         "width": 2048,
@@ -5809,6 +5802,310 @@
       ]
     },
     {
+      "assetKey": "japanese-sika-deer-actions-v1",
+      "path": "/assets/monsters/japanese-sika-deer-actions-v1.png",
+      "kinds": [
+        "japanese-sika-deer"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 182,
+        "height": 167
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 62,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 68,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 69,
+          "height": 161
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 62,
+          "height": 157
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 82,
+          "height": 140
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 144,
+          "height": 138
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 103,
+          "height": 123
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 64,
+          "height": 159
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 118,
+          "height": 151
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 122,
+          "height": 148
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 119,
+          "height": 151
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 124,
+          "height": 145
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 121,
+          "height": 130
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 157,
+          "height": 104
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 139,
+          "height": 105
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 111,
+          "height": 153
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 161,
+          "height": 140
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 179,
+          "height": 142
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 171,
+          "height": 140
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 171,
+          "height": 142
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 149,
+          "height": 108
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 171,
+          "height": 96
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 153,
+          "height": 91
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 167,
+          "height": 142
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 153,
+          "height": 144
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 182,
+          "height": 147
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 167,
+          "height": 149
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 165,
+          "height": 149
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 145,
+          "height": 112
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 172,
+          "height": 95
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 158,
+          "height": 93
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 153,
+          "height": 146
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 51,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 51,
+          "height": 163
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 52,
+          "height": 167
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 52,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 93,
+          "height": 124
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 107,
+          "height": 122
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 59,
+          "height": 121
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 53,
+          "height": 166
+        }
+      ]
+    },
+    {
       "assetKey": "japanese-spearman-actions-v1",
       "path": "/assets/monsters/japanese-spearman-actions-v1.png",
       "kinds": [
@@ -6116,10 +6413,7 @@
       "assetKey": "japanese-swordsman-actions-v1",
       "path": "/assets/monsters/japanese-swordsman-actions-v1.png",
       "kinds": [
-        "japanese-swordsman",
-        "osaka-overseer",
-        "osaka-ronin",
-        "wako-raider"
+        "japanese-swordsman"
       ],
       "dimensions": {
         "width": 2048,
@@ -6420,13 +6714,314 @@
       ]
     },
     {
-      "assetKey": "joseon-archer-actions-v1",
-      "path": "/assets/monsters/joseon-archer-actions-v1.png",
+      "assetKey": "japanese-wild-boar-actions-v1",
+      "path": "/assets/monsters/japanese-wild-boar-actions-v1.png",
       "kinds": [
-        "jeonju-archer",
-        "joseon-border-archer",
-        "ulleung-archer",
-        "yeongwol-archer"
+        "japanese-wild-boar"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 224,
+        "height": 156
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 3,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 104,
+          "height": 156
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 104,
+          "height": 156
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 108,
+          "height": 139
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 181,
+          "height": 131
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 189,
+          "height": 132
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 224,
+          "height": 126
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 224,
+          "height": 126
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 174,
+          "height": 133
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 176,
+          "height": 125
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 178,
+          "height": 122
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 171,
+          "height": 125
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 180,
+          "height": 122
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 199,
+          "height": 123
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 224,
+          "height": 114
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 224,
+          "height": 114
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 175,
+          "height": 134
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 187,
+          "height": 129
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 187,
+          "height": 129
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 185,
+          "height": 128
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 193,
+          "height": 118
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 208,
+          "height": 113
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 220,
+          "height": 106
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 220,
+          "height": 106
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 193,
+          "height": 124
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 178,
+          "height": 122
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 179,
+          "height": 122
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 178,
+          "height": 122
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 186,
+          "height": 110
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 190,
+          "height": 109
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 212,
+          "height": 101
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 212,
+          "height": 101
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 184,
+          "height": 117
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 80,
+          "height": 151
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 150
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 151
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 79,
+          "height": 151
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 196,
+          "height": 121
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 213,
+          "height": 111
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 213,
+          "height": 111
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 80,
+          "height": 154
+        }
+      ]
+    },
+    {
+      "assetKey": "jeonju-archer-actions-v1",
+      "path": "/assets/monsters/jeonju-archer-actions-v1.png",
+      "kinds": [
+        "jeonju-archer"
       ],
       "dimensions": {
         "width": 2048,
@@ -6727,13 +7322,2746 @@
       ]
     },
     {
+      "assetKey": "jeonju-commander-actions-v1",
+      "path": "/assets/monsters/jeonju-commander-actions-v1.png",
+      "kinds": [
+        "jeonju-commander"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 167,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 81,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 73,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 72,
+          "height": 179
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 73,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 151,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 122,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 167,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 128,
+          "height": 165
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 109,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 82,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 126,
+          "height": 164
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 96,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 159,
+          "height": 156
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 118,
+          "height": 165
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 100,
+          "height": 176
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 79,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 77,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 93,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 119,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 110,
+          "height": 177
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 161,
+          "height": 146
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 160
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 105,
+          "height": 181
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 87,
+          "height": 182
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 103,
+          "height": 182
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 181
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 122,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 102,
+          "height": 178
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 150
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 126,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 65,
+          "height": 146
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 64,
+          "height": 148
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 64,
+          "height": 146
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 64,
+          "height": 149
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 111,
+          "height": 145
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 119,
+          "height": 156
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 146,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 143
+        }
+      ]
+    },
+    {
+      "assetKey": "jeonju-shield-actions-v1",
+      "path": "/assets/monsters/jeonju-shield-actions-v1.png",
+      "kinds": [
+        "jeonju-shield"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 183,
+        "height": 182
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 102,
+          "height": 177
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 94,
+          "height": 177
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 86,
+          "height": 177
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 97,
+          "height": 177
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 121,
+          "height": 157
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 110,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 183,
+          "height": 143
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 157
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 107,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 82,
+          "height": 163
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 78,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 106,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 129,
+          "height": 156
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 117,
+          "height": 182
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 179,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 126,
+          "height": 153
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 92,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 73,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 93,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 93,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 90,
+          "height": 156
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 120,
+          "height": 168
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 154,
+          "height": 142
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 108,
+          "height": 149
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 101,
+          "height": 159
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 89,
+          "height": 157
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 91,
+          "height": 157
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 96,
+          "height": 157
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 110,
+          "height": 158
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 94,
+          "height": 175
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 157,
+          "height": 147
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 124,
+          "height": 153
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 64,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 66,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 66,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 64,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 117,
+          "height": 154
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 121,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 164,
+          "height": 143
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 113,
+          "height": 155
+        }
+      ]
+    },
+    {
+      "assetKey": "jeonju-spearman-actions-v1",
+      "path": "/assets/monsters/jeonju-spearman-actions-v1.png",
+      "kinds": [
+        "jeonju-spearman"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 194,
+        "height": 229
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 86,
+          "height": 226
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 228
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 77,
+          "height": 225
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 82,
+          "height": 227
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 174,
+          "height": 139
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 104,
+          "height": 164
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 192,
+          "height": 128
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 147,
+          "height": 140
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 137,
+          "height": 207
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 137,
+          "height": 209
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 137,
+          "height": 206
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 137,
+          "height": 208
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 148,
+          "height": 140
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 105,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 179,
+          "height": 129
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 146,
+          "height": 140
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 194,
+          "height": 172
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 194,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 194,
+          "height": 171
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 194,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 117,
+          "height": 141
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 117,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 151,
+          "height": 133
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 112,
+          "height": 141
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 173,
+          "height": 191
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 173,
+          "height": 193
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 173,
+          "height": 190
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 173,
+          "height": 192
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 112,
+          "height": 145
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 105,
+          "height": 160
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 134
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 142
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 76,
+          "height": 227
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 229
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 226
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 77,
+          "height": 228
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 111,
+          "height": 139
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 162,
+          "height": 130
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 106,
+          "height": 143
+        }
+      ]
+    },
+    {
+      "assetKey": "jeonju-swordsman-actions-v1",
+      "path": "/assets/monsters/jeonju-swordsman-actions-v1.png",
+      "kinds": [
+        "jeonju-swordsman"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 180,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 77,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 75,
+          "height": 183
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 75,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 137,
+          "height": 163
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 123,
+          "height": 178
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 180,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 135,
+          "height": 163
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 110,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 71,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 71,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 135,
+          "height": 166
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 95,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 174,
+          "height": 150
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 134,
+          "height": 166
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 97,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 76,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 101,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 96,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 125,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 186
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 175,
+          "height": 155
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 164
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 98,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 74,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 86,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 89,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 123,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 126,
+          "height": 187
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 165,
+          "height": 152
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 69,
+          "height": 170
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 127,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 171,
+          "height": 144
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 161
+        }
+      ]
+    },
+    {
+      "assetKey": "joseon-archer-actions-v1",
+      "path": "/assets/monsters/joseon-archer-actions-v1.png",
+      "kinds": [
+        "ulleung-archer"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 136,
+        "height": 154
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 72,
+          "height": 150
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 65,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 66,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 63,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 103,
+          "height": 136
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 106,
+          "height": 153
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 128,
+          "height": 139
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 91,
+          "height": 137
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 78,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 63,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 63,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 74,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 114,
+          "height": 137
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 102,
+          "height": 152
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 136,
+          "height": 124
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 113,
+          "height": 138
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 80,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 67,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 68,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 70,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 106,
+          "height": 138
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 97,
+          "height": 154
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 126,
+          "height": 128
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 137
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 82,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 70,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 80,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 112,
+          "height": 137
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 98,
+          "height": 154
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 124,
+          "height": 125
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 114,
+          "height": 138
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 54,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 56,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 56,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 55,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 102,
+          "height": 132
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 109,
+          "height": 145
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 135,
+          "height": 124
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 105,
+          "height": 133
+        }
+      ]
+    },
+    {
+      "assetKey": "joseon-border-archer-actions-v1",
+      "path": "/assets/monsters/joseon-border-archer-actions-v1.png",
+      "kinds": [
+        "joseon-border-archer"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 136,
+        "height": 154
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 72,
+          "height": 150
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 65,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 66,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 63,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 103,
+          "height": 136
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 106,
+          "height": 153
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 128,
+          "height": 139
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 91,
+          "height": 137
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 78,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 63,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 63,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 74,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 114,
+          "height": 137
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 102,
+          "height": 152
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 136,
+          "height": 124
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 113,
+          "height": 138
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 80,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 67,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 68,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 70,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 106,
+          "height": 138
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 97,
+          "height": 154
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 126,
+          "height": 128
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 137
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 82,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 70,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 80,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 112,
+          "height": 137
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 98,
+          "height": 154
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 124,
+          "height": 125
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 114,
+          "height": 138
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 54,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 56,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 56,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 55,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 102,
+          "height": 132
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 109,
+          "height": 145
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 135,
+          "height": 124
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 105,
+          "height": 133
+        }
+      ]
+    },
+    {
+      "assetKey": "joseon-border-commander-actions-v1",
+      "path": "/assets/monsters/joseon-border-commander-actions-v1.png",
+      "kinds": [
+        "joseon-border-commander"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 167,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 81,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 73,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 72,
+          "height": 179
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 73,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 151,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 122,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 167,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 128,
+          "height": 165
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 109,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 82,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 126,
+          "height": 164
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 96,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 159,
+          "height": 156
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 118,
+          "height": 165
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 100,
+          "height": 176
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 79,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 77,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 93,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 119,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 110,
+          "height": 177
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 161,
+          "height": 146
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 160
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 105,
+          "height": 181
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 87,
+          "height": 182
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 103,
+          "height": 182
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 181
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 122,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 102,
+          "height": 178
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 150
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 126,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 65,
+          "height": 146
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 64,
+          "height": 148
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 64,
+          "height": 146
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 64,
+          "height": 149
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 111,
+          "height": 145
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 119,
+          "height": 156
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 146,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 143
+        }
+      ]
+    },
+    {
+      "assetKey": "joseon-border-spearman-actions-v1",
+      "path": "/assets/monsters/joseon-border-spearman-actions-v1.png",
+      "kinds": [
+        "joseon-border-spearman"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 194,
+        "height": 229
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 86,
+          "height": 226
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 228
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 77,
+          "height": 225
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 82,
+          "height": 227
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 174,
+          "height": 139
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 104,
+          "height": 164
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 192,
+          "height": 128
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 147,
+          "height": 140
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 137,
+          "height": 207
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 137,
+          "height": 209
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 137,
+          "height": 206
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 137,
+          "height": 208
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 148,
+          "height": 140
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 105,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 179,
+          "height": 129
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 146,
+          "height": 140
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 194,
+          "height": 172
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 194,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 194,
+          "height": 171
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 194,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 117,
+          "height": 141
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 117,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 151,
+          "height": 133
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 112,
+          "height": 141
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 173,
+          "height": 191
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 173,
+          "height": 193
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 173,
+          "height": 190
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 173,
+          "height": 192
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 112,
+          "height": 145
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 105,
+          "height": 160
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 134
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 142
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 76,
+          "height": 227
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 229
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 226
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 77,
+          "height": 228
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 111,
+          "height": 139
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 162,
+          "height": 130
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 106,
+          "height": 143
+        }
+      ]
+    },
+    {
+      "assetKey": "joseon-border-swordsman-actions-v1",
+      "path": "/assets/monsters/joseon-border-swordsman-actions-v1.png",
+      "kinds": [
+        "joseon-border-swordsman"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 180,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 77,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 75,
+          "height": 183
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 75,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 137,
+          "height": 163
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 123,
+          "height": 178
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 180,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 135,
+          "height": 163
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 110,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 71,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 71,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 135,
+          "height": 166
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 95,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 174,
+          "height": 150
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 134,
+          "height": 166
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 97,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 76,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 101,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 96,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 125,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 186
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 175,
+          "height": 155
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 164
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 98,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 74,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 86,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 89,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 123,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 126,
+          "height": 187
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 165,
+          "height": 152
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 69,
+          "height": 170
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 127,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 171,
+          "height": 144
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 161
+        }
+      ]
+    },
+    {
       "assetKey": "joseon-pododaejang-actions-v1",
       "path": "/assets/monsters/joseon-pododaejang-actions-v1.png",
       "kinds": [
-        "jeonju-commander",
-        "joseon-border-commander",
-        "ulleung-captain",
-        "yeongwol-commander"
+        "ulleung-captain"
       ],
       "dimensions": {
         "width": 2048,
@@ -7037,7 +10365,6 @@
       "assetKey": "joseon-shield-guard-actions-v1",
       "path": "/assets/monsters/joseon-shield-guard-actions-v1.png",
       "kinds": [
-        "jeonju-shield",
         "yeongwol-shield"
       ],
       "dimensions": {
@@ -7342,10 +10669,7 @@
       "assetKey": "joseon-spearman-actions-v1",
       "path": "/assets/monsters/joseon-spearman-actions-v1.png",
       "kinds": [
-        "jeonju-spearman",
-        "joseon-border-spearman",
-        "ulleung-veteran",
-        "yeongwol-spearman"
+        "ulleung-veteran"
       ],
       "dimensions": {
         "width": 2048,
@@ -10078,15 +13402,1530 @@
       ]
     },
     {
+      "assetKey": "osaka-gunner-actions-v1",
+      "path": "/assets/monsters/osaka-gunner-actions-v1.png",
+      "kinds": [
+        "osaka-gunner"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 218,
+        "height": 193
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 134,
+          "height": 192
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 136,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 137,
+          "height": 188
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 137,
+          "height": 190
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 147,
+          "height": 188
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 165,
+          "height": 182
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 218,
+          "height": 178
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 144,
+          "height": 186
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 146,
+          "height": 193
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 149,
+          "height": 189
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 144,
+          "height": 187
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 147,
+          "height": 187
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 147,
+          "height": 187
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 168,
+          "height": 181
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 211,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 139,
+          "height": 185
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 122,
+          "height": 190
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 117,
+          "height": 186
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 111,
+          "height": 187
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 82,
+          "height": 189
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 115,
+          "height": 186
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 150,
+          "height": 183
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 196,
+          "height": 177
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 139,
+          "height": 185
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 146,
+          "height": 188
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 128,
+          "height": 184
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 122,
+          "height": 184
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 93,
+          "height": 184
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 120,
+          "height": 184
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 120,
+          "height": 181
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 132,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 169,
+          "height": 178
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 108,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 120,
+          "height": 162
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 124,
+          "height": 162
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 103,
+          "height": 162
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 137,
+          "height": 162
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 94,
+          "height": 158
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 158,
+          "height": 154
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 123,
+          "height": 158
+        }
+      ]
+    },
+    {
+      "assetKey": "osaka-overseer-actions-v1",
+      "path": "/assets/monsters/osaka-overseer-actions-v1.png",
+      "kinds": [
+        "osaka-overseer"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 225,
+        "height": 180
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 83,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 82,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 91,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 94,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 105,
+          "height": 165
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 165,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 207,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 124,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 112,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 117,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 117,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 118,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 104,
+          "height": 167
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 178,
+          "height": 180
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 222,
+          "height": 153
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 141,
+          "height": 162
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 112,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 119,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 117,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 114,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 169
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 157,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 225,
+          "height": 156
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 152,
+          "height": 165
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 91,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 174
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 79,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 122,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 140,
+          "height": 170
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 205,
+          "height": 158
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 140,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 73,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 75,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 76,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 76,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 82,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 96,
+          "height": 171
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 98,
+          "height": 158
+        }
+      ]
+    },
+    {
+      "assetKey": "osaka-ronin-actions-v1",
+      "path": "/assets/monsters/osaka-ronin-actions-v1.png",
+      "kinds": [
+        "osaka-ronin"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 225,
+        "height": 180
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 83,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 82,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 91,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 94,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 105,
+          "height": 165
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 165,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 207,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 124,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 112,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 117,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 117,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 118,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 104,
+          "height": 167
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 178,
+          "height": 180
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 222,
+          "height": 153
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 141,
+          "height": 162
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 112,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 119,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 117,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 114,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 169
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 157,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 225,
+          "height": 156
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 152,
+          "height": 165
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 91,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 174
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 79,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 122,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 140,
+          "height": 170
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 205,
+          "height": 158
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 140,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 73,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 75,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 76,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 76,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 82,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 96,
+          "height": 171
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 98,
+          "height": 158
+        }
+      ]
+    },
+    {
+      "assetKey": "royal-guard-actions-v1",
+      "path": "/assets/monsters/royal-guard-actions-v1.png",
+      "kinds": [
+        "royal-guard"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 180,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 77,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 75,
+          "height": 183
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 75,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 137,
+          "height": 163
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 123,
+          "height": 178
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 180,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 135,
+          "height": 163
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 110,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 71,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 71,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 135,
+          "height": 166
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 95,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 174,
+          "height": 150
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 134,
+          "height": 166
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 97,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 76,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 101,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 96,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 125,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 186
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 175,
+          "height": 155
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 164
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 98,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 74,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 86,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 89,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 123,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 126,
+          "height": 187
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 165,
+          "height": 152
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 69,
+          "height": 170
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 127,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 171,
+          "height": 144
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 161
+        }
+      ]
+    },
+    {
+      "assetKey": "ulleung-executioner-actions-v1",
+      "path": "/assets/monsters/ulleung-executioner-actions-v1.png",
+      "kinds": [
+        "ulleung-executioner"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 180,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 77,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 75,
+          "height": 183
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 75,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 137,
+          "height": 163
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 123,
+          "height": 178
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 180,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 135,
+          "height": 163
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 110,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 71,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 71,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 135,
+          "height": 166
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 95,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 174,
+          "height": 150
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 134,
+          "height": 166
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 97,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 76,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 101,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 96,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 125,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 186
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 175,
+          "height": 155
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 164
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 98,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 74,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 86,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 89,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 123,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 126,
+          "height": 187
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 165,
+          "height": 152
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 69,
+          "height": 170
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 127,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 171,
+          "height": 144
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 161
+        }
+      ]
+    },
+    {
       "assetKey": "ulleung-guard-actions-v1",
       "path": "/assets/monsters/ulleung-guard-actions-v1.png",
       "kinds": [
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
-        "royal-guard",
-        "ulleung-executioner",
-        "ulleung-guard",
-        "yeongwol-swordsman"
+        "ulleung-guard"
       ],
       "dimensions": {
         "width": 2048,
@@ -10998,7 +15837,6 @@
       "assetKey": "ulleung-water-deer-actions-v1",
       "path": "/assets/monsters/ulleung-water-deer-actions-v1.png",
       "kinds": [
-        "japanese-sika-deer",
         "ulleung-water-deer"
       ],
       "dimensions": {
@@ -11296,6 +16134,918 @@
           "maxY": 248,
           "width": 53,
           "height": 166
+        }
+      ]
+    },
+    {
+      "assetKey": "wako-archer-actions-v1",
+      "path": "/assets/monsters/wako-archer-actions-v1.png",
+      "kinds": [
+        "wako-archer"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 134,
+        "height": 179
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 85,
+          "height": 157
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 92,
+          "height": 158
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 95,
+          "height": 155
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 96,
+          "height": 157
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 116,
+          "height": 178
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 134,
+          "height": 179
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 124,
+          "height": 179
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 96,
+          "height": 155
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 86,
+          "height": 159
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 88,
+          "height": 159
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 92,
+          "height": 159
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 85,
+          "height": 158
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 120,
+          "height": 169
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 133,
+          "height": 173
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 124,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 88,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 88,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 88,
+          "height": 156
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 75,
+          "height": 156
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 86,
+          "height": 158
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 94,
+          "height": 156
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 97,
+          "height": 158
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 89,
+          "height": 155
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 87,
+          "height": 158
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 92,
+          "height": 156
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 84,
+          "height": 156
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 84,
+          "height": 155
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 84,
+          "height": 157
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 89,
+          "height": 155
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 85,
+          "height": 155
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 112,
+          "height": 155
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 95,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 87,
+          "height": 162
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 84,
+          "height": 163
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 87,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 92,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 79,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 75,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 91,
+          "height": 163
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 99,
+          "height": 164
+        }
+      ]
+    },
+    {
+      "assetKey": "wako-captain-actions-v1",
+      "path": "/assets/monsters/wako-captain-actions-v1.png",
+      "kinds": [
+        "wako-captain"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 229,
+        "height": 196
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 81,
+          "height": 190
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 88,
+          "height": 189
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 86,
+          "height": 190
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 84,
+          "height": 190
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 145,
+          "height": 182
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 135,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 222,
+          "height": 174
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 161,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 98,
+          "height": 190
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 100,
+          "height": 189
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 95,
+          "height": 190
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 102,
+          "height": 189
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 117,
+          "height": 181
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 127,
+          "height": 196
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 176,
+          "height": 173
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 155,
+          "height": 172
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 96,
+          "height": 189
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 91,
+          "height": 190
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 82,
+          "height": 191
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 107,
+          "height": 189
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 131,
+          "height": 181
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 212,
+          "height": 171
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 218,
+          "height": 170
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 125,
+          "height": 175
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 100,
+          "height": 186
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 96,
+          "height": 185
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 92,
+          "height": 186
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 98,
+          "height": 184
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 126,
+          "height": 182
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 200,
+          "height": 167
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 229,
+          "height": 169
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 107,
+          "height": 176
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 79,
+          "height": 149
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 78,
+          "height": 148
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 78,
+          "height": 148
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 79,
+          "height": 148
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 88,
+          "height": 153
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 153,
+          "height": 139
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 167,
+          "height": 134
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 82,
+          "height": 142
+        }
+      ]
+    },
+    {
+      "assetKey": "wako-raider-actions-v1",
+      "path": "/assets/monsters/wako-raider-actions-v1.png",
+      "kinds": [
+        "wako-raider"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 225,
+        "height": 180
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 83,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 82,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 91,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 94,
+          "height": 175
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 105,
+          "height": 165
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 165,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 207,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 124,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 112,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 117,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 117,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 118,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 104,
+          "height": 167
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 178,
+          "height": 180
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 222,
+          "height": 153
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 141,
+          "height": 162
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 112,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 119,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 117,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 114,
+          "height": 175
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 169
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 157,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 225,
+          "height": 156
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 152,
+          "height": 165
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 91,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 174
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 79,
+          "height": 173
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 122,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 140,
+          "height": 170
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 205,
+          "height": 158
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 140,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 73,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 75,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 76,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 76,
+          "height": 168
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 82,
+          "height": 164
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 96,
+          "height": 171
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 157
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 98,
+          "height": 158
         }
       ]
     },
@@ -11600,6 +17350,1222 @@
           "maxY": 248,
           "width": 111,
           "height": 172
+        }
+      ]
+    },
+    {
+      "assetKey": "yeongwol-archer-actions-v1",
+      "path": "/assets/monsters/yeongwol-archer-actions-v1.png",
+      "kinds": [
+        "yeongwol-archer"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 136,
+        "height": 154
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 72,
+          "height": 150
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 65,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 66,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 63,
+          "height": 149
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 103,
+          "height": 136
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 106,
+          "height": 153
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 128,
+          "height": 139
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 91,
+          "height": 137
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 78,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 63,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 63,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 74,
+          "height": 144
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 114,
+          "height": 137
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 102,
+          "height": 152
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 136,
+          "height": 124
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 113,
+          "height": 138
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 80,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 67,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 68,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 70,
+          "height": 143
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 106,
+          "height": 138
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 97,
+          "height": 154
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 126,
+          "height": 128
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 137
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 82,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 70,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 80,
+          "height": 138
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 112,
+          "height": 137
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 98,
+          "height": 154
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 124,
+          "height": 125
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 114,
+          "height": 138
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 54,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 56,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 56,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 55,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 102,
+          "height": 132
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 109,
+          "height": 145
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 135,
+          "height": 124
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 105,
+          "height": 133
+        }
+      ]
+    },
+    {
+      "assetKey": "yeongwol-commander-actions-v1",
+      "path": "/assets/monsters/yeongwol-commander-actions-v1.png",
+      "kinds": [
+        "yeongwol-commander"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 167,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 81,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 73,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 72,
+          "height": 179
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 73,
+          "height": 180
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 151,
+          "height": 160
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 122,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 167,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 128,
+          "height": 165
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 109,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 82,
+          "height": 174
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 175
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 126,
+          "height": 164
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 96,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 159,
+          "height": 156
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 118,
+          "height": 165
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 100,
+          "height": 176
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 79,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 77,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 93,
+          "height": 178
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 119,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 110,
+          "height": 177
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 161,
+          "height": 146
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 160
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 105,
+          "height": 181
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 87,
+          "height": 182
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 103,
+          "height": 182
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 181
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 122,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 102,
+          "height": 178
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 150
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 126,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 65,
+          "height": 146
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 64,
+          "height": 148
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 64,
+          "height": 146
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 64,
+          "height": 149
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 111,
+          "height": 145
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 119,
+          "height": 156
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 146,
+          "height": 135
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 143
+        }
+      ]
+    },
+    {
+      "assetKey": "yeongwol-spearman-actions-v1",
+      "path": "/assets/monsters/yeongwol-spearman-actions-v1.png",
+      "kinds": [
+        "yeongwol-spearman"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 194,
+        "height": 229
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 86,
+          "height": 226
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 228
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 77,
+          "height": 225
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 82,
+          "height": 227
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 174,
+          "height": 139
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 104,
+          "height": 164
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 192,
+          "height": 128
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 147,
+          "height": 140
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 137,
+          "height": 207
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 137,
+          "height": 209
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 137,
+          "height": 206
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 137,
+          "height": 208
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 148,
+          "height": 140
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 105,
+          "height": 162
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 179,
+          "height": 129
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 146,
+          "height": 140
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 194,
+          "height": 172
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 194,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 194,
+          "height": 171
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 194,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 117,
+          "height": 141
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 117,
+          "height": 159
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 151,
+          "height": 133
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 112,
+          "height": 141
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 173,
+          "height": 191
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 173,
+          "height": 193
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 173,
+          "height": 190
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 173,
+          "height": 192
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 112,
+          "height": 145
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 105,
+          "height": 160
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 152,
+          "height": 134
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 110,
+          "height": 142
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 76,
+          "height": 227
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 80,
+          "height": 229
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 80,
+          "height": 226
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 77,
+          "height": 228
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 111,
+          "height": 139
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 162,
+          "height": 130
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 106,
+          "height": 143
+        }
+      ]
+    },
+    {
+      "assetKey": "yeongwol-swordsman-actions-v1",
+      "path": "/assets/monsters/yeongwol-swordsman-actions-v1.png",
+      "kinds": [
+        "yeongwol-swordsman"
+      ],
+      "dimensions": {
+        "width": 2048,
+        "height": 1280
+      },
+      "frames": 40,
+      "emptyFrames": 0,
+      "footlineFrames": 40,
+      "maxContent": {
+        "width": 180,
+        "height": 187
+      },
+      "walkDistinctMin": 4,
+      "attackDistinctMin": 4,
+      "compliant": true,
+      "violations": [],
+      "frameMetrics": [
+        {
+          "row": 0,
+          "column": 0,
+          "maxY": 248,
+          "width": 75,
+          "height": 187
+        },
+        {
+          "row": 0,
+          "column": 1,
+          "maxY": 248,
+          "width": 77,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "maxY": 248,
+          "width": 75,
+          "height": 183
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "maxY": 248,
+          "width": 75,
+          "height": 185
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "maxY": 248,
+          "width": 137,
+          "height": 163
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "maxY": 248,
+          "width": 123,
+          "height": 178
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "maxY": 248,
+          "width": 180,
+          "height": 151
+        },
+        {
+          "row": 0,
+          "column": 7,
+          "maxY": 248,
+          "width": 135,
+          "height": 163
+        },
+        {
+          "row": 1,
+          "column": 0,
+          "maxY": 248,
+          "width": 110,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "maxY": 248,
+          "width": 71,
+          "height": 179
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "maxY": 248,
+          "width": 71,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "maxY": 248,
+          "width": 104,
+          "height": 176
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "maxY": 248,
+          "width": 135,
+          "height": 166
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "maxY": 248,
+          "width": 95,
+          "height": 177
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "maxY": 248,
+          "width": 174,
+          "height": 150
+        },
+        {
+          "row": 1,
+          "column": 7,
+          "maxY": 248,
+          "width": 134,
+          "height": 166
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "maxY": 248,
+          "width": 97,
+          "height": 174
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "maxY": 248,
+          "width": 76,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "maxY": 248,
+          "width": 101,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "maxY": 248,
+          "width": 96,
+          "height": 173
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "maxY": 248,
+          "width": 125,
+          "height": 164
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "maxY": 248,
+          "width": 124,
+          "height": 186
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "maxY": 248,
+          "width": 175,
+          "height": 155
+        },
+        {
+          "row": 2,
+          "column": 7,
+          "maxY": 248,
+          "width": 127,
+          "height": 164
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "maxY": 248,
+          "width": 98,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "maxY": 248,
+          "width": 74,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "maxY": 248,
+          "width": 86,
+          "height": 172
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "maxY": 248,
+          "width": 89,
+          "height": 171
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "maxY": 248,
+          "width": 123,
+          "height": 168
+        },
+        {
+          "row": 3,
+          "column": 5,
+          "maxY": 248,
+          "width": 126,
+          "height": 187
+        },
+        {
+          "row": 3,
+          "column": 6,
+          "maxY": 248,
+          "width": 165,
+          "height": 152
+        },
+        {
+          "row": 3,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 165
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "maxY": 248,
+          "width": 69,
+          "height": 170
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "maxY": 248,
+          "width": 68,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "maxY": 248,
+          "width": 124,
+          "height": 161
+        },
+        {
+          "row": 4,
+          "column": 5,
+          "maxY": 248,
+          "width": 127,
+          "height": 169
+        },
+        {
+          "row": 4,
+          "column": 6,
+          "maxY": 248,
+          "width": 171,
+          "height": 144
+        },
+        {
+          "row": 4,
+          "column": 7,
+          "maxY": 248,
+          "width": 122,
+          "height": 161
         }
       ]
     }

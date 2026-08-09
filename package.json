@@ -12,6 +12,8 @@
     "validate:world-bows": "python3 scripts/validate_world_bows.py",
     "build:regional-armors": "python3 scripts/build_regional_armor_layers.py",
     "validate:regional-armors": "python3 scripts/validate_regional_armor_layers.py",
+    "build:monster-variants": "python3 scripts/build_monster_faction_variants.py",
+    "validate:monster-variants": "python3 scripts/validate_monster_faction_variants.py",
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "node scripts/prune_dist_assets.mjs && node scripts/build_guide_host.mjs",

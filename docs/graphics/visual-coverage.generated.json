@@ -5,14 +5,14 @@
     "dedicatedRegionBackgrounds": 46,
     "modularRegionCompositions": 35,
     "monsters": 61,
-    "uniqueMonsterAssets": 38,
-    "sharedMonsterKinds": 34,
+    "uniqueMonsterAssets": 61,
+    "sharedMonsterKinds": 0,
     "items": 60,
     "itemWorldVisualGaps": 0,
     "propAssetEntries": 34,
-    "publicAssetFiles": 501,
-    "publicAssetBytes": 326111572,
-    "referencedAssetPaths": 369,
+    "publicAssetFiles": 524,
+    "publicAssetBytes": 342938262,
+    "referencedAssetPaths": 392,
     "missingReferencedPaths": 0,
     "unreferencedPublicFiles": 132,
     "duplicateContentGroups": 3,
@@ -28,14 +28,14 @@
       "bytes": 181854193
     },
     {
+      "domain": "monsters",
+      "files": 57,
+      "bytes": 55276731
+    },
+    {
       "domain": "characters",
       "files": 86,
       "bytes": 52494023
-    },
-    {
-      "domain": "monsters",
-      "files": 34,
-      "bytes": 38450041
     },
     {
       "domain": "ui",
@@ -1046,45 +1046,38 @@
     {
       "kind": "osaka-overseer",
       "asset": {
-        "key": "japanese-swordsman-actions-v1",
-        "path": "/assets/monsters/japanese-swordsman-actions-v1.png"
+        "key": "osaka-overseer-actions-v1",
+        "path": "/assets/monsters/osaka-overseer-actions-v1.png"
       },
       "sharedBy": [
-        "osaka-overseer",
-        "osaka-ronin",
-        "wako-raider",
-        "japanese-swordsman"
+        "osaka-overseer"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "osaka-ronin",
       "asset": {
-        "key": "japanese-swordsman-actions-v1",
-        "path": "/assets/monsters/japanese-swordsman-actions-v1.png"
+        "key": "osaka-ronin-actions-v1",
+        "path": "/assets/monsters/osaka-ronin-actions-v1.png"
       },
       "sharedBy": [
-        "osaka-overseer",
-        "osaka-ronin",
-        "wako-raider",
-        "japanese-swordsman"
+        "osaka-ronin"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "osaka-gunner",
       "asset": {
-        "key": "japanese-gunner-actions-v1",
-        "path": "/assets/monsters/japanese-gunner-actions-v1.png"
+        "key": "osaka-gunner-actions-v1",
+        "path": "/assets/monsters/osaka-gunner-actions-v1.png"
       },
       "sharedBy": [
-        "osaka-gunner",
-        "japanese-gunner"
+        "osaka-gunner"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "ulleung-hare",
@@ -1105,11 +1098,10 @@
         "path": "/assets/monsters/ulleung-water-deer-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-water-deer",
-        "japanese-sika-deer"
+        "ulleung-water-deer"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "ulleung-sangun",
@@ -1130,15 +1122,10 @@
         "path": "/assets/monsters/ulleung-guard-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-guard",
-        "ulleung-executioner",
-        "yeongwol-swordsman",
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
-        "royal-guard"
+        "ulleung-guard"
       ],
-      "status": "shared",
-      "reuseRisk": "critical"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "ulleung-veteran",
@@ -1147,13 +1134,10 @@
         "path": "/assets/monsters/joseon-spearman-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-veteran",
-        "yeongwol-spearman",
-        "jeonju-spearman",
-        "joseon-border-spearman"
+        "ulleung-veteran"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "ulleung-archer",
@@ -1162,30 +1146,22 @@
         "path": "/assets/monsters/joseon-archer-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-archer",
-        "yeongwol-archer",
-        "jeonju-archer",
-        "joseon-border-archer"
+        "ulleung-archer"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "ulleung-executioner",
       "asset": {
-        "key": "ulleung-guard-actions-v1",
-        "path": "/assets/monsters/ulleung-guard-actions-v1.png"
+        "key": "ulleung-executioner-actions-v1",
+        "path": "/assets/monsters/ulleung-executioner-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-guard",
-        "ulleung-executioner",
-        "yeongwol-swordsman",
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
-        "royal-guard"
+        "ulleung-executioner"
       ],
-      "status": "shared",
-      "reuseRisk": "critical"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "ulleung-captain",
@@ -1194,13 +1170,10 @@
         "path": "/assets/monsters/joseon-pododaejang-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-captain",
-        "yeongwol-commander",
-        "jeonju-commander",
-        "joseon-border-commander"
+        "ulleung-captain"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "ulleung-magistrate",
@@ -1217,90 +1190,74 @@
     {
       "kind": "wako-raider",
       "asset": {
-        "key": "japanese-swordsman-actions-v1",
-        "path": "/assets/monsters/japanese-swordsman-actions-v1.png"
+        "key": "wako-raider-actions-v1",
+        "path": "/assets/monsters/wako-raider-actions-v1.png"
       },
       "sharedBy": [
-        "osaka-overseer",
-        "osaka-ronin",
-        "wako-raider",
-        "japanese-swordsman"
+        "wako-raider"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "wako-archer",
       "asset": {
-        "key": "japanese-archer-actions-v1",
-        "path": "/assets/monsters/japanese-archer-actions-v1.png"
+        "key": "wako-archer-actions-v1",
+        "path": "/assets/monsters/wako-archer-actions-v1.png"
       },
       "sharedBy": [
-        "wako-archer",
-        "japanese-archer"
+        "wako-archer"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "wako-captain",
       "asset": {
-        "key": "japanese-general-actions-v1",
-        "path": "/assets/monsters/japanese-general-actions-v1.png"
+        "key": "wako-captain-actions-v1",
+        "path": "/assets/monsters/wako-captain-actions-v1.png"
       },
       "sharedBy": [
-        "wako-captain",
-        "japanese-general"
+        "wako-captain"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "yeongwol-swordsman",
       "asset": {
-        "key": "ulleung-guard-actions-v1",
-        "path": "/assets/monsters/ulleung-guard-actions-v1.png"
+        "key": "yeongwol-swordsman-actions-v1",
+        "path": "/assets/monsters/yeongwol-swordsman-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-guard",
-        "ulleung-executioner",
-        "yeongwol-swordsman",
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
-        "royal-guard"
+        "yeongwol-swordsman"
       ],
-      "status": "shared",
-      "reuseRisk": "critical"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "yeongwol-spearman",
       "asset": {
-        "key": "joseon-spearman-actions-v1",
-        "path": "/assets/monsters/joseon-spearman-actions-v1.png"
+        "key": "yeongwol-spearman-actions-v1",
+        "path": "/assets/monsters/yeongwol-spearman-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-veteran",
-        "yeongwol-spearman",
-        "jeonju-spearman",
-        "joseon-border-spearman"
+        "yeongwol-spearman"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "yeongwol-archer",
       "asset": {
-        "key": "joseon-archer-actions-v1",
-        "path": "/assets/monsters/joseon-archer-actions-v1.png"
+        "key": "yeongwol-archer-actions-v1",
+        "path": "/assets/monsters/yeongwol-archer-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-archer",
-        "yeongwol-archer",
-        "jeonju-archer",
-        "joseon-border-archer"
+        "yeongwol-archer"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "yeongwol-shield",
@@ -1309,101 +1266,82 @@
         "path": "/assets/monsters/joseon-shield-guard-actions-v1.png"
       },
       "sharedBy": [
-        "yeongwol-shield",
-        "jeonju-shield"
+        "yeongwol-shield"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "yeongwol-commander",
       "asset": {
-        "key": "joseon-pododaejang-actions-v1",
-        "path": "/assets/monsters/joseon-pododaejang-actions-v1.png"
+        "key": "yeongwol-commander-actions-v1",
+        "path": "/assets/monsters/yeongwol-commander-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-captain",
-        "yeongwol-commander",
-        "jeonju-commander",
-        "joseon-border-commander"
+        "yeongwol-commander"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "jeonju-swordsman",
       "asset": {
-        "key": "ulleung-guard-actions-v1",
-        "path": "/assets/monsters/ulleung-guard-actions-v1.png"
+        "key": "jeonju-swordsman-actions-v1",
+        "path": "/assets/monsters/jeonju-swordsman-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-guard",
-        "ulleung-executioner",
-        "yeongwol-swordsman",
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
-        "royal-guard"
+        "jeonju-swordsman"
       ],
-      "status": "shared",
-      "reuseRisk": "critical"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "jeonju-spearman",
       "asset": {
-        "key": "joseon-spearman-actions-v1",
-        "path": "/assets/monsters/joseon-spearman-actions-v1.png"
+        "key": "jeonju-spearman-actions-v1",
+        "path": "/assets/monsters/jeonju-spearman-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-veteran",
-        "yeongwol-spearman",
-        "jeonju-spearman",
-        "joseon-border-spearman"
+        "jeonju-spearman"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "jeonju-archer",
       "asset": {
-        "key": "joseon-archer-actions-v1",
-        "path": "/assets/monsters/joseon-archer-actions-v1.png"
+        "key": "jeonju-archer-actions-v1",
+        "path": "/assets/monsters/jeonju-archer-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-archer",
-        "yeongwol-archer",
-        "jeonju-archer",
-        "joseon-border-archer"
+        "jeonju-archer"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "jeonju-shield",
       "asset": {
-        "key": "joseon-shield-guard-actions-v1",
-        "path": "/assets/monsters/joseon-shield-guard-actions-v1.png"
+        "key": "jeonju-shield-actions-v1",
+        "path": "/assets/monsters/jeonju-shield-actions-v1.png"
       },
       "sharedBy": [
-        "yeongwol-shield",
         "jeonju-shield"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "jeonju-commander",
       "asset": {
-        "key": "joseon-pododaejang-actions-v1",
-        "path": "/assets/monsters/joseon-pododaejang-actions-v1.png"
+        "key": "jeonju-commander-actions-v1",
+        "path": "/assets/monsters/jeonju-commander-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-captain",
-        "yeongwol-commander",
-        "jeonju-commander",
-        "joseon-border-commander"
+        "jeonju-commander"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "jeonju-militia-sickle",
@@ -1420,28 +1358,26 @@
     {
       "kind": "japanese-sika-deer",
       "asset": {
-        "key": "ulleung-water-deer-actions-v1",
-        "path": "/assets/monsters/ulleung-water-deer-actions-v1.png"
+        "key": "japanese-sika-deer-actions-v1",
+        "path": "/assets/monsters/japanese-sika-deer-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-water-deer",
         "japanese-sika-deer"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "japanese-wild-boar",
       "asset": {
-        "key": "boar-actions",
-        "path": "/assets/monsters/boar-actions.webp"
+        "key": "japanese-wild-boar-actions-v1",
+        "path": "/assets/monsters/japanese-wild-boar-actions-v1.png"
       },
       "sharedBy": [
-        "japanese-wild-boar",
-        "boar"
+        "japanese-wild-boar"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "japanese-swordsman",
@@ -1450,13 +1386,10 @@
         "path": "/assets/monsters/japanese-swordsman-actions-v1.png"
       },
       "sharedBy": [
-        "osaka-overseer",
-        "osaka-ronin",
-        "wako-raider",
         "japanese-swordsman"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "japanese-spearman",
@@ -1477,11 +1410,10 @@
         "path": "/assets/monsters/japanese-archer-actions-v1.png"
       },
       "sharedBy": [
-        "wako-archer",
         "japanese-archer"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "japanese-gunner",
@@ -1490,11 +1422,10 @@
         "path": "/assets/monsters/japanese-gunner-actions-v1.png"
       },
       "sharedBy": [
-        "osaka-gunner",
         "japanese-gunner"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "japanese-general",
@@ -1503,11 +1434,10 @@
         "path": "/assets/monsters/japanese-general-actions-v1.png"
       },
       "sharedBy": [
-        "wako-captain",
         "japanese-general"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "japanese-shogun",
@@ -1584,81 +1514,62 @@
     {
       "kind": "joseon-border-swordsman",
       "asset": {
-        "key": "ulleung-guard-actions-v1",
-        "path": "/assets/monsters/ulleung-guard-actions-v1.png"
+        "key": "joseon-border-swordsman-actions-v1",
+        "path": "/assets/monsters/joseon-border-swordsman-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-guard",
-        "ulleung-executioner",
-        "yeongwol-swordsman",
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
-        "royal-guard"
+        "joseon-border-swordsman"
       ],
-      "status": "shared",
-      "reuseRisk": "critical"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "joseon-border-spearman",
       "asset": {
-        "key": "joseon-spearman-actions-v1",
-        "path": "/assets/monsters/joseon-spearman-actions-v1.png"
+        "key": "joseon-border-spearman-actions-v1",
+        "path": "/assets/monsters/joseon-border-spearman-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-veteran",
-        "yeongwol-spearman",
-        "jeonju-spearman",
         "joseon-border-spearman"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "joseon-border-archer",
       "asset": {
-        "key": "joseon-archer-actions-v1",
-        "path": "/assets/monsters/joseon-archer-actions-v1.png"
+        "key": "joseon-border-archer-actions-v1",
+        "path": "/assets/monsters/joseon-border-archer-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-archer",
-        "yeongwol-archer",
-        "jeonju-archer",
         "joseon-border-archer"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "joseon-border-commander",
       "asset": {
-        "key": "joseon-pododaejang-actions-v1",
-        "path": "/assets/monsters/joseon-pododaejang-actions-v1.png"
+        "key": "joseon-border-commander-actions-v1",
+        "path": "/assets/monsters/joseon-border-commander-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-captain",
-        "yeongwol-commander",
-        "jeonju-commander",
         "joseon-border-commander"
       ],
-      "status": "shared",
-      "reuseRisk": "high"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "royal-guard",
       "asset": {
-        "key": "ulleung-guard-actions-v1",
-        "path": "/assets/monsters/ulleung-guard-actions-v1.png"
+        "key": "royal-guard-actions-v1",
+        "path": "/assets/monsters/royal-guard-actions-v1.png"
       },
       "sharedBy": [
-        "ulleung-guard",
-        "ulleung-executioner",
-        "yeongwol-swordsman",
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
         "royal-guard"
       ],
-      "status": "shared",
-      "reuseRisk": "critical"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "joseon-prince",
@@ -1715,11 +1626,10 @@
         "path": "/assets/monsters/boar-actions.webp"
       },
       "sharedBy": [
-        "japanese-wild-boar",
         "boar"
       ],
-      "status": "shared",
-      "reuseRisk": "medium"
+      "status": "dedicated",
+      "reuseRisk": "none"
     },
     {
       "kind": "bandit",
@@ -1866,108 +1776,7 @@
       "reuseRisk": "none"
     }
   ],
-  "monsterReuseGroups": [
-    {
-      "assetKey": "ulleung-guard-actions-v1",
-      "kinds": [
-        "ulleung-guard",
-        "ulleung-executioner",
-        "yeongwol-swordsman",
-        "jeonju-swordsman",
-        "joseon-border-swordsman",
-        "royal-guard"
-      ],
-      "count": 6
-    },
-    {
-      "assetKey": "japanese-swordsman-actions-v1",
-      "kinds": [
-        "osaka-overseer",
-        "osaka-ronin",
-        "wako-raider",
-        "japanese-swordsman"
-      ],
-      "count": 4
-    },
-    {
-      "assetKey": "joseon-archer-actions-v1",
-      "kinds": [
-        "ulleung-archer",
-        "yeongwol-archer",
-        "jeonju-archer",
-        "joseon-border-archer"
-      ],
-      "count": 4
-    },
-    {
-      "assetKey": "joseon-pododaejang-actions-v1",
-      "kinds": [
-        "ulleung-captain",
-        "yeongwol-commander",
-        "jeonju-commander",
-        "joseon-border-commander"
-      ],
-      "count": 4
-    },
-    {
-      "assetKey": "joseon-spearman-actions-v1",
-      "kinds": [
-        "ulleung-veteran",
-        "yeongwol-spearman",
-        "jeonju-spearman",
-        "joseon-border-spearman"
-      ],
-      "count": 4
-    },
-    {
-      "assetKey": "boar-actions",
-      "kinds": [
-        "japanese-wild-boar",
-        "boar"
-      ],
-      "count": 2
-    },
-    {
-      "assetKey": "japanese-archer-actions-v1",
-      "kinds": [
-        "wako-archer",
-        "japanese-archer"
-      ],
-      "count": 2
-    },
-    {
-      "assetKey": "japanese-general-actions-v1",
-      "kinds": [
-        "wako-captain",
-        "japanese-general"
-      ],
-      "count": 2
-    },
-    {
-      "assetKey": "japanese-gunner-actions-v1",
-      "kinds": [
-        "osaka-gunner",
-        "japanese-gunner"
-      ],
-      "count": 2
-    },
-    {
-      "assetKey": "joseon-shield-guard-actions-v1",
-      "kinds": [
-        "yeongwol-shield",
-        "jeonju-shield"
-      ],
-      "count": 2
-    },
-    {
-      "assetKey": "ulleung-water-deer-actions-v1",
-      "kinds": [
-        "ulleung-water-deer",
-        "japanese-sika-deer"
-      ],
-      "count": 2
-    }
-  ],
+  "monsterReuseGroups": [],
   "items": [
     {
       "id": "worn-hwando",
