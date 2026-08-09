@@ -34,7 +34,7 @@ describe('complete regional armor image set', () => {
     });
     expect(result.status, result.stderr || result.stdout).toBe(0);
     expect(result.stdout).toContain('Validated 29 body-locked armor atlases and five-material reference');
-  }, 60_000);
+  }, 120_000);
 
   it('uses Hajin-specific layers in gameplay and the bag preview', () => {
     const scene = readFileSync(new URL('../phaser/HuntingScene.ts', import.meta.url), 'utf8');

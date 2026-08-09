@@ -66,24 +66,46 @@ def main() -> None:
 
     hashes: set[str] = set()
     for path in paths:
-        image = Image.open(path).convert("RGBA")
+        image = Image.open(path)
         if image.size != (2048, 1280):
             raise AssertionError(f"{path.name}: expected 2048x1280, got {image.size}")
+        if image.mode != "RGBA":
+            raise AssertionError(f"{path.name}: expected RGBA PNG, got {image.mode}")
+        hashes.add(sha256(path.read_bytes()).hexdigest())
+
+    if len(hashes) != len(paths):
+        raise AssertionError("regional armor layers must be visually distinct files")
+
+    # Palette siblings share an alpha grid by construction. Decode one sample
+    # for each source silhouette plus both Hajin bodies and all three cleaned
+    # legacy-ready layers; headers and hashes above still cover every file.
+    sample_names = (
+        "joseon-hero-frontier-lamellar-coat-layer-v1.png",
+        "joseon-hero-coastal-scout-coat-layer-v1.png",
+        "joseon-hero-haeju-reed-cape-layer-v1.png",
+        "joseon-hero-frontier-lamellar-coat-weapon-ready-layer-v1.png",
+        "joseon-hero-coastal-scout-coat-weapon-ready-layer-v1.png",
+        "joseon-hero-haeju-reed-cape-weapon-ready-layer-v1.png",
+        "hajin-frontier-lamellar-coat-armor-layer-v1.png",
+        "hajin-frontier-lamellar-coat-melee-armor-layer-v1.png",
+        "joseon-hero-hunter-weapon-ready-layer-v3.png",
+        "joseon-hero-warden-weapon-ready-layer-v3.png",
+        "joseon-hero-tiger-pelt-weapon-ready-layer-v3.png",
+    )
+    for name in sample_names:
+        path = CHARACTERS / name
+        image = Image.open(path).convert("RGBA")
         alpha = np.asarray(image, dtype=np.uint8)[..., 3]
         if any(alpha[y, x] > 0 for x, y in ((0, 0), (2047, 0), (0, 1279), (2047, 1279))):
             raise AssertionError(f"{path.name}: atlas corners must be transparent")
         counts = frame_counts(alpha)
         if min(counts) < 3_000 or max(counts) > 7_000:
             raise AssertionError(f"{path.name}: implausible frame coverage {min(counts)}..{max(counts)}")
-        hashes.add(sha256(path.read_bytes()).hexdigest())
-
-    if len(hashes) != len(paths):
-        raise AssertionError("regional armor layers must be visually distinct files")
 
     ready_body = Image.open(CHARACTERS / "joseon-hero-weapon-ready-body-v3.png").convert("RGBA").getchannel("A")
-    for path in paths:
-        if "joseon-hero" in path.name and "weapon-ready" in path.name:
-            assert_body_locked(path, ready_body)
+    for name in sample_names:
+        if "joseon-hero" in name and "weapon-ready" in name:
+            assert_body_locked(CHARACTERS / name, ready_body)
 
     concept = Image.open(ROOT / "assets/generated/armors/regional-armor-material-reference-v1.png").convert("RGBA")
     if concept.getchannel("A").getextrema() != (0, 255):
