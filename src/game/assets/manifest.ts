@@ -415,6 +415,50 @@ export const ASSETS = {
       key: 'weapon-gunsan-drowned-blade-world-v1', path: '/assets/weapons/gunsan-drowned-blade-world-v1.png', grip: { x: 128, y: 50 },
     },
   },
+  playerCharms: {
+    'boar-tusk-charm': {
+      key: 'charm-boar-tusk-world-v1', path: '/assets/charms/boar-tusk-charm-world-v1.png',
+    },
+    'falcon-eye-bracer': {
+      key: 'charm-falcon-eye-bracer-world-v1', path: '/assets/charms/falcon-eye-bracer-world-v1.png',
+    },
+    'silver-tiger-charm': {
+      key: 'charm-silver-tiger-world-v1', path: '/assets/charms/silver-tiger-charm-world-v1.png',
+    },
+    'haetae-ward-charm': {
+      key: 'charm-haetae-ward-world-v1', path: '/assets/charms/haetae-ward-charm-world-v1.png',
+    },
+    'crane-feather-talisman': {
+      key: 'charm-crane-feather-world-v1', path: '/assets/charms/crane-feather-talisman-world-v1.png',
+    },
+    'sea-salt-amulet': {
+      key: 'charm-sea-salt-amulet-world-v1', path: '/assets/charms/sea-salt-amulet-world-v1.png',
+    },
+    'jaeryeong-fox-charm': {
+      key: 'charm-jaeryeong-fox-world-v1', path: '/assets/charms/jaeryeong-fox-charm-world-v1.png',
+    },
+    'gapyeong-birch-talisman': {
+      key: 'charm-gapyeong-birch-world-v1', path: '/assets/charms/gapyeong-birch-talisman-world-v1.png',
+    },
+    'yangju-beacon-seal': {
+      key: 'charm-yangju-beacon-world-v1', path: '/assets/charms/yangju-beacon-seal-world-v1.png',
+    },
+    'yeoju-river-jade': {
+      key: 'charm-yeoju-river-jade-world-v1', path: '/assets/charms/yeoju-river-jade-world-v1.png',
+    },
+    'icheon-spirit-jar': {
+      key: 'charm-icheon-spirit-jar-world-v1', path: '/assets/charms/icheon-spirit-jar-world-v1.png',
+    },
+    'boryeong-tidal-anchor': {
+      key: 'charm-boryeong-tidal-anchor-world-v1', path: '/assets/charms/boryeong-tidal-anchor-world-v1.png',
+    },
+    'namwon-bamboo-flute': {
+      key: 'charm-namwon-bamboo-flute-world-v1', path: '/assets/charms/namwon-bamboo-flute-world-v1.png',
+    },
+    'tongyeong-signal-drum': {
+      key: 'charm-tongyeong-signal-drum-world-v1', path: '/assets/charms/tongyeong-signal-drum-world-v1.png',
+    },
+  },
   villageCommoner: { key: 'joseon-village-commoner-v1', path: '/assets/characters/joseon-village-commoner-v1.png' },
   villageFieldPloughman: {
     key: 'joseon-field-ploughman-actions-v1',

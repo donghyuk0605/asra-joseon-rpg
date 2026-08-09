@@ -26,6 +26,7 @@ import {
   weaponAttachmentForFrame,
   weaponImpactColumnForRow,
 } from './playerLayerState';
+import { PLAYER_CHARM_VISUALS, playerCharmAttachmentForFrame } from './playerCharmLayer';
 import { resolvePlayerAttackVisual, resolvePlayerMovementVisual } from './playerAttackVisual';
 import { isPointBehindOccluder } from './buildingOcclusion';
 import { monsterScaleForRegion } from './pyongyangSoldierScale';
@@ -749,6 +750,8 @@ export class HuntingScene extends Phaser.Scene {
   private playerActionRoot!: Phaser.GameObjects.Container;
   private playerSprite!: Phaser.GameObjects.Sprite;
   private playerArmorSprite!: Phaser.GameObjects.Sprite;
+  private playerCharmAura!: Phaser.GameObjects.Image;
+  private playerCharmSprite!: Phaser.GameObjects.Image;
   private playerWeaponAura!: Phaser.GameObjects.Image;
   private playerWeaponSprite!: Phaser.GameObjects.Image;
   private playerShadow!: Phaser.GameObjects.Ellipse;
@@ -1735,6 +1738,7 @@ export class HuntingScene extends Phaser.Scene {
       });
     }
     for (const weapon of Object.values(ASSETS.playerWeapons)) this.load.image(weapon.key, weapon.path);
+    for (const charm of Object.values(ASSETS.playerCharms)) this.load.image(charm.key, charm.path);
     const queuedMonsterTextures = new Set<string>();
     for (const monster of Object.values(ASSETS.monsters)) {
       if (queuedMonsterTextures.has(monster.key)) continue;
@@ -1928,12 +1932,18 @@ export class HuntingScene extends Phaser.Scene {
       .setScale(PLAYER_SCALE).setOrigin(0.5, 0.97);
     this.playerArmorSprite = this.add.sprite(0, 0, ASSETS.playerArmorLayers['hunter-durumagi'].key, 0)
       .setScale(PLAYER_SCALE).setOrigin(0.5, 0.97).setVisible(false);
+    this.playerCharmAura = this.add.image(0, 0, ASSETS.playerCharms['boar-tusk-charm'].key)
+      .setOrigin(0.5).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
+    this.playerCharmSprite = this.add.image(0, 0, ASSETS.playerCharms['boar-tusk-charm'].key)
+      .setOrigin(0.5).setVisible(false);
     this.playerWeaponAura = this.add.image(0, 0, ASSETS.playerWeapons['worn-hwando'].key)
       .setOrigin(0.5, 50 / PLAYER_ACTION_FRAME.height).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
     this.playerWeaponSprite = this.add.image(0, 0, ASSETS.playerWeapons['worn-hwando'].key)
       .setOrigin(0.5, 50 / PLAYER_ACTION_FRAME.height).setVisible(false);
     this.playerActionRoot = this.add.container(0, 0, [
-      this.playerWeaponAura, this.playerWeaponSprite, this.playerSprite, this.playerArmorSprite,
+      this.playerWeaponAura, this.playerWeaponSprite,
+      this.playerCharmAura, this.playerCharmSprite,
+      this.playerSprite, this.playerArmorSprite,
     ]);
     this.playerRoot = this.add.container(this.simulation.player.x, this.simulation.player.y, [
       this.playerShadow, this.playerActionRoot,
@@ -1966,6 +1976,11 @@ export class HuntingScene extends Phaser.Scene {
                 : requestedElement === 'earth' ? 'earth-hwando'
                   : requestedElement === 'shadow' ? 'shadow-hwando' : null);
       if (playtestWeapon) this.toggleDevEquipment(playtestWeapon);
+      const requestedCharmId = playtestParams.get('charm');
+      if (requestedCharmId && requestedCharmId in ITEM_CATALOG
+        && ITEM_CATALOG[requestedCharmId as ItemId].slot === 'charm') {
+        this.toggleDevEquipment(requestedCharmId as ItemId);
+      }
       const requestedDropId = playtestParams.get('drop');
       if (requestedDropId && requestedDropId in ITEM_CATALOG) {
         this.gameSettings = { ...this.gameSettings, autoLoot: false };
@@ -9417,13 +9432,25 @@ export class HuntingScene extends Phaser.Scene {
   private syncPlayerEquipmentLayers(): void {
     if (this.gameMode === 'travel') {
       this.playerArmorSprite.setVisible(false);
+      this.playerCharmAura.setVisible(false);
+      this.playerCharmSprite.setVisible(false);
       this.playerWeaponAura.setVisible(false);
       this.playerWeaponSprite.setVisible(false);
       return;
     }
+    const layers = resolvePlayerLayers(this.simulation.equipment, this.simulation.inventory);
+    const facingFrame = directionToFrame(this.simulation.player.facing);
+    const rawFrame = Number(this.playerSprite.frame.name);
+    const frameState = playerFrameState(rawFrame, this.playerSprite.flipX, facingFrame.row);
+    const frame = frameForPlayerLayer(frameState.row, frameState.column);
+    const { row, column, flip } = frameState;
+    const bodyVisible = this.playerSprite.visible && this.playerRoot.visible;
+    this.syncPlayerCharmLayer(row, column, flip, layers.charm && bodyVisible);
+
     if (this.simulation.isOsakaMudang() || this.simulation.isGwanghaePrince()) {
       // 광해의 40프레임 전복·호신 환도 시트는 완성된 전용 주인공
-      // 실루엣이다. 김동혁용 범용 복장/무기 레이어를 겹치지 않는다.
+      // 실루엣이다. 김동혁용 범용 복장/무기만 겹치지 않고 장신구는
+      // 동일한 256px 프레임 앵커로 별도 표시한다.
       this.playerArmorSprite.setVisible(false);
       this.playerWeaponAura.setVisible(false);
       this.playerWeaponSprite.setVisible(false);
@@ -9437,13 +9464,6 @@ export class HuntingScene extends Phaser.Scene {
       this.playerWeaponSprite.setVisible(false);
       return;
     }
-    const layers = resolvePlayerLayers(this.simulation.equipment, this.simulation.inventory);
-    const facingFrame = directionToFrame(this.simulation.player.facing);
-    const rawFrame = Number(this.playerSprite.frame.name);
-    const frameState = playerFrameState(rawFrame, this.playerSprite.flipX, facingFrame.row);
-    const frame = frameForPlayerLayer(frameState.row, frameState.column);
-    const { row, column, flip } = frameState;
-    const bodyVisible = this.playerSprite.visible && this.playerRoot.visible;
     const armor = this.simulation.getEquippedDefinition('armor');
     const weaponReady = this.playerSprite.texture.key === ASSETS.playerWeaponReadyBody.key
       || this.playerSprite.texture.key === ASSETS.frontierMelee.key;
@@ -9519,6 +9539,50 @@ export class HuntingScene extends Phaser.Scene {
       .setFlipX(attachment.flipX)
       .setTint(elementTint)
       .setAlpha(this.playerSprite.alpha * (0.22 + Math.sin(this.time.now * 0.014) * 0.07));
+  }
+
+  private syncPlayerCharmLayer(row: number, column: number, flip: boolean, bodyVisible: boolean): void {
+    const charm = this.simulation.getEquippedDefinition('charm');
+    if (!charm || !bodyVisible) {
+      this.playerCharmAura.setVisible(false);
+      this.playerCharmSprite.setVisible(false);
+      return;
+    }
+    const asset = ASSETS.playerCharms[charm.id as keyof typeof ASSETS.playerCharms];
+    const visual = PLAYER_CHARM_VISUALS[charm.id as keyof typeof PLAYER_CHARM_VISUALS];
+    if (!asset || !visual) {
+      this.playerCharmAura.setVisible(false);
+      this.playerCharmSprite.setVisible(false);
+      return;
+    }
+    const attachment = playerCharmAttachmentForFrame(row, column, flip, visual);
+    if (attachment.behindBody) {
+      this.playerActionRoot.moveBelow(this.playerCharmAura, this.playerSprite);
+      this.playerActionRoot.moveBelow(this.playerCharmSprite, this.playerSprite);
+    } else {
+      this.playerActionRoot.bringToTop(this.playerCharmAura);
+      this.playerActionRoot.bringToTop(this.playerCharmSprite);
+    }
+    if (this.playerCharmSprite.texture.key !== asset.key) this.playerCharmSprite.setTexture(asset.key);
+    if (this.playerCharmAura.texture.key !== asset.key) this.playerCharmAura.setTexture(asset.key);
+    this.playerCharmSprite
+      .setVisible(true)
+      .setPosition(this.playerSprite.x + attachment.x, this.playerSprite.y + attachment.y)
+      .setRotation(this.playerSprite.rotation + attachment.rotation)
+      .setScale(attachment.scale)
+      .setOrigin(0.5)
+      .setFlipX(attachment.flipX)
+      .setAlpha(this.playerSprite.alpha);
+    const rare = charm.rarity === '희귀' || charm.rarity === '영웅';
+    this.playerCharmAura
+      .setVisible(rare)
+      .setPosition(this.playerSprite.x + attachment.x, this.playerSprite.y + attachment.y)
+      .setRotation(this.playerSprite.rotation + attachment.rotation)
+      .setScale(attachment.scale * (1.08 + Math.sin(this.time.now * 0.01) * 0.025))
+      .setOrigin(0.5)
+      .setFlipX(attachment.flipX)
+      .setTint(charm.rarity === '영웅' ? 0xd8a8ff : 0x76bfff)
+      .setAlpha(this.playerSprite.alpha * (0.12 + Math.sin(this.time.now * 0.014) * 0.035));
   }
 
   private toggleDevEquipment(itemId: ItemId): void {
@@ -11022,11 +11086,13 @@ export class HuntingScene extends Phaser.Scene {
     if (event.type === 'player-hit') {
       this.playerSprite.setTint(0xff8b76);
       this.playerArmorSprite.setTint(0xff8b76);
+      this.playerCharmSprite.setTint(0xff8b76);
       this.playerWeaponSprite.setTint(0xff8b76);
       this.time.delayedCall(90, () => {
         if (!this.playerDefeated) {
           this.playerSprite.clearTint();
           this.playerArmorSprite.clearTint();
+          this.playerCharmSprite.clearTint();
           this.playerWeaponSprite.clearTint();
         }
       });
@@ -11839,11 +11905,13 @@ export class HuntingScene extends Phaser.Scene {
     this.tweens.killTweensOf(this.playerSprite);
     this.tweens.killTweensOf(this.playerShadow);
     this.playerArmorSprite.setTint(0xb7aea0);
+    this.playerCharmSprite.setTint(0xb7aea0);
     this.playerWeaponSprite.setTint(0xb7aea0);
     this.playerSprite.stop().setTexture(visual.textureKey, visual.idleFrame + 3)
       .setPosition(0, 0).setRotation(0).setScale(PLAYER_SCALE).setOrigin(0.5, 0.97)
       .setFlipX(direction.flip).setAlpha(1).setTint(0xb7aea0);
     this.syncPlayerEquipmentLayers();
+    this.playerCharmAura.setVisible(false);
     this.playerWeaponAura.setVisible(false);
     this.playerShadow.setVisible(true).setAlpha(0.36).setScale(1, 1);
     this.tweens.add({
@@ -11858,6 +11926,7 @@ export class HuntingScene extends Phaser.Scene {
       onComplete: () => {
         this.playerSprite.setTint(0x948d82);
         this.playerArmorSprite.setTint(0x948d82);
+        this.playerCharmSprite.setTint(0x948d82);
         this.playerWeaponSprite.setTint(0x948d82);
       },
     });
@@ -11881,6 +11950,7 @@ export class HuntingScene extends Phaser.Scene {
       .setOrigin(0.5, 0.97).setScale(PLAYER_SCALE).setFlipX(direction.flip)
       .setTexture(visual.textureKey, visual.idleFrame);
     this.playerArmorSprite.clearTint();
+    this.playerCharmSprite.clearTint();
     this.playerWeaponSprite.clearTint();
     this.syncPlayerEquipmentLayers();
     this.playerSprite.anims.timeScale = 1;

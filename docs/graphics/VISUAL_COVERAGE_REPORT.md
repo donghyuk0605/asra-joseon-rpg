@@ -11,10 +11,10 @@
 | 모듈 조합 지역 | 35개 |
 | 몬스터 종류 / 실제 시각 키 | 61종 / 38개 |
 | 공유 외형 몬스터 | 34종 |
-| 아이템 / 장착 월드 외형 공백 | 60종 / 27종 |
+| 아이템 / 장착 월드 외형 공백 | 60종 / 13종 |
 | 등록된 환경 객체 자산 | 34개 |
-| 배포 자산 | 450개 · 296.1MB |
-| 미참조 배포 자산 | 128개 |
+| 배포 자산 | 464개 · 297.0MB |
+| 미참조 배포 자산 | 129개 |
 | 동일 내용 중복 | 3묶음 · 50.1KB 회수 가능 |
 | 코드 렌더 도형 / 고정 실물 후보 | 130곳 / 0곳 |
 | 존재하지 않는 참조 | 0개 |
@@ -30,6 +30,7 @@
 | bosses | 11 | 14.1MB |
 | items | 77 | 3.1MB |
 | fx | 4 | 1.2MB |
+| charms | 14 | 863.9KB |
 | weapons | 18 | 303.5KB |
 
 ## 몬스터 외형 재사용 위험
@@ -57,28 +58,14 @@
 | 철각 전궁 (iron-horn-warbow) | weapon | missing-world-weapon |
 | 천응 뇌궁 (thunderbird-bow) | weapon | missing-world-weapon |
 | 북풍 철각궁 (northwind-warbow) | weapon | missing-world-weapon |
-| 산령 엄니 부적 (boar-tusk-charm) | charm | missing-charm-layer |
 | 철비늘 변경 전포 (frontier-lamellar-coat) | armor | missing-armor-layer |
-| 매눈 활깍지 (falcon-eye-bracer) | charm | missing-charm-layer |
-| 은호 엄니 부적 (silver-tiger-charm) | charm | missing-charm-layer |
-| 강릉 해태 수호패 (haetae-ward-charm) | charm | missing-charm-layer |
 | 경포 해풍각궁 (gangneung-sea-bow) | weapon | missing-world-weapon |
 | 경포 해안정찰 전포 (coastal-scout-coat) | armor | missing-armor-layer |
-| 해주 백학 깃부적 (crane-feather-talisman) | charm | missing-charm-layer |
 | 해주 갈대 망토 (haeju-reed-cape) | armor | missing-armor-layer |
-| 거제 해무 소금목걸이 (sea-salt-amulet) | charm | missing-charm-layer |
 | 의주 흑각 전궁 (uiju-black-horn-bow) | weapon | missing-world-weapon |
-| 재령 여우령 패 (jaeryeong-fox-charm) | charm | missing-charm-layer |
 | 안주 흑찰 전포 (anju-frontier-coat) | armor | missing-armor-layer |
 | 삼척 해풍각궁 (samcheok-seawind-bow) | weapon | missing-world-weapon |
-| 가평 백화령 부적 (gapyeong-birch-talisman) | charm | missing-charm-layer |
-| 양주 봉수 사자패 (yangju-beacon-seal) | charm | missing-charm-layer |
-| 여주 강옥 패 (yeoju-river-jade) | charm | missing-charm-layer |
 | 공주 유장 도포 (gongju-scholar-coat) | armor | missing-armor-layer |
-| 이천 진혼 백자 (icheon-spirit-jar) | charm | missing-charm-layer |
-| 보령 조철 닻패 (boryeong-tidal-anchor) | charm | missing-charm-layer |
-| 남원 살풀이 죽적 (namwon-bamboo-flute) | charm | missing-charm-layer |
-| 통영 삼도 신호고 (tongyeong-signal-drum) | charm | missing-charm-layer |
 
 ## 고정 실물로 의심되는 코드 도형
 
@@ -176,6 +163,7 @@
 ## 미참조 배포 자산
 
 - `/assets/characters/harlan-frontier-archer-actions-v1.png` (739.1KB)
+- `/assets/characters/joseon-gwanghae-actions-v1.png` (809.7KB)
 - `/assets/characters/joseon-hero-armor-layer-v1.png` (479.3KB)
 - `/assets/characters/joseon-hero-armor-layer-v2.png` (386.6KB)
 - `/assets/characters/joseon-hero-armor-layer-v3.png` (529.3KB)

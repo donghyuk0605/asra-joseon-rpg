@@ -64,7 +64,10 @@ const managedTextFiles = [
   ...['index.html', 'guide.html', 'public/manifest.webmanifest', 'public/sw.js']
     .map((path) => resolve(root, path))
     .filter(existsSync),
-].filter((path) => ['.ts', '.tsx', '.js', '.jsx', '.css', '.html', '.json', '.webmanifest'].includes(extname(path)));
+].filter((path) => ['.ts', '.tsx', '.js', '.jsx', '.css', '.html', '.json', '.webmanifest'].includes(extname(path)))
+  // Test fixtures intentionally mention retired and missing paths to assert
+  // cleanup behavior. They are not bundled runtime references.
+  .filter((path) => !/\.(?:test|spec)\.[^.]+$/.test(path));
 
 const literalAssetPattern = /\/assets\/[A-Za-z0-9_./-]+\.(?:png|webp|jpg|jpeg|svg)/g;
 const sourceLiteralPaths = new Set<string>();

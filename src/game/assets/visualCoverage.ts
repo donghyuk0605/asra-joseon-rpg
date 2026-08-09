@@ -36,6 +36,7 @@ export type MonsterVisualCoverage = Readonly<{
 export type ItemWorldVisualStatus =
   | 'world-weapon-ready'
   | 'armor-layer-ready'
+  | 'charm-layer-ready'
   | 'missing-world-weapon'
   | 'missing-armor-layer'
   | 'missing-charm-layer'
@@ -198,11 +199,12 @@ export const MONSTER_VISUAL_COVERAGE: Readonly<Record<MonsterKind, MonsterVisual
 
 const playerWeapons = ASSETS.playerWeapons as Partial<Record<ItemId, VisualAssetReference>>;
 const playerArmorLayers = ASSETS.playerArmorLayers as Partial<Record<ItemId, VisualAssetReference>>;
+const playerCharms = ASSETS.playerCharms as Partial<Record<ItemId, VisualAssetReference>>;
 
 const itemWorldVisualStatus = (item: ItemDefinition): ItemWorldVisualStatus => {
   if (item.slot === 'weapon') return playerWeapons[item.id] ? 'world-weapon-ready' : 'missing-world-weapon';
   if (item.slot === 'armor') return playerArmorLayers[item.id] ? 'armor-layer-ready' : 'missing-armor-layer';
-  if (item.slot === 'charm') return 'missing-charm-layer';
+  if (item.slot === 'charm') return playerCharms[item.id] ? 'charm-layer-ready' : 'missing-charm-layer';
   return 'not-applicable';
 };
 

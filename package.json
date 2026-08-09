@@ -6,6 +6,8 @@
   "scripts": {
     "audit:graphics": "vite-node scripts/generate_graphics_coverage.ts && python3 scripts/audit_monster_atlases.py",
     "audit:monsters": "python3 scripts/audit_monster_atlases.py --check",
+    "build:world-charms": "python3 scripts/build_world_charms.py",
+    "validate:world-charms": "python3 scripts/validate_world_charms.py",
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "node scripts/prune_dist_assets.mjs && node scripts/build_guide_host.mjs",

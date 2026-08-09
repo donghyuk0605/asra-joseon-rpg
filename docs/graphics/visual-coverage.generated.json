@@ -8,13 +8,13 @@
     "uniqueMonsterAssets": 38,
     "sharedMonsterKinds": 34,
     "items": 60,
-    "itemWorldVisualGaps": 27,
+    "itemWorldVisualGaps": 13,
     "propAssetEntries": 34,
-    "publicAssetFiles": 450,
-    "publicAssetBytes": 310520274,
-    "referencedAssetPaths": 322,
+    "publicAssetFiles": 464,
+    "publicAssetBytes": 311404932,
+    "referencedAssetPaths": 335,
     "missingReferencedPaths": 0,
-    "unreferencedPublicFiles": 128,
+    "unreferencedPublicFiles": 129,
     "duplicateContentGroups": 3,
     "duplicateReclaimableBytes": 51350,
     "versionFamilies": 79,
@@ -56,6 +56,11 @@
       "domain": "fx",
       "files": 4,
       "bytes": 1296126
+    },
+    {
+      "domain": "charms",
+      "files": 14,
+      "bytes": 884658
     },
     {
       "domain": "weapons",
@@ -2061,7 +2066,7 @@
         "path": "/assets/items/boar-tusk-charm-v4.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "frontier-lamellar-coat",
@@ -2083,7 +2088,7 @@
         "path": "/assets/items/falcon-eye-bracer-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "border-war-dispatch",
@@ -2226,7 +2231,7 @@
         "path": "/assets/items/silver-tiger-charm-v4.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "ulleung-tiger-pelt",
@@ -2281,7 +2286,7 @@
         "path": "/assets/items/haetae-ward-charm-v2.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "gangneung-sea-bow",
@@ -2314,7 +2319,7 @@
         "path": "/assets/items/crane-feather-talisman-v2.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "haeju-reed-cape",
@@ -2347,7 +2352,7 @@
         "path": "/assets/items/sea-salt-amulet-v2.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "geoje-anchor-hwando",
@@ -2435,7 +2440,7 @@
         "path": "/assets/items/episode2/episode2-jaeryeong-fox-charm-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "anju-frontier-coat",
@@ -2479,7 +2484,7 @@
         "path": "/assets/items/episode2/episode2-gapyeong-birch-talisman-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "yangju-beacon-seal",
@@ -2490,7 +2495,7 @@
         "path": "/assets/items/episode2/episode2-yangju-beacon-seal-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "yeoju-river-jade",
@@ -2501,7 +2506,7 @@
         "path": "/assets/items/episode2/episode2-yeoju-river-jade-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "gongju-scholar-coat",
@@ -2534,7 +2539,7 @@
         "path": "/assets/items/episode2/episode2-icheon-spirit-jar-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "boryeong-tidal-anchor",
@@ -2545,7 +2550,7 @@
         "path": "/assets/items/episode2/episode2-boryeong-tidal-anchor-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "gunsan-drowned-blade",
@@ -2567,7 +2572,7 @@
         "path": "/assets/items/episode2/episode2-namwon-bamboo-flute-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "tongyeong-signal-drum",
@@ -2578,7 +2583,7 @@
         "path": "/assets/items/episode2/episode2-tongyeong-signal-drum-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-charm-layer"
+      "worldPresentation": "charm-layer-ready"
     },
     {
       "id": "weapon-enchant-scroll",
@@ -2657,34 +2662,10 @@
       "reason": "missing-world-weapon"
     },
     {
-      "id": "boar-tusk-charm",
-      "name": "산령 엄니 부적",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
       "id": "frontier-lamellar-coat",
       "name": "철비늘 변경 전포",
       "slot": "armor",
       "reason": "missing-armor-layer"
-    },
-    {
-      "id": "falcon-eye-bracer",
-      "name": "매눈 활깍지",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
-      "id": "silver-tiger-charm",
-      "name": "은호 엄니 부적",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
-      "id": "haetae-ward-charm",
-      "name": "강릉 해태 수호패",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
     },
     {
       "id": "gangneung-sea-bow",
@@ -2699,34 +2680,16 @@
       "reason": "missing-armor-layer"
     },
     {
-      "id": "crane-feather-talisman",
-      "name": "해주 백학 깃부적",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
       "id": "haeju-reed-cape",
       "name": "해주 갈대 망토",
       "slot": "armor",
       "reason": "missing-armor-layer"
     },
     {
-      "id": "sea-salt-amulet",
-      "name": "거제 해무 소금목걸이",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
       "id": "uiju-black-horn-bow",
       "name": "의주 흑각 전궁",
       "slot": "weapon",
       "reason": "missing-world-weapon"
-    },
-    {
-      "id": "jaeryeong-fox-charm",
-      "name": "재령 여우령 패",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
     },
     {
       "id": "anju-frontier-coat",
@@ -2741,52 +2704,10 @@
       "reason": "missing-world-weapon"
     },
     {
-      "id": "gapyeong-birch-talisman",
-      "name": "가평 백화령 부적",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
-      "id": "yangju-beacon-seal",
-      "name": "양주 봉수 사자패",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
-      "id": "yeoju-river-jade",
-      "name": "여주 강옥 패",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
       "id": "gongju-scholar-coat",
       "name": "공주 유장 도포",
       "slot": "armor",
       "reason": "missing-armor-layer"
-    },
-    {
-      "id": "icheon-spirit-jar",
-      "name": "이천 진혼 백자",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
-      "id": "boryeong-tidal-anchor",
-      "name": "보령 조철 닻패",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
-      "id": "namwon-bamboo-flute",
-      "name": "남원 살풀이 죽적",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
-    },
-    {
-      "id": "tongyeong-signal-drum",
-      "name": "통영 삼도 신호고",
-      "slot": "charm",
-      "reason": "missing-charm-layer"
     }
   ],
   "props": [
@@ -3034,6 +2955,10 @@
     {
       "path": "/assets/characters/harlan-frontier-archer-actions-v1.png",
       "bytes": 756845
+    },
+    {
+      "path": "/assets/characters/joseon-gwanghae-actions-v1.png",
+      "bytes": 829104
     },
     {
       "path": "/assets/characters/joseon-hero-armor-layer-v1.png",
@@ -4703,652 +4628,652 @@
   ],
   "renderPrimitiveOccurrences": [
     {
-      "line": 1198,
+      "line": 1201,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 5, 58, 18, 0x080807, 0.42);"
     },
     {
-      "line": 1883,
+      "line": 1887,
       "primitive": "rectangle",
       "source": "this.add.rectangle(WORLD_MIN_X + WORLD_WIDTH / 2, WORLD_MIN_Y + WORLD_HEIGHT / 2, WORLD_WIDTH, WORLD_HEIGHT, 0x101610, 0.06)"
     },
     {
-      "line": 1913,
+      "line": 1917,
       "primitive": "circle",
       "source": "this.destinationMark = this.add.circle(0, 0, 15, 0x000000, 0).setStrokeStyle(2, 0xd7b66c, 0.9).setVisible(false).setDepth(1900);"
     },
     {
-      "line": 1914,
+      "line": 1918,
       "primitive": "circle",
       "source": "this.requestedDestinationMark = this.add.circle(0, 0, 9, 0x1c1812, 0.16)"
     },
     {
-      "line": 1918,
+      "line": 1922,
       "primitive": "circle",
       "source": "const blockedRing = this.add.circle(0, 0, 13, 0x461b17, 0.16)"
     },
     {
-      "line": 1920,
+      "line": 1924,
       "primitive": "graphics",
       "source": "const blockedCross = this.add.graphics();"
     },
     {
-      "line": 1926,
+      "line": 1930,
       "primitive": "ellipse",
       "source": "this.playerShadow = this.add.ellipse(0, 5, 58, 18, 0x090a07, 0.42);"
     },
     {
-      "line": 2359,
+      "line": 2374,
       "primitive": "rectangle",
       "source": "const veil = this.add.rectangle(0, 0, this.scale.gameSize.width, this.scale.gameSize.height, 0x090b0a, 0.22)"
     },
     {
-      "line": 2361,
+      "line": 2376,
       "primitive": "rectangle",
       "source": "const topBar = this.add.rectangle(0, 0, this.scale.gameSize.width, 58, 0x050606, 0.94)"
     },
     {
-      "line": 2363,
+      "line": 2378,
       "primitive": "rectangle",
       "source": "const bottomBar = this.add.rectangle(0, this.scale.gameSize.height, this.scale.gameSize.width, 112, 0x050606, 0.94)"
     },
     {
-      "line": 2386,
+      "line": 2401,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 5, 66, 20, 0x080807, 0.48);"
     },
     {
-      "line": 2418,
+      "line": 2433,
       "primitive": "ellipse",
       "source": "const pool = this.add.ellipse(actor.root.x, actor.root.y + 5, 22, 8, 0x681c18, 0.72).setDepth(actor.root.y - 2);"
     },
     {
-      "line": 2422,
+      "line": 2437,
       "primitive": "circle",
       "source": "const drop = this.add.circle(actor.root.x, actor.root.y - 46, 2 + index % 3, 0x8e2820, 0.9).setDepth(actor.root.y + 80);"
     },
     {
-      "line": 2590,
+      "line": 2605,
       "primitive": "rectangle",
       "source": "const veil = this.add.rectangle(0, 0, this.scale.gameSize.width, this.scale.gameSize.height, 0x070a0a, 0.28)"
     },
     {
-      "line": 2592,
+      "line": 2607,
       "primitive": "rectangle",
       "source": "const topBar = this.add.rectangle(0, 0, this.scale.gameSize.width, 58, 0x050606, 0.95)"
     },
     {
-      "line": 2594,
+      "line": 2609,
       "primitive": "rectangle",
       "source": "const bottomBar = this.add.rectangle(0, this.scale.gameSize.height, this.scale.gameSize.width, 124, 0x050606, 0.95)"
     },
     {
-      "line": 2602,
+      "line": 2617,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 5, 62, 19, 0x070807, 0.46);"
     },
     {
-      "line": 3895,
+      "line": 3910,
       "primitive": "ellipse",
       "source": "const forgeCoalGlow = this.add.ellipse(origin.x + 823, origin.y + 760, 54, 24, 0xe8752f, 0.2)"
     },
     {
-      "line": 4008,
+      "line": 4023,
       "primitive": "ellipse",
       "source": "const treeShadow = this.add.ellipse(0, 2, 96, 30, 0x080806, 0.36);"
     },
     {
-      "line": 4099,
+      "line": 4114,
       "primitive": "circle",
       "source": "const glow = this.add.circle(origin.x + brazier.x, origin.y + brazier.y, 28, 0xd17a35, 0.08)"
     },
     {
-      "line": 4101,
+      "line": 4116,
       "primitive": "circle",
       "source": "const ember = this.add.circle(origin.x + brazier.x, origin.y + brazier.y, 3.2, 0xffc06a, 0.72)"
     },
     {
-      "line": 4109,
+      "line": 4124,
       "primitive": "ellipse",
       "source": "const dockGlow = this.add.ellipse(origin.x + 1375, origin.y + 820, 126, 40, 0x365669, 0.25)"
     },
     {
-      "line": 4138,
+      "line": 4153,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse("
     },
     {
-      "line": 4185,
+      "line": 4200,
       "primitive": "circle",
       "source": "const glow = this.add.circle(origin.x + localX, origin.y + localY, 34, 0xe59448, 0.07)"
     },
     {
-      "line": 4188,
+      "line": 4203,
       "primitive": "circle",
       "source": "const core = this.add.circle(origin.x + localX, origin.y + localY, 3.4, 0xffcb78, 0.78)"
     },
     {
-      "line": 4240,
+      "line": 4255,
       "primitive": "ellipse",
       "source": "const hallShadow = this.add.ellipse(origin.x + 768, origin.y + 380, 620, 92, 0x070807, 0.34)"
     },
     {
-      "line": 4256,
+      "line": 4271,
       "primitive": "ellipse",
       "source": "const southGateShadow = this.add.ellipse(origin.x + 768, origin.y + 986, 420, 58, 0x070807, 0.36)"
     },
     {
-      "line": 4277,
+      "line": 4292,
       "primitive": "ellipse",
       "source": "this.add.ellipse(origin.x + prop.x, origin.y + prop.y + 8, 280, 34, 0x070807, 0.34)"
     },
     {
-      "line": 4295,
+      "line": 4310,
       "primitive": "circle",
       "source": "const glow = this.add.circle(origin.x + localX, origin.y + localY, 34, 0xe59448, 0.08)"
     },
     {
-      "line": 4297,
+      "line": 4312,
       "primitive": "circle",
       "source": "const core = this.add.circle(origin.x + localX, origin.y + localY, 3.5, 0xffcb78, 0.82)"
     },
     {
-      "line": 4334,
+      "line": 4349,
       "primitive": "ellipse",
       "source": "const seed = this.add.ellipse("
     },
     {
-      "line": 4508,
+      "line": 4523,
       "primitive": "circle",
       "source": "const halo = this.add.circle(x, y, 28, 0xf2a64d, 0.08)"
     },
     {
-      "line": 4511,
+      "line": 4526,
       "primitive": "ellipse",
       "source": "const flame = this.add.ellipse(x, y, 5, 9, 0xffd37a, 0.86)"
     },
     {
-      "line": 4583,
+      "line": 4598,
       "primitive": "ellipse",
       "source": "const halo = this.add.ellipse(x, y - 10, 44, 28, 0xe99142, 0.08)"
     },
     {
-      "line": 4586,
+      "line": 4601,
       "primitive": "ellipse",
       "source": "const flame = this.add.ellipse(x, y - 12, 6, 12, 0xffc766, 0.82)"
     },
     {
-      "line": 5041,
+      "line": 5056,
       "primitive": "graphics",
       "source": "const water = this.add.graphics()"
     },
     {
-      "line": 5397,
+      "line": 5412,
       "primitive": "circle",
       "source": "const glow = this.add.circle(x, y, 3.5, 0xf0a652, 0.18)"
     },
     {
-      "line": 5876,
+      "line": 5891,
       "primitive": "ellipse",
       "source": "const royalShadow = this.add.ellipse(royalX, royalY + 7, 66, 20, 0x080706, 0.46).setDepth(royalY - 2);"
     },
     {
-      "line": 5917,
+      "line": 5932,
       "primitive": "circle",
       "source": "const mote = this.add.circle(origin.x + 260 + (index * 137) % 1040, origin.y + 250 + (index * 91) % 560, 1.5, color, 0.42)"
     },
     {
-      "line": 5983,
+      "line": 5998,
       "primitive": "ellipse",
       "source": "const groundShadow = this.add.ellipse(0, 18, 410, 72, 0x090807, 0.46);"
     },
     {
-      "line": 6488,
+      "line": 6503,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 22, 302, 54, 0x100b09, 0.52);"
     },
     {
-      "line": 6665,
+      "line": 6680,
       "primitive": "graphics",
       "source": "const ice = this.add.graphics().setDepth(origin.y + 390);"
     },
     {
-      "line": 6764,
+      "line": 6779,
       "primitive": "circle",
       "source": "const glow = this.add.circle(origin.x + localX, origin.y + localY, 20, 0xe88e44, 0.08)"
     },
     {
-      "line": 6766,
+      "line": 6781,
       "primitive": "circle",
       "source": "const flame = this.add.circle(origin.x + localX, origin.y + localY, 3.2, 0xffcf79, 0.8)"
     },
     {
-      "line": 6833,
+      "line": 6848,
       "primitive": "circle",
       "source": "const dust = this.add.circle("
     },
     {
-      "line": 6877,
+      "line": 6892,
       "primitive": "circle",
       "source": "const glow = this.add.circle(origin.x + localX, origin.y + localY, 34, 0xe28c42, 0.07)"
     },
     {
-      "line": 6879,
+      "line": 6894,
       "primitive": "circle",
       "source": "const flame = this.add.circle(origin.x + localX, origin.y + localY, 3.4, 0xffc76e, 0.82)"
     },
     {
-      "line": 6886,
+      "line": 6901,
       "primitive": "ellipse",
       "source": "const smoke = this.add.ellipse(origin.x + localX + 2, origin.y + localY - 13, 9, 15, 0xb9ada0, 0.09)"
     },
     {
-      "line": 6909,
+      "line": 6924,
       "primitive": "ellipse",
       "source": "const ripple = this.add.ellipse(origin.x + localX, origin.y + localY, width, 3, 0x9eb8b5, 0.1)"
     },
     {
-      "line": 7001,
+      "line": 7016,
       "primitive": "ellipse",
       "source": "const smoke = this.add.ellipse(origin.x + localX, origin.y + localY, 22, 13, 0xb8afa2, 0.08)"
     },
     {
-      "line": 7226,
+      "line": 7241,
       "primitive": "ellipse",
       "source": "const cartShadow = this.add.ellipse(315, 741, 156, 44, 0x090b08, 0.42).setDepth(730);"
     },
     {
-      "line": 7229,
+      "line": 7244,
       "primitive": "ellipse",
       "source": "const shrineShadow = this.add.ellipse(1120, 700, 132, 42, 0x090b08, 0.45).setDepth(685);"
     },
     {
-      "line": 7240,
+      "line": 7255,
       "primitive": "circle",
       "source": "const glow = this.add.circle(x, y, index % 3 === 0 ? 2.2 : 1.4, 0xf4d889, 0.48)"
     },
     {
-      "line": 7261,
+      "line": 7276,
       "primitive": "ellipse",
       "source": "const fog = this.add.ellipse(band.x, band.y, band.w, band.h, 0xb9c3ae, 0.035).setDepth(band.depth);"
     },
     {
-      "line": 7283,
+      "line": 7298,
       "primitive": "rectangle",
       "source": "const rain = this.add.rectangle("
     },
     {
-      "line": 7304,
+      "line": 7319,
       "primitive": "ellipse",
       "source": "const smoke = this.add.ellipse("
     },
     {
-      "line": 7328,
+      "line": 7343,
       "primitive": "ellipse",
       "source": "const leaf = this.add.ellipse("
     },
     {
-      "line": 7352,
+      "line": 7367,
       "primitive": "circle",
       "source": "const lantern = this.add.circle("
     },
     {
-      "line": 7379,
+      "line": 7394,
       "primitive": "ellipse",
       "source": "const spray = this.add.ellipse(x, y, 84 + index * 7, 8, 0xd9e4df, 0.08)"
     },
     {
-      "line": 7398,
+      "line": 7413,
       "primitive": "ellipse",
       "source": "const grassWave = this.add.ellipse("
     },
     {
-      "line": 7421,
+      "line": 7436,
       "primitive": "ellipse",
       "source": "const smoke = this.add.ellipse("
     },
     {
-      "line": 7444,
+      "line": 7459,
       "primitive": "circle",
       "source": "const ember = this.add.circle("
     },
     {
-      "line": 7467,
+      "line": 7482,
       "primitive": "ellipse",
       "source": "const gust = this.add.ellipse("
     },
     {
-      "line": 7493,
+      "line": 7508,
       "primitive": "circle",
       "source": "const glow = this.add.circle(origin.x + localX, origin.y + localY, 30, 0xe5893f, 0.05)"
     },
     {
-      "line": 7496,
+      "line": 7511,
       "primitive": "circle",
       "source": "const flame = this.add.circle(origin.x + localX, origin.y + localY, 3, 0xffc66b, 0.72)"
     },
     {
-      "line": 7523,
+      "line": 7538,
       "primitive": "circle",
       "source": "const ember = this.add.circle(x, y - prop.size * 0.3, prop.size * 0.13, 0xe57435, 0.14)"
     },
     {
-      "line": 7543,
+      "line": 7558,
       "primitive": "ellipse",
       "source": "const roadBlend = this.add.ellipse(770, villageTop + 4, 330, 96, 0x766044, 0.14)"
     },
     {
-      "line": 7548,
+      "line": 7563,
       "primitive": "ellipse",
       "source": "const fog = this.add.ellipse(x, villageTop + (index % 2 === 0 ? -5 : 8), 245, 92 + (index % 3) * 18, 0x9ba297, 0.075)"
     },
     {
-      "line": 7567,
+      "line": 7582,
       "primitive": "circle",
       "source": "const outer = this.add.circle(point.x, point.y, 27, 0xe59d46, 0.055).setDepth(point.y - 4);"
     },
     {
-      "line": 7568,
+      "line": 7583,
       "primitive": "circle",
       "source": "const core = this.add.circle(point.x, point.y, 4, 0xffc66d, 0.78).setDepth(point.y + 2);"
     },
     {
-      "line": 7584,
+      "line": 7599,
       "primitive": "ellipse",
       "source": "const smoke = this.add.ellipse(1370, villageTop + 100, 24 + index * 5, 13 + index * 3, 0xa9aea5, 0.11)"
     },
     {
-      "line": 7766,
+      "line": 7781,
       "primitive": "ellipse",
       "source": "add(this.add.ellipse(x, y + 4, feature.radius * 2.2, feature.radius * 0.9, 0x0b0908, 0.48).setDepth(y - 2));"
     },
     {
-      "line": 8031,
+      "line": 8046,
       "primitive": "graphics",
       "source": "const graphics = this.add.graphics()"
     },
     {
-      "line": 8139,
+      "line": 8154,
       "primitive": "circle",
       "source": "const mote = this.add.circle(x, y, 1.3 + (index % 2), field.color, 0.28).setDepth(y + 40);"
     },
     {
-      "line": 8234,
+      "line": 8249,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 4, 54, 17, 0x080907, 0.38);"
     },
     {
-      "line": 8248,
+      "line": 8263,
       "primitive": "ellipse",
       "source": "forgeGlow = this.add.ellipse(-43, -28, 76, 25, 0xf08b38, 0.08)"
     },
     {
-      "line": 8702,
+      "line": 8717,
       "primitive": "circle",
       "source": "const spark = this.add.circle(x, y, index === 0 ? 2.4 : 1.5, index % 2 === 0 ? 0xffd36a : 0xf07b35, 0.95)"
     },
     {
-      "line": 8741,
+      "line": 8756,
       "primitive": "graphics",
       "source": "const ripple = this.add.graphics({ x, y }).setDepth(90 + index).setMask(waterMask);"
     },
     {
-      "line": 8762,
+      "line": 8777,
       "primitive": "ellipse",
       "source": "const foam = this.add.ellipse(point.x, point.y, 18 + (index % 3) * 7, 4, 0xd9ddd0, 0.16)"
     },
     {
-      "line": 8789,
+      "line": 8804,
       "primitive": "graphics",
       "source": "const wave = this.add.graphics({ x, y })"
     },
     {
-      "line": 8814,
+      "line": 8829,
       "primitive": "ellipse",
       "source": "const reflection = this.add.ellipse(x, y, 92 + index * 26, 8, 0xdce1ce, 0.08)"
     },
     {
-      "line": 8848,
+      "line": 8863,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 2, 112, 25, 0x11140f, 0.22);"
     },
     {
-      "line": 8901,
+      "line": 8916,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 2, 110, 24, 0x11140f, 0.2);"
     },
     {
-      "line": 8930,
+      "line": 8945,
       "primitive": "graphics",
       "source": "const wind = this.add.graphics({ x, y }).setDepth(1200 + index).setAlpha(0.18);"
     },
     {
-      "line": 8943,
+      "line": 8958,
       "primitive": "ellipse",
       "source": "const leaf = this.add.ellipse(x - 12, y + 8, 7, 3, index % 2 === 0 ? 0x7f6d47 : 0x53613f, 0.55)"
     },
     {
-      "line": 8969,
+      "line": 8984,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 5, 58, 19, 0x080a07, 0.38);"
     },
     {
-      "line": 8970,
+      "line": 8985,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(0, 4, 70, 25, 0x3c6c43, 0.12)"
     },
     {
-      "line": 9028,
+      "line": 9043,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 4, isLowQuadrupedMonster(monster.kind) ? 78 : 62, isLowQuadrupedMonster(monster.kind) ? 24 : 20, 0x090907, 0.4);"
     },
     {
-      "line": 9029,
+      "line": 9044,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(0, 3, campaignBoss ? 104 : 82, campaignBoss ? 36 : 30, friendly ? 0x244a46 : 0x160c08, friendly ? 0.18 : 0.14)"
     },
     {
-      "line": 9041,
+      "line": 9056,
       "primitive": "graphics",
       "source": "const intentCue = this.add.graphics().setVisible(false);"
     },
     {
-      "line": 9079,
+      "line": 9094,
       "primitive": "graphics",
       "source": "const hp = this.add.graphics().setDepth(monster.y + 2);"
     },
     {
-      "line": 9169,
+      "line": 9184,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 5, 58, 18, 0x080807, 0.42);"
     },
     {
-      "line": 9278,
+      "line": 9293,
       "primitive": "ellipse",
       "source": "this.travelGhostAura = this.add.ellipse(0, -36, 82, 116, 0x79e7ff, 0.22)"
     },
     {
-      "line": 9280,
+      "line": 9295,
       "primitive": "ellipse",
       "source": "this.travelGhostCore = this.add.ellipse(0, -34, 46, 88, 0xd5f9ff, 0.16)"
     },
     {
-      "line": 10032,
+      "line": 10096,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 6, 118, 34, 0x080605, 0.56);"
     },
     {
-      "line": 10033,
+      "line": 10097,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(0, 5, 142, 48, 0x5b1616, 0.18).setStrokeStyle(3, 0xe4ae58, 0.88);"
     },
     {
-      "line": 10047,
+      "line": 10111,
       "primitive": "graphics",
       "source": "const hp = this.add.graphics();"
     },
     {
-      "line": 10172,
+      "line": 10236,
       "primitive": "rectangle",
       "source": "const beam = this.add.rectangle(drop.x, drop.y - 38, 5, 88, rarityStyle.color, rarityStyle.notable ? 0.19 : 0.08);"
     },
     {
-      "line": 10173,
+      "line": 10237,
       "primitive": "ellipse",
       "source": "const glow = this.add.ellipse(drop.x, drop.y + 3, 58, 21, rarityStyle.color, 0.17)"
     },
     {
-      "line": 10810,
+      "line": 10874,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(monster.x, monster.y + 4, 94, 32, 0x4e120f, 0.08)"
     },
     {
-      "line": 10878,
+      "line": 10942,
       "primitive": "graphics",
       "source": "const strike = this.add.graphics().setDepth(target.y + 18).setBlendMode(Phaser.BlendModes.ADD);"
     },
     {
-      "line": 10909,
+      "line": 10973,
       "primitive": "ellipse",
       "source": "const rally = this.add.ellipse(monster.x, monster.y + 2, 92, 34, 0x7f4b20, 0.08)"
     },
     {
-      "line": 11093,
+      "line": 11159,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(player.x, player.y + 3, 54, 22, 0x8ad5e8, 0.08)"
     },
     {
-      "line": 11111,
+      "line": 11177,
       "primitive": "ellipse",
       "source": "const aura = this.add.ellipse(player.x, player.y + 4, 58, 24, 0x9edff0, 0.04)"
     },
     {
-      "line": 11265,
+      "line": 11331,
       "primitive": "graphics",
       "source": "const fx = this.add.graphics().setDepth(to.y + 24).setBlendMode(Phaser.BlendModes.ADD);"
     },
     {
-      "line": 11424,
+      "line": 11490,
       "primitive": "graphics",
       "source": "const slash = this.add.graphics({ x: fromX, y: fromY }).setDepth(1900).setRotation(angle).setScale(0.65);"
     },
     {
-      "line": 11466,
+      "line": 11532,
       "primitive": "circle",
       "source": "const ember = this.add.circle("
     },
     {
-      "line": 11487,
+      "line": 11553,
       "primitive": "graphics",
       "source": "const ice = this.add.graphics({ x: target.x, y: target.y - 45 }).setDepth(target.y + 18);"
     },
     {
-      "line": 11513,
+      "line": 11579,
       "primitive": "circle",
       "source": "const bubble = this.add.circle("
     },
     {
-      "line": 11533,
+      "line": 11599,
       "primitive": "graphics",
       "source": "const wind = this.add.graphics({ x: target.x, y: target.y - 46 }).setDepth(target.y + 18);"
     },
     {
-      "line": 11545,
+      "line": 11611,
       "primitive": "graphics",
       "source": "const quake = this.add.graphics({ x: target.x, y: target.y - 4 }).setDepth(target.y + 17);"
     },
     {
-      "line": 11560,
+      "line": 11626,
       "primitive": "circle",
       "source": "const shadow = this.add.circle(target.x, target.y - 48, secondary ? 18 : 30, 0x5d3a88, 0.5)"
     },
     {
-      "line": 11583,
+      "line": 11649,
       "primitive": "graphics",
       "source": "const lightning = this.add.graphics().setDepth(Math.max(start.y, end.y) + 40);"
     },
     {
-      "line": 11629,
+      "line": 11695,
       "primitive": "graphics",
       "source": "const warning = this.add.graphics().setDepth(1880);"
     },
     {
-      "line": 11682,
+      "line": 11748,
       "primitive": "graphics",
       "source": "const shock = this.add.graphics({ x, y }).setDepth(1900).setRotation(angle);"
     },
     {
-      "line": 11698,
+      "line": 11764,
       "primitive": "graphics",
       "source": "const trail = this.add.graphics({ x, y }).setDepth(1895).setRotation(angle);"
     },
     {
-      "line": 11736,
+      "line": 11802,
       "primitive": "ellipse",
       "source": "const stain = this.add.ellipse(0, 7, isLowQuadrupedMonster(monster.kind) ? 72 : 58, isLowQuadrupedMonster(monster.kind) ? 22 : 18, 0x361916, 0.14);"
     },
     {
-      "line": 11737,
+      "line": 11803,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 4, isLowQuadrupedMonster(monster.kind) ? 78 : 62, isLowQuadrupedMonster(monster.kind) ? 24 : 20, 0x090907, 0.34);"
     },
     {
-      "line": 11768,
+      "line": 11834,
       "primitive": "circle",
       "source": "const fireball = this.add.circle(monster.x, monster.y - 42, 32, 0xff5a20, 0.72)"
     },
     {
-      "line": 12043,
+      "line": 12113,
       "primitive": "graphics",
       "source": "const tracer = this.add.graphics().setDepth(Math.max(monster.y, target.y) + 74);"
     },
     {
-      "line": 12046,
+      "line": 12116,
       "primitive": "circle",
       "source": "const flash = this.add.circle(startX, startY, 16, 0xffbf5f, 0.74)"
     },
     {
-      "line": 12049,
+      "line": 12119,
       "primitive": "circle",
       "source": "const smoke = this.add.circle(startX, startY, 9, 0xc9c1ae, 0.42)"
     },
     {
-      "line": 12182,
+      "line": 12252,
       "primitive": "graphics",
       "source": "const impact = this.add.graphics({ x, y }).setDepth(1950);"
     },
     {
-      "line": 12220,
+      "line": 12290,
       "primitive": "rectangle",
       "source": "const shard = this.add.rectangle("
     },
     {
-      "line": 12251,
+      "line": 12321,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(x, y + 20, 54, 22, color, 0.08)"
     },
     {
-      "line": 12254,
+      "line": 12324,
       "primitive": "ellipse",
       "source": "const inner = this.add.ellipse(x, y + 20, 32, 13, 0xffffff, 0.08)"
     },
     {
-      "line": 12339,
+      "line": 12409,
       "primitive": "circle",
       "source": "const mote = this.add.circle("
     },
     {
-      "line": 12365,
+      "line": 12435,
       "primitive": "rectangle",
       "source": "const pulse = this.add.rectangle("
     },
     {
-      "line": 12383,
+      "line": 12453,
       "primitive": "ellipse",
       "source": "const dust = this.add.ellipse(x, y, 18, 7, 0x8c7659, 0.38).setDepth(y - 2);"
     },
     {
-      "line": 12405,
+      "line": 12475,
       "primitive": "graphics",
       "source": "const warning = this.add.graphics({ x, y }).setDepth(y - 1).setRotation(angle);"
     }

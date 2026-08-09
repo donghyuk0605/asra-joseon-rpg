@@ -6,25 +6,27 @@ describe('resolvePlayerLayers', () => {
   const inventory: InventoryItem[] = [
     { instanceId: 'weapon-1', itemId: 'worn-hwando' },
     { instanceId: 'armor-1', itemId: 'hunter-durumagi' },
+    { instanceId: 'charm-1', itemId: 'boar-tusk-charm' },
   ];
 
-  it.each<[EquipmentState, { armor: boolean; weapon: boolean }]>([
-    [{ weapon: null, armor: null, charm: null }, { armor: false, weapon: false }],
-    [{ weapon: 'weapon-1', armor: null, charm: null }, { armor: false, weapon: true }],
-    [{ weapon: null, armor: 'armor-1', charm: null }, { armor: true, weapon: false }],
-    [{ weapon: 'weapon-1', armor: 'armor-1', charm: null }, { armor: true, weapon: true }],
+  it.each<[EquipmentState, { armor: boolean; weapon: boolean; charm: boolean }]>([
+    [{ weapon: null, armor: null, charm: null }, { armor: false, weapon: false, charm: false }],
+    [{ weapon: 'weapon-1', armor: null, charm: null }, { armor: false, weapon: true, charm: false }],
+    [{ weapon: null, armor: 'armor-1', charm: null }, { armor: true, weapon: false, charm: false }],
+    [{ weapon: 'weapon-1', armor: 'armor-1', charm: null }, { armor: true, weapon: true, charm: false }],
+    [{ weapon: null, armor: null, charm: 'charm-1' }, { armor: false, weapon: false, charm: true }],
   ])('shows only inventory-backed equipped layers for %j', (equipment, expected) => {
     expect(resolvePlayerLayers(equipment, inventory)).toEqual(expected);
   });
 
   it('hides stale equipment ids that are not actually in the inventory', () => {
     expect(resolvePlayerLayers({ weapon: 'missing-weapon', armor: 'missing-armor', charm: null }, inventory))
-      .toEqual({ armor: false, weapon: false });
+      .toEqual({ armor: false, weapon: false, charm: false });
   });
 
   it('hides inventory items assigned to the wrong equipment slot', () => {
     expect(resolvePlayerLayers({ weapon: 'armor-1', armor: 'weapon-1', charm: null }, inventory))
-      .toEqual({ armor: false, weapon: false });
+      .toEqual({ armor: false, weapon: false, charm: false });
   });
 });
 

@@ -4,13 +4,17 @@ import type { EquipmentState, InventoryItem } from '../simulation/types';
 export function resolvePlayerLayers(
   equipment: EquipmentState,
   inventory: readonly InventoryItem[],
-): { armor: boolean; weapon: boolean } {
-  const hasEquippedItem = (slot: 'armor' | 'weapon') => {
+): { armor: boolean; weapon: boolean; charm: boolean } {
+  const hasEquippedItem = (slot: 'armor' | 'weapon' | 'charm') => {
     const instanceId = equipment[slot];
     if (!instanceId) return false;
     return inventory.some((item) => item.instanceId === instanceId && ITEM_CATALOG[item.itemId].slot === slot);
   };
-  return { armor: hasEquippedItem('armor'), weapon: hasEquippedItem('weapon') };
+  return {
+    armor: hasEquippedItem('armor'),
+    weapon: hasEquippedItem('weapon'),
+    charm: hasEquippedItem('charm'),
+  };
 }
 
 export function resolvePlayerVisualMovement(
