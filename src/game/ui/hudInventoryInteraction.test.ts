@@ -64,4 +64,24 @@ describe('RPG inventory interaction and raster UI', () => {
     expect(hudSource).toContain('definition.defenseBonus + (definition.slot === \'armor\' ? enhancement * 2 : 0)');
     expect(styles).toContain('.item-stat-line');
   });
+
+  it('uses a 5 by 4 bag and exposes immediate equipment decisions', () => {
+    expect(hudSource).toContain("type InventoryFilter = 'all' | ItemSlot | 'equippable' | 'upgrade'");
+    expect(hudSource).toContain('data-filter="equippable"');
+    expect(hudSource).toContain('data-filter="upgrade"');
+    expect(hudSource).toContain('private isItemUpgrade(item: InventoryItem, snapshot: Snapshot)');
+    expect(hudSource).toContain('data-item-state="${state}"');
+    expect(hudSource).toContain('현재 장비보다 능력치 상승');
+    expect(hudSource).toContain('품부터 장착 가능');
+    expect(styles).toContain('.inventory-grid { grid-template-columns: repeat(5, minmax(0, 1fr));');
+    expect(styles).toContain('.inventory-item.is-upgrade:not(.is-equipped)');
+    expect(styles).toContain('.inventory-filter-state[hidden] { display: none; }');
+  });
+
+  it('moves hunting progress out of the bag and into the story journal', () => {
+    expect(hudSource).toContain('class="story-hunt-log"');
+    expect(hudSource).not.toContain('class="bag-hunt-summary"');
+    expect(styles).toContain('.story-hunt-log');
+    expect(styles).not.toContain('.bag-hunt-summary');
+  });
 });

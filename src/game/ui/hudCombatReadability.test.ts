@@ -45,4 +45,23 @@ describe('HUD combat readability', () => {
     expect(hud).toContain('button.disabled = !correctWeapon || !unlocked || cooldown > 0');
     expect(styles).toContain('content: "무기 필요"');
   });
+
+  it('expands combat information only when a target or party needs attention', () => {
+    const hud = readFileSync(new URL('./Hud.ts', import.meta.url), 'utf8');
+    const styles = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8');
+    expect(hud).toContain("this.root.classList.toggle('has-combat-target', combatEngaged)");
+    expect(hud).toContain("this.root.classList.remove('has-combat-target')");
+    expect(hud).toContain("followerHud?.classList.toggle('is-empty', snapshot.followers.length === 0 && armyStatus === null)");
+    expect(styles).toContain('#hud.has-combat-target .chat-box');
+    expect(styles).toContain('.follower-roster-hud.is-empty');
+  });
+
+  it('marks learned and mastered skill-tree nodes with a visible legend', () => {
+    const hud = readFileSync(new URL('./Hud.ts', import.meta.url), 'utf8');
+    const styles = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8');
+    expect(hud).toContain('class="skill-tree-legend"');
+    expect(hud).toContain('node.dataset.skillRank = String(rank)');
+    expect(styles).toContain('.skill-node.is-unlocked::before');
+    expect(styles).toContain('.skill-node.is-mastered::before');
+  });
 });

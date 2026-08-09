@@ -58,7 +58,7 @@ import {
   monsterLootPityProgress,
 } from '../combat/monsterIntel';
 
-type InventoryFilter = 'all' | ItemSlot;
+type InventoryFilter = 'all' | ItemSlot | 'equippable' | 'upgrade';
 type InventorySort = 'recent' | 'type';
 type InventoryMobileTab = 'equipment' | 'bag' | 'stats';
 type WorldMapSidebarTab = 'settlements' | 'war';
@@ -246,6 +246,8 @@ export const monsterIntentLabel = (kind: MonsterKind, state: MonsterAiState): st
 
 const INVENTORY_FILTERS: Array<{ id: InventoryFilter; label: string }> = [
   { id: 'all', label: '전체' },
+  { id: 'equippable', label: '장착 가능' },
+  { id: 'upgrade', label: '상향 장비' },
   { id: 'weapon', label: '무기' },
   { id: 'armor', label: '복장' },
   { id: 'charm', label: '부적' },
@@ -1031,7 +1033,7 @@ export class Hud {
       if (this.snapshot) {
         if (!this.inventorySelectionTouched) {
           this.selectedItemId = this.preferredEquippedItemId(this.snapshot)
-            ?? this.filteredInventory(this.snapshot.inventory)[0]?.instanceId
+            ?? this.filteredInventory(this.snapshot)[0]?.instanceId
             ?? null;
         }
         this.inventorySignature = '';
@@ -1239,7 +1241,8 @@ export class Hud {
   private setFilter(filter: InventoryFilter): void {
     if (!INVENTORY_FILTERS.some((entry) => entry.id === filter)) return;
     this.inventoryFilter = filter;
-    const visible = this.filteredInventory(this.snapshot?.inventory ?? []);
+    if (!this.snapshot) return;
+    const visible = this.filteredInventory(this.snapshot);
     if (!visible.some((item) => item.instanceId === this.selectedItemId)) {
       this.selectedItemId = visible[0]?.instanceId ?? null;
       this.inventorySelectionTouched = false;
@@ -1648,6 +1651,8 @@ export class Hud {
       : gwanghaePrince ? snapshot.gwanghaeArmy : null;
     const followerCapacity = armyStatus ? armyStatus.fieldCap + 3 : 3;
     this.text('follower-count', `${snapshot.followers.length} / ${followerCapacity}`);
+    const followerHud = this.root.querySelector<HTMLElement>('.follower-roster-hud');
+    followerHud?.classList.toggle('is-empty', snapshot.followers.length === 0 && armyStatus === null);
     const armyCommand = this.root.querySelector<HTMLElement>('[data-id="field-army-command"]');
     if (armyCommand) {
       armyCommand.hidden = armyStatus === null;
@@ -1803,6 +1808,7 @@ export class Hud {
         const meta = SKILL_TREE_META[skillId];
         node.dataset.skillBranch = meta.branch;
         node.dataset.skillTier = String(meta.tier);
+        node.dataset.skillRank = String(rank);
         node.dataset.recommended = String(meta.recommendedOrigins.includes(snapshot.playerOrigin));
       }
       const learn = this.root.querySelector<HTMLButtonElement>(`[data-learn-skill="${skillId}"]`);
@@ -2091,6 +2097,9 @@ export class Hud {
       const isBoss = dungeonBoss || campaignBoss;
       const targetHpRatio = target.hp / target.maxHp;
       const state = dungeonBoss ? target.state : target.aiState;
+      const combatEngaged = dungeonBoss || campaignBoss || target.hp < target.maxHp
+        || !(['patrol', 'sleep', 'return', 'flee'] as string[]).includes(state);
+      this.root.classList.toggle('has-combat-target', combatEngaged);
       const dangerousIntent = state === 'brace' || state === 'rally' || state === 'telegraph' || state === 'windup' || state === 'impact' || state === 'charge' || state === 'attack';
       targetCard?.classList.toggle('is-intent-danger', dangerousIntent);
       targetCard?.classList.toggle('is-low-hp', targetHpRatio <= 0.28);
@@ -2136,6 +2145,7 @@ export class Hud {
       const intent = dungeonBossIntent ?? campaignBossIntent ?? monsterIntent ?? '전투 중';
       this.text('target-intent', intent);
     } else {
+      this.root.classList.remove('has-combat-target');
       targetCard?.classList.remove('is-intent-danger', 'is-low-hp', 'is-vulnerable', 'is-boss');
       targetCard?.removeAttribute('data-intent');
       this.renderTargetStatuses([]);
@@ -2694,7 +2704,7 @@ export class Hud {
       this.selectedItemId = null;
       this.inventorySelectionTouched = false;
     }
-    const visibleItems = this.filteredInventory(snapshot.inventory);
+    const visibleItems = this.filteredInventory(snapshot);
     if (!this.selectedItemId && visibleItems[0]) this.selectedItemId = visibleItems[0].instanceId;
     const signature = JSON.stringify([
       snapshot.inventory, snapshot.equipment, snapshot.player.maxHp, snapshot.attackPower,
@@ -2776,8 +2786,17 @@ export class Hud {
         const equipped = Object.values(snapshot.equipment).includes(item.instanceId);
         const selected = item.instanceId === this.selectedItemId;
         const enhancement = item.enhancement ? ` +${item.enhancement}` : '';
-        return `<button class="inventory-item rarity-${definition.rarity} ${definition.element ? `element-${definition.element}` : ''} ${equipped ? 'is-equipped' : ''} ${selected ? 'is-selected' : ''}" data-select-item="${item.instanceId}" data-slot="${definition.slot}" aria-pressed="${selected}" aria-label="${definition.name}${enhancement}, ${ITEM_SLOT_LABEL[definition.slot]}, ${definition.rarity}, ${this.itemStats(definition, item.enhancement ?? 0)}${equipped ? ', 장착 중' : ''}" title="${definition.description}">
-          <span class="slot-index">${String(index + 1).padStart(2, '0')}</span><span class="item-glow"></span>${definition.element ? `<span class="element-glyph element-${definition.element}">${ELEMENT_LABEL[definition.element].glyph}</span>` : ''}<img src="${definition.iconPath}" alt=""><span class="item-stat-line">${this.itemStatBadge(definition, item.enhancement ?? 0)}</span><b>${definition.name}${enhancement}</b>${equipped ? '<em>착용</em>' : ''}
+        const canEquip = this.canEquipItem(definition, snapshot);
+        const upgrade = !equipped && this.isItemUpgrade(item, snapshot);
+        const equipment = this.isEquipment(definition);
+        const state = equipped ? 'equipped' : equipment && !canEquip ? 'locked' : upgrade ? 'upgrade' : 'standard';
+        const stateBadge = equipped
+          ? '<em class="item-state-badge">착용</em>'
+          : equipment && !canEquip
+            ? `<em class="item-state-badge is-locked">${definition.requiredLevel}품</em>`
+            : upgrade ? '<em class="item-state-badge is-upgrade">상향</em>' : '';
+        return `<button class="inventory-item rarity-${definition.rarity} ${definition.element ? `element-${definition.element}` : ''} ${equipped ? 'is-equipped' : ''} ${upgrade ? 'is-upgrade' : ''} ${equipment && !canEquip ? 'is-level-locked' : ''} ${selected ? 'is-selected' : ''}" data-select-item="${item.instanceId}" data-slot="${definition.slot}" data-item-state="${state}" aria-pressed="${selected}" aria-label="${definition.name}${enhancement}, ${ITEM_SLOT_LABEL[definition.slot]}, ${definition.rarity}, ${this.itemStats(definition, item.enhancement ?? 0)}${equipped ? ', 장착 중' : upgrade ? ', 현재 장비보다 능력치 상승' : equipment && !canEquip ? `, ${definition.requiredLevel}품 필요` : ''}" title="${definition.description}">
+          <span class="slot-index">${String(index + 1).padStart(2, '0')}</span><span class="item-glow"></span>${definition.element ? `<span class="element-glyph element-${definition.element}">${ELEMENT_LABEL[definition.element].glyph}</span>` : ''}<img src="${definition.iconPath}" alt=""><span class="item-stat-line">${this.itemStatBadge(definition, item.enhancement ?? 0)}</span><b>${definition.name}${enhancement}</b>${stateBadge}
         </button>`;
       });
       while (items.length < snapshot.inventoryCapacity) {
@@ -2785,6 +2804,12 @@ export class Hud {
       }
       grid.innerHTML = items.join('');
     }
+    const filterState = this.root.querySelector<HTMLElement>('[data-id="inventory-filter-state"]');
+    if (filterState) {
+      filterState.hidden = visibleItems.length > 0;
+      filterState.innerHTML = `<b>${INVENTORY_FILTERS.find((filter) => filter.id === this.inventoryFilter)?.label ?? '선택한 분류'} 없음</b><small>다른 분류를 선택하거나 사냥과 의뢰에서 전리품을 획득하십시오.</small>`;
+    }
+    this.text('inventory-visible-count', `${visibleItems.length}개 표시`);
 
     const detail = this.root.querySelector<HTMLElement>('[data-id="item-detail"]');
     const selectedItem = snapshot.inventory.find((item) => item.instanceId === this.selectedItemId);
@@ -2818,6 +2843,7 @@ export class Hud {
         const equippedItem = snapshot.inventory.find((item) => item.instanceId === equippedInstanceId);
         const equippedDefinition = equippedItem ? ITEM_CATALOG[equippedItem.itemId] : null;
         const isEquipped = isEquippable && equippedInstanceId === selectedItem.instanceId;
+        const canEquip = !isEquippable || this.canEquipItem(definition, snapshot);
         const comparisons = isMaterial
           ? `<span class="comparison-current">${isTigerPelt ? '산군 호피갑 핵심 재료 · 3장 필요' : '교역·의뢰에 쓰이는 재료 아이템'}</span>`
           : manualSkill
@@ -2843,7 +2869,7 @@ export class Hud {
           <div class="item-acquisition"><small>획득처</small><b>${acquisition.primary}</b><span>${acquisition.detail}</span></div>
           ${definition.setId ? this.setDetail(snapshot) : ''}
           <div class="detail-comparison"><small>${isMaterial ? '제작 정보' : manualSkill ? '무공 습득' : isScroll ? '강화 상태' : equippedDefinition && !isEquipped ? `${equippedDefinition.name} 대비` : '장비 비교'}</small>${comparisons}</div>
-          <button class="detail-equip" ${isMaterial ? 'disabled' : isScroll ? `data-use-item="${selectedItem.instanceId}"` : `data-equip-item="${selectedItem.instanceId}"`}>${isMaterial ? isTigerPelt ? '대장장이에게 가져가기' : '재료 보관 중' : manualSkill ? '비급 읽고 익히기' : isScroll ? '주문서 사용하기' : isEquipped ? '장비 해제' : '장착하기'}</button>
+          <button class="detail-equip" ${isMaterial || (!canEquip && !isEquipped) ? 'disabled' : isScroll ? `data-use-item="${selectedItem.instanceId}"` : `data-equip-item="${selectedItem.instanceId}"`}>${isMaterial ? isTigerPelt ? '대장장이에게 가져가기' : '재료 보관 중' : manualSkill ? '비급 읽고 익히기' : isScroll ? '주문서 사용하기' : !canEquip ? `${definition.requiredLevel}품부터 장착 가능` : isEquipped ? '장비 해제' : '장착하기'}</button>
           <small class="detail-hint">${isMaterial ? isTigerPelt ? '호피 3장과 180전을 모으면 산군 호피갑을 제작할 수 있습니다.' : '획득처를 참고해 필요한 재료를 더 모으거나 상점에 판매할 수 있습니다.' : `PC 더블클릭 · 모바일 더블탭으로 ${isScroll ? '사용' : '장착'}할 수 있습니다.`}</small>`;
       }
     }
@@ -2860,11 +2886,39 @@ export class Hud {
     if (focusedSelectId) window.requestAnimationFrame(() => this.root.querySelector<HTMLButtonElement>(`[data-select-item="${focusedSelectId}"]`)?.focus());
   }
 
-  private filteredInventory(inventory: InventoryItem[]): InventoryItem[] {
-    const indexed = inventory.map((item, index) => ({ item, index }));
+  private isEquipment(definition: ItemDefinition): boolean {
+    return definition.slot === 'weapon' || definition.slot === 'armor' || definition.slot === 'charm';
+  }
+
+  private canEquipItem(definition: ItemDefinition, snapshot: Snapshot): boolean {
+    return this.isEquipment(definition) && definition.requiredLevel <= snapshot.player.level;
+  }
+
+  private isItemUpgrade(item: InventoryItem, snapshot: Snapshot): boolean {
+    const definition = ITEM_CATALOG[item.itemId];
+    if (!this.canEquipItem(definition, snapshot)) return false;
+    const equippedInstanceId = snapshot.equipment[definition.slot as EquipmentSlot];
+    if (equippedInstanceId === item.instanceId) return false;
+    const equippedItem = snapshot.inventory.find((entry) => entry.instanceId === equippedInstanceId);
+    const equippedDefinition = equippedItem ? ITEM_CATALOG[equippedItem.itemId] : null;
+    const candidate = this.effectiveItemStats(definition, item.enhancement ?? 0);
+    const current = equippedDefinition
+      ? this.effectiveItemStats(equippedDefinition, equippedItem?.enhancement ?? 0)
+      : { attack: 0, hp: 0, defense: 0, accuracy: 0, evasion: 0 };
+    const candidateScore = candidate.attack * 4 + candidate.hp * .25 + candidate.defense * 3 + candidate.accuracy * 1.5 + candidate.evasion * 2;
+    const currentScore = current.attack * 4 + current.hp * .25 + current.defense * 3 + current.accuracy * 1.5 + current.evasion * 2;
+    return candidateScore > currentScore;
+  }
+
+  private filteredInventory(snapshot: Snapshot): InventoryItem[] {
+    const indexed = snapshot.inventory.map((item, index) => ({ item, index }));
     const filtered = this.inventoryFilter === 'all'
       ? indexed
-      : indexed.filter(({ item }) => ITEM_CATALOG[item.itemId].slot === this.inventoryFilter);
+      : this.inventoryFilter === 'equippable'
+        ? indexed.filter(({ item }) => this.canEquipItem(ITEM_CATALOG[item.itemId], snapshot))
+        : this.inventoryFilter === 'upgrade'
+          ? indexed.filter(({ item }) => this.isItemUpgrade(item, snapshot))
+          : indexed.filter(({ item }) => ITEM_CATALOG[item.itemId].slot === this.inventoryFilter);
     if (this.inventorySort === 'type') {
       filtered.sort((a, b) => SLOT_ORDER[ITEM_CATALOG[a.item.itemId].slot] - SLOT_ORDER[ITEM_CATALOG[b.item.itemId].slot] || a.index - b.index);
     }
@@ -2872,7 +2926,7 @@ export class Hud {
   }
 
   private preferredEquippedItemId(snapshot: Snapshot): string | null {
-    const visibleIds = new Set(this.filteredInventory(snapshot.inventory).map((item) => item.instanceId));
+    const visibleIds = new Set(this.filteredInventory(snapshot).map((item) => item.instanceId));
     return (['weapon', 'armor', 'charm'] as const)
       .map((slot) => snapshot.equipment[slot])
       .find((instanceId): instanceId is string => Boolean(instanceId && visibleIds.has(instanceId)))
@@ -3193,6 +3247,11 @@ export class Hud {
           <p data-id="story-current-objective">형을 죽인 관아 포졸을 쓰러뜨리고 북문을 연다.</p>
           <button type="button" data-action="story-replay"><span>현재 장면 다시 보기</span><small>대화와 목표를 다시 확인</small></button>
         </section>
+        <section class="story-hunt-log" aria-label="사냥과 제작 기록">
+          <img src="/assets/items/ulleung-tiger-pelt-v1.png" alt="">
+          <div><small>獵 · HUNT RECORD</small><strong>사냥과 제작 기록</strong><span>발견한 적과 희귀 제작 재료를 이야기 기록에서 함께 추적합니다.</span></div>
+          <dl><div><dt>발견 종</dt><dd><b data-id="hunt-species-count">0</b>종</dd></div><div><dt>산군 토벌</dt><dd><b data-id="tiger-hunt-count">0</b>회</dd></div><div><dt>울릉 호피</dt><dd><b data-id="tiger-pelt-count">0</b> / 3</dd></div></dl>
+        </section>
         <section class="story-memory-log" aria-label="지나온 장면" hidden>
           <header><span>記憶 · SCENES</span><b>지나온 장면</b></header>
           <ol data-id="story-memories"></ol>
@@ -3442,26 +3501,25 @@ export class Hud {
             </section>
           </aside>
           <main class="bag-column">
-            <div class="bag-title"><div><span>FIELD BAG</span><strong>소지품</strong></div><b data-id="inventory-count">0 / 12</b></div>
+            <div class="bag-title"><div><span>FIELD BAG</span><strong>소지품</strong></div><b data-id="inventory-count">0 / 20</b></div>
             <div class="capacity-bar" aria-label="가방 사용량"><i data-id="inventory-capacity-fill" role="progressbar"></i></div>
             <nav class="bag-toolbar" aria-label="소지품 분류">
               <div class="bag-filters">
                 <button data-filter="all" aria-pressed="true">전체</button>
+                <button data-filter="equippable" aria-pressed="false">장착 가능</button>
+                <button data-filter="upgrade" aria-pressed="false">상향 장비</button>
                 <button data-filter="weapon" aria-pressed="false">무기</button>
                 <button data-filter="armor" aria-pressed="false">복장</button>
                 <button data-filter="charm" aria-pressed="false">부적</button>
                 <button data-filter="scroll" aria-pressed="false">주문</button>
                 <button data-filter="material" aria-pressed="false">재료</button>
               </div>
+              <span class="inventory-visible-count" data-id="inventory-visible-count">0개 표시</span>
               <button class="inventory-sort" data-action="inventory-sort" aria-label="소지품 정렬 방식 변경"><span data-id="inventory-sort-label">획득순</span><i>↕</i></button>
             </nav>
             <div class="inventory-grid" data-id="inventory-grid"></div>
-            <section class="bag-hunt-summary" aria-label="사냥 도감 요약">
-              <img src="/assets/items/ulleung-tiger-pelt-v1.png" alt="">
-              <span><small>獵 · 사냥 기록</small><b><em data-id="hunt-species-count">0</em>종 발견 · 산군 <em data-id="tiger-hunt-count">0</em>회</b></span>
-              <strong>호피 <em data-id="tiger-pelt-count">0</em> / 3</strong>
-            </section>
-            <footer><span>클릭·탭 선택</span><span>더블클릭·더블탭 장착</span><span>빈손은 주먹 공격</span></footer>
+            <div class="inventory-filter-state" data-id="inventory-filter-state" hidden></div>
+            <footer><span>클릭·탭 선택</span><span>더블클릭·더블탭 장착</span><span>획득처·비교는 우측 상세</span></footer>
           </main>
           <aside class="item-detail" data-id="item-detail" aria-live="polite"></aside>
         </div>
@@ -3522,7 +3580,7 @@ export class Hud {
       <button class="skill-tree-backdrop" data-action="skill-tree-backdrop" aria-label="무공 수련도 닫기" aria-hidden="true" tabindex="-1"></button>
       <section class="skill-tree-panel" id="skill-tree-panel" role="dialog" aria-modal="false" aria-labelledby="skill-tree-title" aria-hidden="true" inert>
         <header><div><span>MOONSHADOW MARTIAL ARTS</span><strong id="skill-tree-title">월영 무공 수련도</strong></div><em>사용 가능 점수 <b data-id="skill-points">2</b></em><button data-action="skill-tree-close" aria-label="닫기">×</button></header>
-        <div class="skill-tree-intro"><b>배우는 길이 다른 무공</b><span>기초 수련 · 장인 전수 · 비급 습득 · 사건 각성으로 익힙니다. Q · W · E · R로 발동합니다.</span></div>
+        <div class="skill-tree-intro"><b>배우는 길이 다른 무공</b><span>기초 수련 · 장인 전수 · 비급 습득 · 사건 각성으로 익힙니다. Q · W · E · R로 발동합니다.</span><div class="skill-tree-legend" aria-label="무공 노드 상태"><em><i></i>수련 가능</em><em><i></i>습득 완료</em><em><i></i>선행 필요</em><strong>기초 → 전개 → 절기 → 비전</strong></div></div>
         <div class="skill-tree-scroll">
           <section class="skill-discipline sword-discipline">
             <header><span>攻 · ACTIVE</span><b>실전 검술</b><small>직접 발동하는 공격 무공</small></header>
