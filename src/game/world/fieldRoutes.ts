@@ -30,6 +30,7 @@ export type CampaignFieldRoute = Readonly<{
   destination: RegionId;
   entrance: 'north' | 'south';
   requiresClear: boolean;
+  mode?: FieldRouteMode;
 }>;
 
 export type FieldExitGuide = Readonly<{
@@ -52,6 +53,7 @@ const route = (
   destination: RegionId,
   entrance: 'north' | 'south',
   requiresClear = false,
+  mode?: FieldRouteMode,
 ): CampaignFieldRoute => Object.freeze({
   id: `${region}-${destination}-${localX}-${localY}`,
   region,
@@ -61,6 +63,7 @@ const route = (
   destination,
   entrance,
   requiresClear,
+  ...(mode ? { mode } : {}),
 });
 
 const STATIC_CAMPAIGN_FIELD_ROUTES: readonly CampaignFieldRoute[] = [
@@ -86,6 +89,9 @@ const STATIC_CAMPAIGN_FIELD_ROUTES: readonly CampaignFieldRoute[] = [
   route('izuhara', 768, 890, '북쪽 산길 · 아리아케 산림', 'tsushimahunt', 'north'),
   route('izuhara', 768, 145, '조선 해협 · 도주군 격파 후 부산진', 'busanjin', 'south', true),
   route('jeonju', 112, 510, '서문 역참 · 부산진성 출정', 'busanjin', 'south'),
+  route('busanjin', 768, 890, '남문 군로 · 전주성 귀환', 'jeonju', 'north'),
+  route('busanjin', 1240, 500, '견내량 수군선 · 거제 수군진', 'geoje', 'south', false, 'ferry'),
+  route('geoje', 1260, 700, '견내량 귀환선 · 부산진성', 'busanjin', 'north', false, 'ferry'),
   route('busanjin', 768, 145, '북문 군로 · 탄금대', 'tangeumdae', 'south'),
   route('tangeumdae', 768, 890, '남행 군로 · 부산진성', 'busanjin', 'north'),
   route('tangeumdae', 768, 150, '한성 파발로 · 왜군 전멸 후 개방', 'gyeongbokgate', 'south'),
@@ -105,6 +111,8 @@ const STATIC_CAMPAIGN_FIELD_ROUTES: readonly CampaignFieldRoute[] = [
   route('pyongyanggate', 768, 890, '대동문 안길 · 평양 내성', 'pyongyanginner', 'north', true),
   route('pyongyanginner', 768, 145, '대동문 회랑', 'pyongyanggate', 'south'),
   route('pyongyanginner', 768, 890, '한성 북로 · 경복궁 광화문', 'gyeongbokgate', 'north', true),
+  route('namhansanseong', 768, 890, '왕실 후퇴로 · 경복궁 내전', 'gyeongbokinner', 'north', true),
+  route('ganghwado', 768, 890, '갑곶 귀환선 · 경복궁 내전', 'gyeongbokinner', 'north', true, 'ferry'),
 ];
 
 const JURCHEN_CAMPAIGN_FIELD_ROUTES: readonly CampaignFieldRoute[] =
@@ -267,6 +275,12 @@ const specialGuidesFor = (region: RegionId): FieldExitGuide[] => {
   if (region === 'village') {
     return [guide('village-solgogae', region, 'solgogae', 768, 24, '월영 솔고개 북문', false, 'road')];
   }
+  if (region === 'minepass') {
+    return [guide('minepass-dungeon', region, 'dungeon', 770, 300, '무영광산 입구', false, 'portal')];
+  }
+  if (region === 'dungeon') {
+    return [guide('dungeon-minepass', region, 'minepass', 255, 875, '지상 귀환 계단', false, 'portal')];
+  }
   return [];
 };
 
@@ -282,6 +296,7 @@ export const fieldExitGuidesForRegion = (region: RegionId): readonly FieldExitGu
       entry.localY,
       entry.label,
       entry.requiresClear,
+      entry.mode,
     ));
   const all = [
     ...campaign,

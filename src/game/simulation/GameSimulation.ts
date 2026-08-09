@@ -72,7 +72,11 @@ import {
   jurchenForwardDestination,
 } from '../world/jurchenCampaign';
 import { jurchenExpansionWorldObstacles } from '../world/jurchenExpansion';
-import { extendedWorldObstacles, isExtendedRegion } from '../world/extendedRegions';
+import {
+  EXTENDED_REGION_IDS,
+  extendedWorldObstacles,
+  isExtendedRegion,
+} from '../world/extendedRegions';
 import {
   EPISODE2_REGION_SPAWNS,
   episode2DropPool,
@@ -3754,7 +3758,7 @@ export class GameSimulation {
 
   travelToCampaignRegion(region: RegionId, entrance: 'north' | 'south' = 'south'): void {
     const campaignRegions: RegionId[] = [
-      'jeonjufield', 'jeonjugate', 'jeonju',
+      'yeongwolhq', 'jeonjufield', 'jeonjugate', 'jeonju',
       'busanjin', 'tangeumdae', 'gyeongbokgate', 'gyeongbokcourt', 'gyeongbokinner',
       ...JOSEON_TOWN_REGION_IDS,
       ...JURCHEN_REGION_IDS, 'manchufrontier',
@@ -3762,6 +3766,7 @@ export class GameSimulation {
       ...ROYAL_REFUGE_REGIONS,
       ...JAPAN_REGION_IDS,
       ...EPISODE2_REGION_IDS,
+      ...EXTENDED_REGION_IDS,
     ];
     if (!campaignRegions.includes(region)) return;
     const activeGwanghaeCoupStage = this.activeGwanghaeCoupStageRegion();
@@ -3789,6 +3794,9 @@ export class GameSimulation {
       && this.region === 'pyongyanginner'
       && (region === 'gyeongbokcourt' || region === 'gyeongbokinner')
     ) return;
+    if (isRoyalRefugeRegion(this.region)
+      && region === 'gyeongbokinner'
+      && !this.royalRefugeState.finalDefenseComplete) return;
     if (this.region === 'tangeumdae' && region === 'gyeongbokgate' && !this.tangeumCleared) {
       const progress = this.getTangeumBattleProgress();
       this.events.push({ type: 'tangeum-gate-blocked', remaining: progress.total - progress.defeated });
@@ -3867,16 +3875,20 @@ export class GameSimulation {
     const previousRegion = this.region;
     const previousOrigin = REGION_ORIGINS[previousRegion];
     const previousLocalX = this.player.x - previousOrigin.x;
+    const previousLocalY = this.player.y - previousOrigin.y;
     const origin = REGION_ORIGINS[region];
     const terrainSeam = worldTerrainSeamBetween(previousRegion, region);
     const continuousVerticalTravel = terrainSeam?.orientation === 'vertical';
+    const continuousHorizontalTravel = terrainSeam?.orientation === 'horizontal';
     const continuousJoseonTownTravel = Boolean(terrainSeam)
       && isJoseonTownRegion(previousRegion)
       && isJoseonTownRegion(region);
     const joseonEntranceGate = continuousJoseonTownTravel
       ? JOSEON_TOWN_LAYOUTS[region].gates.find((candidate) => candidate.edge === entrance)
       : undefined;
-    if (continuousJoseonTownTravel) {
+    if (continuousHorizontalTravel) {
+      this.player.x = origin.x + (previousOrigin.x < origin.x ? 12 : MAP_WIDTH - 12);
+    } else if (continuousJoseonTownTravel) {
       const laneCenter = joseonEntranceGate?.x ?? MAP_WIDTH / 2;
       const laneHalfWidth = Math.max(40, (joseonEntranceGate?.width ?? 344) / 2 - 28);
       this.player.x = origin.x + Math.max(
@@ -3898,7 +3910,18 @@ export class GameSimulation {
     } else {
       this.player.x = origin.x + MAP_WIDTH / 2;
     }
-    this.player.y = origin.y + (continuousJoseonTownTravel
+    this.player.y = origin.y + (continuousHorizontalTravel && terrainSeam
+      ? (() => {
+        const destinationLane = terrainSeam.from === region
+          ? terrainSeam.fromLane
+          : terrainSeam.toLane;
+        const laneHalfWidth = Math.max(96, terrainSeam.roadWidth / 2 - 16);
+        return Math.max(
+          destinationLane - laneHalfWidth,
+          Math.min(destinationLane + laneHalfWidth, previousLocalY),
+        );
+      })()
+      : continuousJoseonTownTravel
       ? entrance === 'north'
         ? joseonEntranceGate && joseonEntranceGate.y > 100
           ? joseonEntranceGate.y + joseonEntranceGate.height / 2 + 28
@@ -5283,6 +5306,29 @@ export class GameSimulation {
     const northReached = centerGate && localY <= (northSeam ? -4 : 78);
     const southReached = centerGate && localY >= (southSeam ? MAP_HEIGHT + 4 : MAP_HEIGHT - 58);
     const westReached = localX <= 82 && localY >= 360 && localY <= 660;
+    const eastReached = localX >= MAP_WIDTH - 82 && localY >= 360 && localY <= 660;
+
+    if (isExtendedRegion(this.region)) {
+      const crossEdge = (
+        edge: 'north' | 'south' | 'west' | 'east',
+        reached: boolean,
+      ): boolean => {
+        if (!reached) return false;
+        const seam = continuousWorldEdge(this.region, edge);
+        if (!seam) return false;
+        const destination = seam.from === this.region ? seam.to : seam.from;
+        this.travelToCampaignRegion(
+          destination,
+          edge === 'north' || edge === 'west' ? 'south' : 'north',
+        );
+        return true;
+      };
+      crossEdge('north', northReached)
+        || crossEdge('south', southReached)
+        || crossEdge('west', westReached)
+        || crossEdge('east', eastReached);
+      return;
+    }
 
     if (isEpisode2Region(this.region)) {
       const neighbors = episode2Neighbors(this.region);
@@ -9235,6 +9281,27 @@ export class GameSimulation {
               : southOpen
                 ? origin.y + MAP_HEIGHT - 42
                 : origin.y + MAP_HEIGHT - 80,
+            point.y,
+          ),
+        ),
+      };
+    }
+
+    if (isExtendedRegion(this.region)) {
+      const origin = REGION_ORIGINS[this.region];
+      const northOpen = this.isWithinWorldSeamLane(point, 'north');
+      const southOpen = this.isWithinWorldSeamLane(point, 'south');
+      const westOpen = this.isWithinWorldSeamLane(point, 'west');
+      const eastOpen = this.isWithinWorldSeamLane(point, 'east');
+      return {
+        x: Math.max(
+          westOpen ? origin.x - 14 : origin.x + 110,
+          Math.min(eastOpen ? origin.x + MAP_WIDTH + 14 : origin.x + MAP_WIDTH - 110, point.x),
+        ),
+        y: Math.max(
+          northOpen ? origin.y - 14 : origin.y + 110,
+          Math.min(
+            southOpen ? origin.y + MAP_HEIGHT + 14 : origin.y + MAP_HEIGHT - 80,
             point.y,
           ),
         ),

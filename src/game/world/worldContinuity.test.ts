@@ -56,6 +56,8 @@ describe('world terrain continuity graph', () => {
       ],
       ['jeonju', 'jeonjugate', 'jeonjufield'],
       ['gyeongbokinner', 'gyeongbokcourt', 'gyeongbokgate'],
+      ['gangneung', 'wonju', 'yeongwolhq'],
+      ['haeju', 'gaeseong'],
     ] as const;
     for (const chain of chains) {
       for (let index = 1; index < chain.length; index += 1) {
@@ -146,6 +148,12 @@ describe('world terrain continuity graph', () => {
       .toEqual(continuityCameraBoundsForRegion('minepass'));
     expect(continuityCameraBoundsForRegion('village'))
       .toEqual(continuityCameraBoundsForRegion('moonfield'));
+    expect(continuityCameraBoundsForRegion('gangneung'))
+      .toEqual(continuityCameraBoundsForRegion('wonju'));
+    expect(continuityCameraBoundsForRegion('wonju'))
+      .toEqual(continuityCameraBoundsForRegion('yeongwolhq'));
+    expect(continuityCameraBoundsForRegion('haeju'))
+      .toEqual(continuityCameraBoundsForRegion('gaeseong'));
     for (const seam of WORLD_TERRAIN_SEAMS) {
       expect(sameContinuityCameraGroup(seam.from, seam.to), seam.id).toBe(true);
     }
@@ -203,5 +211,45 @@ describe('world terrain continuity graph', () => {
       x: origin.x + MAP_WIDTH + 40,
       y: origin.y + 800,
     }).x).toBe(origin.x + MAP_WIDTH - 110);
+  });
+
+  it('crosses the new Gangwon east-west road in both directions without lane snapping', () => {
+    const game = new GameSimulation('wonju');
+    const wonju = REGION_ORIGINS.wonju;
+    game.player.x = wonju.x + MAP_WIDTH - 5;
+    game.player.y = wonju.y + 542;
+    (game as unknown as { updateCampaignGateTransitions: () => void })
+      .updateCampaignGateTransitions();
+
+    expect(game.region).toBe('gangneung');
+    expect(game.player.x).toBe(REGION_ORIGINS.gangneung.x + 12);
+    expect(game.player.y).toBe(REGION_ORIGINS.gangneung.y + 542);
+
+    game.travelToCampaignRegion('wonju', 'south');
+    expect(game.region).toBe('wonju');
+    expect(game.player.x).toBe(REGION_ORIGINS.wonju.x + MAP_WIDTH - 12);
+    expect(game.player.y).toBe(REGION_ORIGINS.wonju.y + 542);
+  });
+
+  it('opens only the authored Gangwon road and preserves its north-south lane', () => {
+    const game = new GameSimulation('wonju');
+    const internals = game as unknown as {
+      clampToField: (point: { x: number; y: number }) => { x: number; y: number };
+    };
+    const wonju = REGION_ORIGINS.wonju;
+    expect(internals.clampToField({
+      x: wonju.x + MAP_WIDTH + 40,
+      y: wonju.y + 500,
+    }).x).toBe(wonju.x + MAP_WIDTH + 14);
+    expect(internals.clampToField({
+      x: wonju.x + MAP_WIDTH + 40,
+      y: wonju.y + 800,
+    }).x).toBe(wonju.x + MAP_WIDTH - 110);
+
+    game.player.x = wonju.x + 846;
+    game.travelToCampaignRegion('yeongwolhq', 'north');
+    expect(game.region).toBe('yeongwolhq');
+    expect(game.player.x).toBe(REGION_ORIGINS.yeongwolhq.x + 846);
+    expect(game.player.y).toBe(REGION_ORIGINS.yeongwolhq.y + 12);
   });
 });

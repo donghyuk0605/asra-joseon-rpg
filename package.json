@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "audit:graphics": "vite-node scripts/generate_graphics_coverage.ts && python3 scripts/audit_monster_atlases.py",
+    "audit:routes": "vite-node scripts/generate_field_connection_audit.ts",
     "audit:monsters": "python3 scripts/audit_monster_atlases.py --check",
     "build:world-charms": "python3 scripts/build_world_charms.py",
     "validate:world-charms": "python3 scripts/validate_world_charms.py",

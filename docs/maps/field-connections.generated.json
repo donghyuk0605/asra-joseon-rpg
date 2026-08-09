@@ -1,0 +1,1648 @@
+{
+  "schemaVersion": 1,
+  "summary": {
+    "regions": 81,
+    "regionsWithLocalExit": 81,
+    "localExitGuides": 142,
+    "terrainSeams": 55,
+    "ferryConnections": 3,
+    "atlasNodes": 23,
+    "atlasRoutes": 35,
+    "atlasComponents": 1,
+    "road": 122,
+    "ferry": 9,
+    "portal": 11
+  },
+  "regionsWithoutExit": [],
+  "regionsWithoutAtlasNode": [
+    "dungeon"
+  ],
+  "unpairedLocalExits": [
+    {
+      "from": "izuhara",
+      "to": "busanjin",
+      "mode": "portal",
+      "requiresClear": true
+    },
+    {
+      "from": "gyeongbokinner",
+      "to": "pyongyanginner",
+      "mode": "portal",
+      "requiresClear": false
+    },
+    {
+      "from": "heuksuvillage",
+      "to": "jurchenvillage",
+      "mode": "portal",
+      "requiresClear": true
+    },
+    {
+      "from": "pyongyanginner",
+      "to": "gyeongbokgate",
+      "mode": "portal",
+      "requiresClear": true
+    },
+    {
+      "from": "namhansanseong",
+      "to": "gyeongbokinner",
+      "mode": "portal",
+      "requiresClear": true
+    },
+    {
+      "from": "ganghwado",
+      "to": "gyeongbokinner",
+      "mode": "ferry",
+      "requiresClear": true
+    }
+  ],
+  "atlasComponents": [
+    [
+      "andong",
+      "busan",
+      "chungju",
+      "episode2-central-river",
+      "episode2-honam-road",
+      "episode2-mountain-road",
+      "episode2-northwest-road",
+      "episode2-west-coast",
+      "episode2-yeongnam-road",
+      "gaeseong",
+      "gangneung",
+      "geoje",
+      "haeju",
+      "hanseong",
+      "jeonju",
+      "jurchen",
+      "osaka",
+      "pyongyang",
+      "suwon",
+      "ulleung",
+      "wonju",
+      "yalu",
+      "yeongwol"
+    ]
+  ],
+  "regions": [
+    {
+      "id": "solgogae",
+      "name": "월영 솔고개",
+      "atlasNode": "yeongwol",
+      "exits": [
+        {
+          "destination": "village",
+          "destinationName": "달빛고을",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "village",
+      "name": "달빛고을",
+      "atlasNode": "yeongwol",
+      "exits": [
+        {
+          "destination": "solgogae",
+          "destinationName": "월영 솔고개",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "mistwood",
+          "destinationName": "청람 안개숲",
+          "edge": "west",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "minepass",
+          "destinationName": "흑철 폐광고개",
+          "edge": "east",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "moonfield",
+          "destinationName": "월하 그림자들",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "mistwood",
+      "name": "청람 안개숲",
+      "atlasNode": "yeongwol",
+      "exits": [
+        {
+          "destination": "village",
+          "destinationName": "달빛고을",
+          "edge": "east",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "yeongwol",
+          "destinationName": "영월 관아 앞 훈련마당",
+          "edge": "west",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "yeongwol",
+      "name": "영월 관아 앞 훈련마당",
+      "atlasNode": "yeongwol",
+      "exits": [
+        {
+          "destination": "jeonjufield",
+          "destinationName": "전주 완산벌 대사냥터",
+          "edge": "west",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "mistwood",
+          "destinationName": "청람 안개숲",
+          "edge": "east",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "yeongwolhq",
+          "destinationName": "영월 관아 지휘부",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "yeongwolhq",
+      "name": "영월 관아 지휘부",
+      "atlasNode": "yeongwol",
+      "exits": [
+        {
+          "destination": "yeongwol",
+          "destinationName": "영월 관아 앞 훈련마당",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "wonju",
+          "destinationName": "원주 치악산역",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "jeonjufield",
+      "name": "전주 완산벌 대사냥터",
+      "atlasNode": "jeonju",
+      "exits": [
+        {
+          "destination": "yeongwol",
+          "destinationName": "영월 관아 앞 훈련마당",
+          "edge": "east",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "jeonjugate",
+          "destinationName": "전주성 풍남문 대회전",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "jeonjugate",
+      "name": "전주성 풍남문 대회전",
+      "atlasNode": "jeonju",
+      "exits": [
+        {
+          "destination": "jeonju",
+          "destinationName": "전주성 대읍성",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "jeonjufield",
+          "destinationName": "전주 완산벌 대사냥터",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "jeonju",
+      "name": "전주성 대읍성",
+      "atlasNode": "jeonju",
+      "exits": [
+        {
+          "destination": "busanjin",
+          "destinationName": "부산진성 혈전",
+          "edge": "west",
+          "mode": "portal",
+          "requiresClear": false
+        },
+        {
+          "destination": "jeonjugate",
+          "destinationName": "전주성 풍남문 대회전",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "osaka",
+      "name": "오사카 외항 포로촌",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "settsuvillage",
+          "destinationName": "셋쓰 달그림자 산촌",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "settsuvillage",
+      "name": "셋쓰 달그림자 산촌",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "osaka",
+          "destinationName": "오사카 외항 포로촌",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "yamazakihunt",
+          "destinationName": "야마자키 삼나무 사냥숲",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "yamazakihunt",
+      "name": "야마자키 삼나무 사냥숲",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "settsuvillage",
+          "destinationName": "셋쓰 달그림자 산촌",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "osakacastle",
+          "destinationName": "오사카 성하마을",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "osakacastle",
+      "name": "오사카 성하마을",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "yamazakihunt",
+          "destinationName": "야마자키 삼나무 사냥숲",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "shogunkeep",
+          "destinationName": "오사카 군선봉행 성채",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "shogunkeep",
+      "name": "오사카 군선봉행 성채",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "osakacastle",
+          "destinationName": "오사카 성하마을",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "sakaicity",
+          "destinationName": "사카이 자유항",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "sakaicity",
+      "name": "사카이 자유항",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "shogunkeep",
+          "destinationName": "오사카 군선봉행 성채",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "izumihunt",
+          "destinationName": "이즈미 대나무 고개",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "izumihunt",
+      "name": "이즈미 대나무 고개",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "sakaicity",
+          "destinationName": "사카이 자유항",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "awajicoast",
+          "destinationName": "아와지 해협 사냥터",
+          "edge": "north",
+          "mode": "ferry",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "awajicoast",
+      "name": "아와지 해협 사냥터",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "izumihunt",
+          "destinationName": "이즈미 대나무 고개",
+          "edge": "south",
+          "mode": "ferry",
+          "requiresClear": false
+        },
+        {
+          "destination": "ikiport",
+          "destinationName": "이키 고노우라 항구",
+          "edge": "north",
+          "mode": "ferry",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "ikiport",
+      "name": "이키 고노우라 항구",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "awajicoast",
+          "destinationName": "아와지 해협 사냥터",
+          "edge": "south",
+          "mode": "ferry",
+          "requiresClear": false
+        },
+        {
+          "destination": "tsushimahunt",
+          "destinationName": "대마도 아리아케 산림",
+          "edge": "north",
+          "mode": "ferry",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "tsushimahunt",
+      "name": "대마도 아리아케 산림",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "ikiport",
+          "destinationName": "이키 고노우라 항구",
+          "edge": "south",
+          "mode": "ferry",
+          "requiresClear": false
+        },
+        {
+          "destination": "izuhara",
+          "destinationName": "대마도 이즈하라 성하",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "izuhara",
+      "name": "대마도 이즈하라 성하",
+      "atlasNode": "osaka",
+      "exits": [
+        {
+          "destination": "tsushimahunt",
+          "destinationName": "대마도 아리아케 산림",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "busanjin",
+          "destinationName": "부산진성 혈전",
+          "edge": "north",
+          "mode": "portal",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "busanjin",
+      "name": "부산진성 혈전",
+      "atlasNode": "busan",
+      "exits": [
+        {
+          "destination": "jeonju",
+          "destinationName": "전주성 대읍성",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false
+        },
+        {
+          "destination": "geoje",
+          "destinationName": "거제 견내량 수군진",
+          "edge": "east",
+          "mode": "ferry",
+          "requiresClear": false
+        },
+        {
+          "destination": "tangeumdae",
+          "destinationName": "탄금대 대회전",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "tangeumdae",
+      "name": "탄금대 대회전",
+      "atlasNode": "chungju",
+      "exits": [
+        {
+          "destination": "busanjin",
+          "destinationName": "부산진성 혈전",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "gyeongbokgate",
+          "destinationName": "경복궁 광화문",
+          "edge": "north",
+          "mode": "portal",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gyeongbokgate",
+      "name": "경복궁 광화문",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "tangeumdae",
+          "destinationName": "탄금대 대회전",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false
+        },
+        {
+          "destination": "gyeongbokcourt",
+          "destinationName": "경복궁 근정전",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gyeongbokcourt",
+      "name": "경복궁 근정전",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "gyeongbokgate",
+          "destinationName": "경복궁 광화문",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "gyeongbokinner",
+          "destinationName": "경복궁 사정전·강녕전",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gyeongbokinner",
+      "name": "경복궁 사정전·강녕전",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "gyeongbokcourt",
+          "destinationName": "경복궁 근정전",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "pyongyanginner",
+          "destinationName": "평양성 내성",
+          "edge": "east",
+          "mode": "portal",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "hanseongsouth",
+      "name": "한성 숭례문·칠패장",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "hanseongmarket",
+          "destinationName": "한성 종루·운종가",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "suwon",
+          "destinationName": "수원 읍치 장터",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "hanseongmarket",
+      "name": "한성 종루·운종가",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "changdeokgung",
+          "destinationName": "창덕궁 · 왕세자 광해 분조청",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "hanseongsouth",
+          "destinationName": "한성 숭례문·칠패장",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "changdeokgung",
+      "name": "창덕궁 · 왕세자 광해 분조청",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "gaeseong",
+          "destinationName": "개성 송도 장시",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "hanseongmarket",
+          "destinationName": "한성 종루·운종가",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gaeseong",
+      "name": "개성 송도 장시",
+      "atlasNode": "gaeseong",
+      "exits": [
+        {
+          "destination": "changdeokgung",
+          "destinationName": "창덕궁 · 왕세자 광해 분조청",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "haeju",
+          "destinationName": "해주 염전포",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "suwon",
+      "name": "수원 읍치 장터",
+      "atlasNode": "suwon",
+      "exits": [
+        {
+          "destination": "hanseongsouth",
+          "destinationName": "한성 숭례문·칠패장",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "chungju",
+          "destinationName": "충주 목계나루",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "chungju",
+      "name": "충주 목계나루",
+      "atlasNode": "chungju",
+      "exits": [
+        {
+          "destination": "suwon",
+          "destinationName": "수원 읍치 장터",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "andong",
+          "destinationName": "안동부 서원길",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "andong",
+      "name": "안동부 서원길",
+      "atlasNode": "andong",
+      "exits": [
+        {
+          "destination": "chungju",
+          "destinationName": "충주 목계나루",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "wonju",
+      "name": "원주 치악산역",
+      "atlasNode": "wonju",
+      "exits": [
+        {
+          "destination": "yeongwolhq",
+          "destinationName": "영월 관아 지휘부",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "gangneung",
+          "destinationName": "강릉 경포 봉화길",
+          "edge": "east",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gangneung",
+      "name": "강릉 경포 봉화길",
+      "atlasNode": "gangneung",
+      "exits": [
+        {
+          "destination": "wonju",
+          "destinationName": "원주 치악산역",
+          "edge": "west",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "haeju",
+      "name": "해주 염전포",
+      "atlasNode": "haeju",
+      "exits": [
+        {
+          "destination": "gaeseong",
+          "destinationName": "개성 송도 장시",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "geoje",
+      "name": "거제 견내량 수군진",
+      "atlasNode": "geoje",
+      "exits": [
+        {
+          "destination": "busanjin",
+          "destinationName": "부산진성 혈전",
+          "edge": "east",
+          "mode": "ferry",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "hwangju",
+      "name": "황주 달고개 역참",
+      "atlasNode": "episode2-northwest-road",
+      "exits": [
+        {
+          "destination": "jaeryeong",
+          "destinationName": "재령 갈대벌",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "jaeryeong",
+      "name": "재령 갈대벌",
+      "atlasNode": "episode2-northwest-road",
+      "exits": [
+        {
+          "destination": "hwangju",
+          "destinationName": "황주 달고개 역참",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "anju",
+          "destinationName": "안주 청천강진",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "anju",
+      "name": "안주 청천강진",
+      "atlasNode": "episode2-northwest-road",
+      "exits": [
+        {
+          "destination": "jaeryeong",
+          "destinationName": "재령 갈대벌",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "uiju",
+          "destinationName": "의주 용만관",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "uiju",
+      "name": "의주 용만관",
+      "atlasNode": "episode2-northwest-road",
+      "exits": [
+        {
+          "destination": "anju",
+          "destinationName": "안주 청천강진",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "yangju",
+      "name": "양주 송화 봉수로",
+      "atlasNode": "episode2-mountain-road",
+      "exits": [
+        {
+          "destination": "gapyeong",
+          "destinationName": "가평 잣나무 물레촌",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gapyeong",
+      "name": "가평 잣나무 물레촌",
+      "atlasNode": "episode2-mountain-road",
+      "exits": [
+        {
+          "destination": "yangju",
+          "destinationName": "양주 송화 봉수로",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "pyeongchang",
+          "destinationName": "평창 눈재 사냥터",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "pyeongchang",
+      "name": "평창 눈재 사냥터",
+      "atlasNode": "episode2-mountain-road",
+      "exits": [
+        {
+          "destination": "gapyeong",
+          "destinationName": "가평 잣나무 물레촌",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "samcheok",
+          "destinationName": "삼척 죽서루 해풍길",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "samcheok",
+      "name": "삼척 죽서루 해풍길",
+      "atlasNode": "episode2-mountain-road",
+      "exits": [
+        {
+          "destination": "pyeongchang",
+          "destinationName": "평창 눈재 사냥터",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "icheon",
+      "name": "이천 도요지",
+      "atlasNode": "episode2-central-river",
+      "exits": [
+        {
+          "destination": "yeoju",
+          "destinationName": "여주 신륵 나루",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "yeoju",
+      "name": "여주 신륵 나루",
+      "atlasNode": "episode2-central-river",
+      "exits": [
+        {
+          "destination": "icheon",
+          "destinationName": "이천 도요지",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "cheongju",
+          "destinationName": "청주 상당 벌판",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "cheongju",
+      "name": "청주 상당 벌판",
+      "atlasNode": "episode2-central-river",
+      "exits": [
+        {
+          "destination": "yeoju",
+          "destinationName": "여주 신륵 나루",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "gongju",
+          "destinationName": "공주 금강진",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gongju",
+      "name": "공주 금강진",
+      "atlasNode": "episode2-central-river",
+      "exits": [
+        {
+          "destination": "cheongju",
+          "destinationName": "청주 상당 벌판",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "jemulpo",
+      "name": "제물포 월미 나루",
+      "atlasNode": "episode2-west-coast",
+      "exits": [
+        {
+          "destination": "namyang",
+          "destinationName": "남양 염초장",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "namyang",
+      "name": "남양 염초장",
+      "atlasNode": "episode2-west-coast",
+      "exits": [
+        {
+          "destination": "jemulpo",
+          "destinationName": "제물포 월미 나루",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "boryeong",
+          "destinationName": "보령 오천 수영",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "boryeong",
+      "name": "보령 오천 수영",
+      "atlasNode": "episode2-west-coast",
+      "exits": [
+        {
+          "destination": "namyang",
+          "destinationName": "남양 염초장",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "gunsan",
+          "destinationName": "군산 금강 하구",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "gunsan",
+      "name": "군산 금강 하구",
+      "atlasNode": "episode2-west-coast",
+      "exits": [
+        {
+          "destination": "boryeong",
+          "destinationName": "보령 오천 수영",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "namwon",
+      "name": "남원 광한 대숲",
+      "atlasNode": "episode2-honam-road",
+      "exits": [
+        {
+          "destination": "suncheon",
+          "destinationName": "순천만 갈대포",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "suncheon",
+      "name": "순천만 갈대포",
+      "atlasNode": "episode2-honam-road",
+      "exits": [
+        {
+          "destination": "namwon",
+          "destinationName": "남원 광한 대숲",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "mokpo",
+          "destinationName": "목포 유달진",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "mokpo",
+      "name": "목포 유달진",
+      "atlasNode": "episode2-honam-road",
+      "exits": [
+        {
+          "destination": "suncheon",
+          "destinationName": "순천만 갈대포",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "naju",
+          "destinationName": "나주 배꽃들",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "naju",
+      "name": "나주 배꽃들",
+      "atlasNode": "episode2-honam-road",
+      "exits": [
+        {
+          "destination": "mokpo",
+          "destinationName": "목포 유달진",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "sangju",
+      "name": "상주 낙동 역원",
+      "atlasNode": "episode2-yeongnam-road",
+      "exits": [
+        {
+          "destination": "daegu",
+          "destinationName": "대구 달성 약령장",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "daegu",
+      "name": "대구 달성 약령장",
+      "atlasNode": "episode2-yeongnam-road",
+      "exits": [
+        {
+          "destination": "sangju",
+          "destinationName": "상주 낙동 역원",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "jinju",
+          "destinationName": "진주 남강진",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "jinju",
+      "name": "진주 남강진",
+      "atlasNode": "episode2-yeongnam-road",
+      "exits": [
+        {
+          "destination": "daegu",
+          "destinationName": "대구 달성 약령장",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "tongyeong",
+          "destinationName": "통영 삼도수군진",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "tongyeong",
+      "name": "통영 삼도수군진",
+      "atlasNode": "episode2-yeongnam-road",
+      "exits": [
+        {
+          "destination": "jinju",
+          "destinationName": "진주 남강진",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "jurchenvillage",
+      "name": "여진 설원부락",
+      "atlasNode": "jurchen",
+      "exits": [
+        {
+          "destination": "changbaihunt",
+          "destinationName": "장백 자작나무 사냥터",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "manchufrontier",
+          "destinationName": "압록 국경 전선",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "changbaihunt",
+      "name": "장백 자작나무 사냥터",
+      "atlasNode": "jurchen",
+      "exits": [
+        {
+          "destination": "jurchenvillage",
+          "destinationName": "여진 설원부락",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "baeksanvillage",
+          "destinationName": "백산부 부족마을",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "baeksanvillage",
+      "name": "백산부 부족마을",
+      "atlasNode": "jurchen",
+      "exits": [
+        {
+          "destination": "changbaihunt",
+          "destinationName": "장백 자작나무 사냥터",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "songhuahunt",
+          "destinationName": "송화강 사슴벌 사냥터",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "songhuahunt",
+      "name": "송화강 사슴벌 사냥터",
+      "atlasNode": "jurchen",
+      "exits": [
+        {
+          "destination": "baeksanvillage",
+          "destinationName": "백산부 부족마을",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "songhuavillage",
+          "destinationName": "송화부 부족마을",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "songhuavillage",
+      "name": "송화부 부족마을",
+      "atlasNode": "jurchen",
+      "exits": [
+        {
+          "destination": "songhuahunt",
+          "destinationName": "송화강 사슴벌 사냥터",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "blackpinehunt",
+          "destinationName": "흑송령 산짐승 사냥터",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "blackpinehunt",
+      "name": "흑송령 산짐승 사냥터",
+      "atlasNode": "jurchen",
+      "exits": [
+        {
+          "destination": "songhuavillage",
+          "destinationName": "송화부 부족마을",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "heuksuvillage",
+          "destinationName": "흑수부 부족마을·회맹장",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "heuksuvillage",
+      "name": "흑수부 부족마을·회맹장",
+      "atlasNode": "jurchen",
+      "exits": [
+        {
+          "destination": "blackpinehunt",
+          "destinationName": "흑송령 산짐승 사냥터",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "jurchenvillage",
+          "destinationName": "여진 설원부락",
+          "edge": "north",
+          "mode": "portal",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "manchufrontier",
+      "name": "압록 국경 전선",
+      "atlasNode": "yalu",
+      "exits": [
+        {
+          "destination": "jurchenvillage",
+          "destinationName": "여진 설원부락",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "pyongyangouter",
+          "destinationName": "평양성 북곽",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "pyongyangouter",
+      "name": "평양성 북곽",
+      "atlasNode": "pyongyang",
+      "exits": [
+        {
+          "destination": "manchufrontier",
+          "destinationName": "압록 국경 전선",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "pyongyanggate",
+          "destinationName": "평양성 대동문",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "pyongyanggate",
+      "name": "평양성 대동문",
+      "atlasNode": "pyongyang",
+      "exits": [
+        {
+          "destination": "pyongyangouter",
+          "destinationName": "평양성 북곽",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "pyongyanginner",
+          "destinationName": "평양성 내성",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "pyongyanginner",
+      "name": "평양성 내성",
+      "atlasNode": "pyongyang",
+      "exits": [
+        {
+          "destination": "pyongyanggate",
+          "destinationName": "평양성 대동문",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "gyeongbokgate",
+          "destinationName": "경복궁 광화문",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "namhansanseong",
+      "name": "남한산성 최종 방어선",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "gyeongbokinner",
+          "destinationName": "경복궁 사정전·강녕전",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "ganghwado",
+      "name": "강화도 최종 방어선",
+      "atlasNode": "hanseong",
+      "exits": [
+        {
+          "destination": "gyeongbokinner",
+          "destinationName": "경복궁 사정전·강녕전",
+          "edge": "south",
+          "mode": "ferry",
+          "requiresClear": true
+        }
+      ]
+    },
+    {
+      "id": "minepass",
+      "name": "흑철 폐광고개",
+      "atlasNode": "yeongwol",
+      "exits": [
+        {
+          "destination": "dungeon",
+          "destinationName": "무영광산 지하",
+          "edge": "north",
+          "mode": "portal",
+          "requiresClear": false
+        },
+        {
+          "destination": "village",
+          "destinationName": "달빛고을",
+          "edge": "west",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "moonfield",
+      "name": "월하 그림자들",
+      "atlasNode": "yeongwol",
+      "exits": [
+        {
+          "destination": "village",
+          "destinationName": "달빛고을",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "dungeon",
+      "name": "무영광산 지하",
+      "atlasNode": null,
+      "exits": [
+        {
+          "destination": "minepass",
+          "destinationName": "흑철 폐광고개",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "ulleungdo",
+      "name": "울릉도 관청 감옥터",
+      "atlasNode": "ulleung",
+      "exits": [
+        {
+          "destination": "ulleungridge",
+          "destinationName": "울릉 바람고개",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "ulleungvillage",
+          "destinationName": "울릉 관아",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "ulleungcoast",
+      "name": "울릉 해안 해송숲",
+      "atlasNode": "ulleung",
+      "exits": [
+        {
+          "destination": "ulleungmeadow",
+          "destinationName": "울릉 억새초원",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "ulleungmeadow",
+      "name": "울릉 억새초원",
+      "atlasNode": "ulleung",
+      "exits": [
+        {
+          "destination": "ulleungcoast",
+          "destinationName": "울릉 해안 해송숲",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "ulleunghunt",
+          "destinationName": "약탈당한 울릉 해송마을",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "ulleunghunt",
+      "name": "약탈당한 울릉 해송마을",
+      "atlasNode": "ulleung",
+      "exits": [
+        {
+          "destination": "ulleungmeadow",
+          "destinationName": "울릉 억새초원",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "ulleungridge",
+          "destinationName": "울릉 바람고개",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "ulleungridge",
+      "name": "울릉 바람고개",
+      "atlasNode": "ulleung",
+      "exits": [
+        {
+          "destination": "ulleunghunt",
+          "destinationName": "약탈당한 울릉 해송마을",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        },
+        {
+          "destination": "ulleungdo",
+          "destinationName": "울릉도 관청 감옥터",
+          "edge": "south",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "ulleungvillage",
+      "name": "울릉 관아",
+      "atlasNode": "ulleung",
+      "exits": [
+        {
+          "destination": "ulleungdo",
+          "destinationName": "울릉도 관청 감옥터",
+          "edge": "north",
+          "mode": "road",
+          "requiresClear": false
+        }
+      ]
+    }
+  ]
+}

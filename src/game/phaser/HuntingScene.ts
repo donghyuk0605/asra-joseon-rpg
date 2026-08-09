@@ -5860,6 +5860,19 @@ export class HuntingScene extends Phaser.Scene {
             return;
           }
         }
+        if (requiresClear
+          && isRoyalRefugeRouteId(region)
+          && !this.simulation.getRoyalRefugeState().finalDefenseComplete) {
+          const progress = this.simulation.getRoyalRefugeBattleProgress();
+          this.alertMarker(
+            this.simulation.player.x,
+            this.simulation.player.y - 122,
+            `왕실 후퇴로 봉쇄 · 남은 추격군 ${Math.max(0, progress.total - progress.defeated)}명`,
+            2000,
+          );
+          this.simulation.moveTo({ x: origin.x + 768, y: origin.y + 810 });
+          return;
+        }
         const continuousTravel = isContinuousWorldNeighbor(region, destination);
         const performTravel = () => {
           const previousRegion = this.simulation.region;

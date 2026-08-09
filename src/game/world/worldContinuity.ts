@@ -154,6 +154,26 @@ export const WORLD_TERRAIN_SEAMS: readonly WorldTerrainSeam[] = [
     roadWidth: 260,
     bandSize: 390,
   }),
+  vertical('wonju', 'yeongwolhq', {
+    kind: 'forest-pass',
+    terrainFrom: 0x5f6857,
+    terrainTo: 0x5c5650,
+    roadColor: 0x978263,
+    shoulderColor: 0x424a3e,
+    roadWidth: 258,
+    bandSize: 430,
+  }),
+  horizontal('wonju', 'gangneung', {
+    kind: 'forest-pass',
+    terrainFrom: 0x5f6857,
+    terrainTo: 0x536c69,
+    roadColor: 0x958166,
+    shoulderColor: 0x3d514b,
+    roadWidth: 246,
+    fromLane: 500,
+    toLane: 500,
+    bandSize: 430,
+  }),
 
   // Jeonju and the southern invasion road.
   vertical('jeonju', 'jeonjugate', {
@@ -271,6 +291,10 @@ export const WORLD_TERRAIN_SEAMS: readonly WorldTerrainSeam[] = [
   vertical('chungju', 'andong', {
     kind: 'forest-pass', terrainFrom: 0x687067, terrainTo: 0x6d6858,
     roadColor: 0x9b835f, shoulderColor: 0x485043, roadWidth: 246,
+  }),
+  vertical('haeju', 'gaeseong', {
+    kind: 'coast-road', terrainFrom: 0x65705e, terrainTo: 0x746856,
+    roadColor: 0x9c876a, shoulderColor: 0x46554e, roadWidth: 252, bandSize: 440,
   }),
 
   // Japan: inland roads, castle approaches and visibly different sea links.
@@ -450,7 +474,7 @@ const cameraGroup = (
 const CONTINUITY_CAMERA_GROUPS = [
   cameraGroup('western-mainland', [
     'jeonjufield', 'yeongwol', 'mistwood', 'village', 'minepass', 'moonfield',
-    'yeongwolhq', 'jeonjugate', 'jeonju',
+    'yeongwolhq', 'wonju', 'gangneung', 'jeonjugate', 'jeonju',
   ]),
   cameraGroup('southern-front', ['tangeumdae', 'busanjin']),
   cameraGroup('gyeongbok-palace', ['gyeongbokinner', 'gyeongbokcourt', 'gyeongbokgate']),
@@ -460,7 +484,7 @@ const CONTINUITY_CAMERA_GROUPS = [
     'pyongyangouter', 'pyongyanggate', 'pyongyanginner',
   ]),
   cameraGroup('joseon-post-road', [
-    'gaeseong', 'changdeokgung', 'hanseongmarket', 'hanseongsouth',
+    'haeju', 'gaeseong', 'changdeokgung', 'hanseongmarket', 'hanseongsouth',
     'suwon', 'chungju', 'andong',
   ]),
   cameraGroup('japan-tsushima', ['izuhara', 'tsushimahunt']),

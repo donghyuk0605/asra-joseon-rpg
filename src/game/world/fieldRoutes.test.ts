@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MAP_HEIGHT, MAP_WIDTH } from './layout';
+import { GameSimulation } from '../simulation/GameSimulation';
+import { MAP_HEIGHT, MAP_WIDTH, REGION_ORIGINS } from './layout';
 import { REGIONS } from './regions';
 import {
   CAMPAIGN_FIELD_ROUTES,
@@ -56,6 +57,13 @@ describe('field route guidance', () => {
     expect(fieldExitGuidesForRegion('izuhara')).toContainEqual(
       expect.objectContaining({ destination: 'busanjin', mode: 'portal', requiresClear: true }),
     );
+    expect(fieldExitGuidesForRegion('busanjin')).toEqual(expect.arrayContaining([
+      expect.objectContaining({ destination: 'jeonju', mode: 'portal' }),
+      expect.objectContaining({ destination: 'geoje', edge: 'east', mode: 'ferry' }),
+    ]));
+    expect(fieldExitGuidesForRegion('geoje')).toContainEqual(
+      expect.objectContaining({ destination: 'busanjin', edge: 'east', mode: 'ferry' }),
+    );
   });
 
   it('uses authored city gates ahead of generic terrain seams', () => {
@@ -65,5 +73,53 @@ describe('field route guidance', () => {
       destination: 'changdeokgung',
       label: '창덕궁 돈화문',
     }));
+  });
+
+  it('shows a usable local exit on every one of the 81 authored regions', () => {
+    const regionsWithoutExit = Object.keys(REGIONS).filter((region) => (
+      fieldExitGuidesForRegion(region as keyof typeof REGIONS).length === 0
+    ));
+    expect(Object.keys(REGIONS)).toHaveLength(81);
+    expect(regionsWithoutExit).toEqual([]);
+  });
+
+  it('guides dungeon returns and final-defense refuge returns explicitly', () => {
+    expect(fieldExitGuidesForRegion('minepass')).toContainEqual(expect.objectContaining({
+      destination: 'dungeon',
+      mode: 'portal',
+      label: '무영광산 입구',
+    }));
+    expect(fieldExitGuidesForRegion('dungeon')).toContainEqual(expect.objectContaining({
+      destination: 'minepass',
+      mode: 'portal',
+      label: '지상 귀환 계단',
+    }));
+    expect(fieldExitGuidesForRegion('namhansanseong')).toContainEqual(expect.objectContaining({
+      destination: 'gyeongbokinner',
+      requiresClear: true,
+      mode: 'portal',
+    }));
+    expect(fieldExitGuidesForRegion('ganghwado')).toContainEqual(expect.objectContaining({
+      destination: 'gyeongbokinner',
+      requiresClear: true,
+      mode: 'ferry',
+    }));
+  });
+
+  it('keeps the new Busan and Geoje ferry signs on reachable ground', () => {
+    for (const region of ['busanjin', 'geoje'] as const) {
+      const game = new GameSimulation(region);
+      const collision = game as unknown as {
+        isRoutePointClear: (point: { x: number; y: number }, bodyRadius: number) => boolean;
+      };
+      const origin = REGION_ORIGINS[region];
+      const ferry = fieldExitGuidesForRegion(region)
+        .find((exit) => exit.mode === 'ferry' && ['geoje', 'busanjin'].includes(exit.destination));
+      expect(ferry, region).toBeDefined();
+      expect(collision.isRoutePointClear({
+        x: origin.x + ferry!.x,
+        y: origin.y + ferry!.y,
+      }, 20), region).toBe(true);
+    }
   });
 });
