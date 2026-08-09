@@ -692,6 +692,7 @@ export class Hud {
   private lastItemTap: { instanceId: string; at: number } | null = null;
   private skillLoadoutKey: string | null = null;
   private minimapExitRegion: RegionId | null = null;
+  private fieldIntelCollapsed = false;
   private targetStatusSignature = '';
   private targetIntelSignature = '';
   private contextInteractionSignature = '';
@@ -720,6 +721,11 @@ export class Hud {
       if (target.closest('[data-action="context-interact"]')) {
         event.stopPropagation();
         this.actions.onContextInteract();
+        return;
+      }
+      if (target.closest('[data-action="field-intel-toggle"]')) {
+        event.stopPropagation();
+        this.toggleFieldIntel();
         return;
       }
       if (target.closest('[data-action="skill-tree"]')) {
@@ -1019,6 +1025,18 @@ export class Hud {
     if (shouldOpen) {
       window.requestAnimationFrame(() => this.root.querySelector<HTMLButtonElement>('[data-action="pause-resume"]')?.focus());
     }
+  }
+
+  private toggleFieldIntel(force?: boolean): void {
+    this.fieldIntelCollapsed = force ?? !this.fieldIntelCollapsed;
+    const panel = this.root.querySelector<HTMLElement>('.field-intel');
+    const button = this.root.querySelector<HTMLButtonElement>('[data-action="field-intel-toggle"]');
+    panel?.classList.toggle('is-collapsed', this.fieldIntelCollapsed);
+    panel?.setAttribute('data-collapsed', String(this.fieldIntelCollapsed));
+    button?.setAttribute('aria-expanded', String(!this.fieldIntelCollapsed));
+    button?.setAttribute('aria-label', this.fieldIntelCollapsed ? '전장 정보 펼치기' : '전장 정보 접기');
+    const label = button?.querySelector<HTMLElement>('span');
+    if (label) label.textContent = this.fieldIntelCollapsed ? '펼치기' : '접기';
   }
 
   toggleInventory(force?: boolean): void {
@@ -3180,21 +3198,6 @@ export class Hud {
       <button class="system-menu-button" data-action="pause-menu" aria-label="게임 메뉴 열기" aria-controls="pause-panel" aria-expanded="false">
         <i></i><i></i><i></i><span>메뉴</span>
       </button>
-      <aside class="field-minimap" aria-label="현재 지역 미니맵">
-        <header><span data-id="minimap-name">월영 솔고개</span><b>N</b></header>
-        <div class="minimap-surface" data-id="minimap-surface">
-          <span class="minimap-exits" data-id="minimap-exits" aria-label="지역 출구"></span>
-          <i class="minimap-player" aria-label="현재 위치"></i>
-          <em class="minimap-target" data-id="minimap-target" aria-label="선택한 적"></em>
-          <span class="minimap-vignette"></span>
-        </div>
-        <footer><span data-id="minimap-exit-summary">가까운 출구 확인</span><b data-id="minimap-coords">765, 680</b></footer>
-      </aside>
-      <section class="mobile-route-guide" data-id="mobile-route-guide" aria-label="가까운 지역 출구">
-        <i data-id="mobile-route-arrow">↓</i>
-        <span><small>가까운 출구</small><b data-id="mobile-route-name">달빛고을</b></span>
-        <em data-id="mobile-route-distance">32보</em>
-      </section>
 
       <button class="context-interaction" data-id="context-interaction" data-action="context-interact" data-kind="npc" aria-hidden="true" disabled>
         <kbd>F</kbd>
@@ -3223,12 +3226,34 @@ export class Hud {
         <small data-id="target-intent">선택 대상 · 자동 추적 중</small>
       </section>
 
-      <section class="quest-chip ornate-panel" data-action="story-journal" role="button" tabindex="0" aria-label="이야기 기록 열기">
-        <span class="quest-mark" aria-label="진행 중인 퀘스트"><img src="/assets/ui/joseon-quest-order-v1.png" alt=""></span>
-        <div><span class="eyebrow" data-id="quest-eyebrow">관아 현상수배</span><strong data-id="quest-title">솔고개 요물 토벌</strong>
-          <div class="quest-progress"><i data-id="quest-fill"></i></div>
-          <small><span data-id="kill-count">0 / 8</span> · <span data-id="quest-reward">보상 엽전 240</span></small>
-        </div>
+      <aside class="field-intel" aria-label="전장 정보" data-collapsed="false">
+        <header class="field-intel-heading">
+          <span><i aria-hidden="true">陣</i><b>전장 정보</b><small>FIELD INTEL</small></span>
+          <button data-action="field-intel-toggle" aria-label="전장 정보 접기" aria-expanded="true"><i aria-hidden="true"></i><span>접기</span></button>
+        </header>
+        <section class="quest-chip ornate-panel" data-action="story-journal" role="button" tabindex="0" aria-label="이야기 기록 열기">
+          <span class="quest-mark" aria-label="진행 중인 퀘스트"><img src="/assets/ui/joseon-quest-order-v1.png" alt=""></span>
+          <div><span class="eyebrow" data-id="quest-eyebrow">관아 현상수배</span><strong data-id="quest-title">솔고개 요물 토벌</strong>
+            <div class="quest-progress"><i data-id="quest-fill"></i></div>
+            <small><span data-id="kill-count">0 / 8</span> · <span data-id="quest-reward">보상 엽전 240</span></small>
+          </div>
+        </section>
+        <aside class="field-minimap" aria-label="현재 지역 미니맵">
+          <header><span data-id="minimap-name">월영 솔고개</span><b>N</b></header>
+          <div class="minimap-surface" data-id="minimap-surface">
+            <span class="minimap-exits" data-id="minimap-exits" aria-label="지역 출구"></span>
+            <i class="minimap-player" aria-label="현재 위치"></i>
+            <em class="minimap-target" data-id="minimap-target" aria-label="선택한 적"></em>
+            <span class="minimap-vignette"></span>
+          </div>
+          <footer><span data-id="minimap-exit-summary">가까운 출구 확인</span><b data-id="minimap-coords">765, 680</b></footer>
+        </aside>
+      </aside>
+
+      <section class="mobile-route-guide" data-id="mobile-route-guide" aria-label="가까운 지역 출구">
+        <i data-id="mobile-route-arrow">↓</i>
+        <span><small>가까운 출구</small><b data-id="mobile-route-name">달빛고을</b></span>
+        <em data-id="mobile-route-distance">32보</em>
       </section>
 
       <section class="starter-weapon-tutorial" aria-live="polite" aria-hidden="true">
@@ -3347,11 +3372,13 @@ export class Hud {
           </div>
           <div class="bottom-xp" aria-label="수련 경험치"><i data-id="xp-bottom-fill" role="progressbar"></i><b data-id="xp-bottom-label">수련 64 / 160</b></div>
         </div>
+      </section>
+      <nav class="field-tools" aria-label="모험 도구">
         <button class="menu-seal inventory-seal" data-action="inventory" aria-label="행낭 열기" aria-controls="inventory-panel" aria-expanded="false"><span class="ui-icon ui-icon-bag" aria-hidden="true"></span><b>행낭</b><kbd>I</kbd></button>
         <button class="menu-seal skill-seal" data-action="skill-tree" aria-label="무공 수련도 열기" aria-controls="skill-tree-panel" aria-expanded="false"><span class="skill-icon skill-whirlwind"></span><b>무공</b><kbd>K</kbd></button>
         <button class="menu-seal story-seal" data-action="story-journal" aria-label="복수록 열기" aria-controls="story-journal-panel" aria-expanded="false"><span class="story-seal-icon"><img src="/assets/ui/joseon-quest-order-v1.png" alt=""></span><b>기록</b><kbd>J</kbd></button>
         <button class="menu-seal map-seal" data-action="world-map" aria-label="천하 대도시 지도 열기" aria-controls="world-map-panel" aria-expanded="false"><span class="map-seal-icon">地</span><b>지도</b><kbd>M</kbd></button>
-      </section>
+      </nav>
 
       <button class="world-map-backdrop" data-action="world-map-backdrop" aria-label="전체 지도 닫기" aria-hidden="true" tabindex="-1"></button>
       <section class="world-map-panel" id="world-map-panel" role="dialog" aria-modal="true" aria-labelledby="world-map-title" aria-hidden="true" inert>
@@ -3586,7 +3613,7 @@ export class Hud {
       </section>
 
       <button class="skill-tree-backdrop" data-action="skill-tree-backdrop" aria-label="무공 수련도 닫기" aria-hidden="true" tabindex="-1"></button>
-      <section class="skill-tree-panel" id="skill-tree-panel" role="dialog" aria-modal="false" aria-labelledby="skill-tree-title" aria-hidden="true" inert>
+      <section class="skill-tree-panel" id="skill-tree-panel" role="dialog" aria-modal="true" aria-labelledby="skill-tree-title" aria-hidden="true" inert>
         <header><div><span>MOONSHADOW MARTIAL ARTS</span><strong id="skill-tree-title">월영 무공 수련도</strong></div><em>사용 가능 점수 <b data-id="skill-points">2</b></em><button data-action="skill-tree-close" aria-label="닫기">×</button></header>
         <div class="skill-tree-intro"><b>배우는 길이 다른 무공</b><span>기초 수련 · 장인 전수 · 비급 습득 · 사건 각성으로 익힙니다. Q · W · E · R로 발동합니다.</span><div class="skill-tree-legend" aria-label="무공 노드 상태"><em><i></i>수련 가능</em><em><i></i>습득 완료</em><em><i></i>선행 필요</em><strong>기초 → 전개 → 절기 → 비전</strong></div></div>
         <div class="skill-tree-scroll">
