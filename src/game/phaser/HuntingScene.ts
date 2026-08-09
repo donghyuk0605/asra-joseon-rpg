@@ -127,6 +127,14 @@ import { BETA_ROADSIDE_PROP_PLACEMENTS } from '../world/betaRoadsideProps';
 import { createExtendedRegionMotion } from './extendedRegionMotion';
 import { EPISODE2_REGION_LAYOUTS, isEpisode2Region } from '../world/episode2Regions';
 import { createEpisode2RegionWorld } from './episode2RegionMotion';
+import {
+  SIEGE_MACHINE_SITES,
+  SIEGE_RUIN_SITES,
+  siegeDamageStage,
+  siegeMachineFrame,
+  siegeRuinFrame,
+  type SiegeMachineKind,
+} from '../world/siegePresentation';
 import { BOSS_CATALOG, bossForFloor } from '../bosses/catalog';
 import type { BossId, BossState } from '../bosses/types';
 import {
@@ -179,11 +187,29 @@ type BossView = {
 };
 
 type CorpseView = {
+  entityId: string;
+  entityKind: 'monster' | 'boss';
   root: Phaser.GameObjects.Container;
   sprite: Phaser.GameObjects.Sprite;
   shadow: Phaser.GameObjects.Ellipse;
   remainingMs: number;
   fading: boolean;
+};
+
+type SiegeMachineView = {
+  siteId: string;
+  region: RegionId;
+  kind: SiegeMachineKind;
+  sprite: Phaser.GameObjects.Sprite;
+  phaseOffset: number;
+};
+
+type SiegeRuinView = {
+  siteId: string;
+  region: RegionId;
+  kind: 'wall' | 'barricade' | 'house';
+  backfill: Phaser.GameObjects.Ellipse;
+  sprite: Phaser.GameObjects.Sprite;
 };
 
 type GroundItemView = {
@@ -795,6 +821,8 @@ export class HuntingScene extends Phaser.Scene {
   private followerViews = new Map<string, FollowerView>();
   private bossView: BossView | null = null;
   private corpseViews: CorpseView[] = [];
+  private siegeMachineViews: SiegeMachineView[] = [];
+  private siegeRuinViews: SiegeRuinView[] = [];
   private groundItemViews = new Map<string, GroundItemView>();
   private remotePlayerViews = new Map<string, RemotePlayerView>();
   private onlineRoster: OnlinePresence[] = [];
@@ -1666,6 +1694,11 @@ export class HuntingScene extends Phaser.Scene {
       frameHeight: 512,
       endFrame: 5,
     });
+    this.load.spritesheet(ASSETS.props.siegeDestruction.key, ASSETS.props.siegeDestruction.path, {
+      frameWidth: 512,
+      frameHeight: 512,
+      endFrame: 7,
+    });
     this.load.image(ASSETS.props.episode2WaterwheelWheel.key, ASSETS.props.episode2WaterwheelWheel.path);
     for (const terrain of Object.values(ASSETS.episode2TerrainBases)) {
       this.load.image(terrain.key, terrain.path);
@@ -1942,6 +1975,7 @@ export class HuntingScene extends Phaser.Scene {
     this.createJoseonTownWorlds();
     this.createCampaignWorld();
     this.createFrontierCampProps();
+    this.createSiegePresentation();
     this.time.delayedCall(1800, () => this.loadBossAssetsInBackground());
     this.createVillage();
     this.createBetaRoadsideProps();
@@ -2372,6 +2406,7 @@ export class HuntingScene extends Phaser.Scene {
       this.syncMonsters();
       this.syncFollowers();
       this.syncVillageNpcs(heavyRenderDelta);
+      this.syncSiegePresentation();
     }
     this.syncBoss();
     this.syncGroundItems();
@@ -4739,6 +4774,122 @@ export class HuntingScene extends Phaser.Scene {
       { left: 650, right: 886, top: 690, front: 868 },
       { left: 886, right: 1536, top: 690 },
     ]);
+  }
+
+  private createSiegePresentation(): void {
+    this.game.canvas.dataset.siegeAtlas = this.textures.exists(ASSETS.props.siegeDestruction.key)
+      ? `${ASSETS.props.siegeDestruction.key}:8`
+      : 'missing';
+    this.siegeMachineViews = SIEGE_MACHINE_SITES.map((site, index) => {
+      const origin = REGION_ORIGINS[site.region];
+      const sprite = this.add.sprite(
+        origin.x + site.x,
+        origin.y + site.y,
+        ASSETS.props.siegeDestruction.key,
+        siegeMachineFrame(site.kind, false),
+      )
+        .setOrigin(0.5, 0.97)
+        .setScale(site.scale)
+        .setFlipX(Boolean(site.flipX))
+        .setDepth(origin.y + site.y + 5)
+        .setVisible(false)
+        .setName(`siege-machine-${site.id}`);
+      sprite.setData('siegeSiteId', site.id).setData('siegeMachineKind', site.kind);
+      return {
+        siteId: site.id,
+        region: site.region,
+        kind: site.kind,
+        sprite,
+        phaseOffset: index * 173,
+      };
+    });
+    this.siegeRuinViews = SIEGE_RUIN_SITES.map((site) => {
+      const origin = REGION_ORIGINS[site.region];
+      const depth = origin.y + site.y + 220;
+      const backfill = this.add.ellipse(
+        origin.x + site.x,
+        origin.y + site.y - 48 * site.scale,
+        220 * site.scale,
+        154 * site.scale,
+        0x11110f,
+        0.88,
+      ).setDepth(depth - 1).setVisible(false).setName(`siege-breach-shadow-${site.id}`);
+      const sprite = this.add.sprite(
+        origin.x + site.x,
+        origin.y + site.y,
+        ASSETS.props.siegeDestruction.key,
+        4,
+      )
+        .setOrigin(0.5, 0.97)
+        .setScale(site.scale)
+        .setFlipX(Boolean(site.flipX))
+        .setDepth(depth)
+        .setVisible(false)
+        .setName(`siege-ruin-${site.id}`);
+      sprite.setData('siegeSiteId', site.id).setData('siegeRuinKind', site.kind);
+      return { siteId: site.id, region: site.region, kind: site.kind, backfill, sprite };
+    });
+    this.syncSiegePresentation();
+  }
+
+  private currentSiegeDamageStage(): 0 | 1 | 2 | 3 {
+    if (import.meta.env.DEV) {
+      const qaStage = Number(new URLSearchParams(window.location.search).get('siegeqa'));
+      if (Number.isInteger(qaStage) && qaStage >= 0 && qaStage <= 3) return qaStage as 0 | 1 | 2 | 3;
+    }
+    const region = this.simulation.region;
+    if (region === 'busanjin') return 2;
+    if (region === 'pyongyangouter' || region === 'pyongyanggate' || region === 'pyongyanginner') {
+      const progress = this.simulation.getPyongyangBattleProgress(region);
+      return siegeDamageStage(progress.defeated, progress.total, progress.cleared);
+    }
+    if (region === 'gyeongbokgate' || region === 'gyeongbokcourt' || region === 'gyeongbokinner') {
+      const progress = this.simulation.getGwanghaeCoupStageProgress(region);
+      return progress ? siegeDamageStage(progress.defeated, progress.total, progress.complete) : 0;
+    }
+    if (region === 'namhansanseong' || region === 'ganghwado') {
+      const progress = this.simulation.getRoyalRefugeBattleProgress();
+      if (progress.routeId !== region) return 0;
+      return siegeDamageStage(progress.defeated, progress.total, progress.cleared);
+    }
+    return 0;
+  }
+
+  private syncSiegePresentation(): void {
+    if (this.siegeMachineViews.length === 0 && this.siegeRuinViews.length === 0) return;
+    const region = this.simulation.region;
+    const stage = this.currentSiegeDamageStage();
+    let visibleMachines = 0;
+    let visibleRuins = 0;
+    const visibleMachineFrames: number[] = [];
+    for (const view of this.siegeMachineViews) {
+      const visible = view.region === region && stage < 3;
+      view.sprite.setVisible(visible);
+      if (!visible) continue;
+      visibleMachines += 1;
+      const impactFrame = this.gameSettings.reducedMotion
+        ? stage >= 2
+        : Math.floor((this.time.now + view.phaseOffset) / 720) % 2 === 1;
+      const frame = siegeMachineFrame(view.kind, impactFrame);
+      view.sprite.setFrame(frame);
+      visibleMachineFrames.push(frame);
+      view.sprite.setAlpha(stage === 2 ? 0.94 : 1);
+    }
+    for (const view of this.siegeRuinViews) {
+      const frame = view.region === region ? siegeRuinFrame(view.kind, stage) : null;
+      const visible = frame !== null;
+      view.sprite.setVisible(visible);
+      view.backfill.setVisible(visible && frame === 5);
+      if (!visible || frame === null) continue;
+      visibleRuins += 1;
+      view.sprite.setFrame(frame);
+      if (frame === 6 && !this.gameSettings.reducedMotion) {
+        view.sprite.setAlpha(0.92 + Math.sin(this.time.now * 0.006 + visibleRuins) * 0.08);
+      } else {
+        view.sprite.setAlpha(1);
+      }
+    }
+    this.game.canvas.dataset.siegeVisual = `${region}:stage-${stage}:machines-${visibleMachines}:frames-${visibleMachineFrames.join('.') || 'none'}:ruins-${visibleRuins}`;
   }
 
   private createJurchenVillage(): void {
@@ -10325,6 +10476,9 @@ export class HuntingScene extends Phaser.Scene {
       corpse.root.destroy(true);
       this.corpseViews.splice(index, 1);
     }
+    const monsterCorpses = this.corpseViews.filter((corpse) => corpse.entityKind === 'monster').length;
+    const bossCorpses = this.corpseViews.length - monsterCorpses;
+    this.game.canvas.dataset.corpseVisual = `monsters-${monsterCorpses}:bosses-${bossCorpses}`;
   }
 
   private createGroundItemView(drop: GroundDrop): GroundItemView {
@@ -10649,11 +10803,7 @@ export class HuntingScene extends Phaser.Scene {
       this.cameras.main.flash(320, 112, 16, 23, false);
     }
     if (event.type === 'boss-killed') {
-      if (this.bossView) {
-        this.bossView.hitZone.disableInteractive();
-        this.tweens.add({ targets: this.bossView.sprite, angle: 78, y: 12, alpha: 0.25, duration: 620, ease: 'Cubic.easeIn' });
-        this.tweens.add({ targets: this.bossView.shadow, alpha: 0.14, scaleX: 1.4, duration: 620 });
-      }
+      if (this.simulation.boss && this.bossView) this.showBossCorpse(this.simulation.boss, this.bossView);
       this.alertMarker(this.simulation.boss?.x ?? this.simulation.player.x, (this.simulation.boss?.y ?? this.simulation.player.y) - 128, `${event.floor}층 수문장 격파`);
     }
     if (event.type === 'dungeon-stair-lock-changed') this.renderDungeonFloor();
@@ -11424,6 +11574,11 @@ export class HuntingScene extends Phaser.Scene {
       this.syncRoyalRefugeGates(false);
     }
     if (event.type === 'dungeon-floor-changed') {
+      for (const corpse of this.corpseViews) {
+        this.tweens.killTweensOf(corpse.root);
+        corpse.root.destroy(true);
+      }
+      this.corpseViews = [];
       this.renderDungeonFloor();
       const compact = this.scale.gameSize.width <= 600;
       this.regionLabel
@@ -11818,7 +11973,30 @@ export class HuntingScene extends Phaser.Scene {
     });
   }
 
+  private removeCorpse(entityId: string): void {
+    for (let index = this.corpseViews.length - 1; index >= 0; index -= 1) {
+      const corpse = this.corpseViews[index];
+      if (corpse.entityId !== entityId) continue;
+      this.tweens.killTweensOf(corpse.root);
+      this.tweens.killTweensOf(corpse.sprite);
+      this.tweens.killTweensOf(corpse.shadow);
+      corpse.root.destroy(true);
+      this.corpseViews.splice(index, 1);
+    }
+  }
+
+  private makeCorpseCapacity(): void {
+    if (this.corpseViews.length < MAX_MONSTER_CORPSES) return;
+    const oldest = this.corpseViews.shift();
+    if (!oldest) return;
+    this.tweens.killTweensOf(oldest.root);
+    this.tweens.killTweensOf(oldest.sprite);
+    this.tweens.killTweensOf(oldest.shadow);
+    oldest.root.destroy(true);
+  }
+
   private showMonsterCorpse(monster: MonsterState, view: MonsterView): void {
+    this.removeCorpse(monster.id);
     const pose = MONSTER_CORPSE_POSE[monster.kind];
     const fallbackSign = Number(monster.id.split('-')[1]) % 2 === 0 ? 1 : -1;
     const fallSign = Math.abs(monster.knockback.x) > 1 ? Math.sign(monster.knockback.x) : fallbackSign;
@@ -11834,15 +12012,7 @@ export class HuntingScene extends Phaser.Scene {
     view.hitZone.setVisible(false);
     if (view.hitZone.input) view.hitZone.input.enabled = false;
 
-    if (this.corpseViews.length >= MAX_MONSTER_CORPSES) {
-      const oldest = this.corpseViews.shift();
-      if (oldest) {
-        this.tweens.killTweensOf(oldest.root);
-        this.tweens.killTweensOf(oldest.sprite);
-        this.tweens.killTweensOf(oldest.shadow);
-        oldest.root.destroy(true);
-      }
-    }
+    this.makeCorpseCapacity();
 
     const stain = this.add.ellipse(0, 7, isLowQuadrupedMonster(monster.kind) ? 72 : 58, isLowQuadrupedMonster(monster.kind) ? 22 : 18, 0x361916, 0.14);
     const shadow = this.add.ellipse(0, 4, isLowQuadrupedMonster(monster.kind) ? 78 : 62, isLowQuadrupedMonster(monster.kind) ? 24 : 20, 0x090907, 0.34);
@@ -11866,6 +12036,8 @@ export class HuntingScene extends Phaser.Scene {
       .setFlipX(isLowQuadrupedMonster(monster.kind) ? direction.flip : fallSign < 0);
     const corpseRoot = this.add.container(monster.x, monster.y, [stain, shadow, corpseSprite]).setDepth(monster.y - 1);
     const corpse: CorpseView = {
+      entityId: monster.id,
+      entityKind: 'monster',
       root: corpseRoot,
       sprite: corpseSprite,
       shadow,
@@ -11920,7 +12092,49 @@ export class HuntingScene extends Phaser.Scene {
     this.createDust(monster.x - fallSign * 8, monster.y + 1);
   }
 
+  private showBossCorpse(boss: BossState, view: BossView): void {
+    this.removeCorpse(boss.id);
+    this.makeCorpseCapacity();
+    const direction = directionToFrame(boss.facing);
+    const definition = BOSS_CATALOG[boss.bossId];
+    const fallSign = Math.cos(boss.facing) >= 0 ? 1 : -1;
+    const stain = this.add.ellipse(0, 9, 118, 34, 0x301513, 0.2);
+    const shadow = this.add.ellipse(0, 7, 126, 38, 0x080605, 0.42);
+    const corpseSprite = this.add.sprite(0, 0, definition.textureKey, direction.row * 8 + 7)
+      .setOrigin(0.5, 0.97)
+      .setScale(view.baseScale)
+      .setFlipX(direction.flip)
+      .setTint(0xa49b8e);
+    const root = this.add.container(boss.x, boss.y, [stain, shadow, corpseSprite]).setDepth(boss.y + 1);
+    this.corpseViews.push({
+      entityId: boss.id,
+      entityKind: 'boss',
+      root,
+      sprite: corpseSprite,
+      shadow,
+      remainingMs: 45_000,
+      fading: false,
+    });
+    view.hitZone.disableInteractive().setVisible(false);
+    view.root.setVisible(false);
+    this.tweens.add({
+      targets: corpseSprite,
+      x: fallSign * 4,
+      y: 12,
+      angle: fallSign * 76,
+      scaleX: view.baseScale * 1.08,
+      scaleY: view.baseScale * 0.88,
+      alpha: 0.9,
+      duration: 430,
+      ease: 'Cubic.easeIn',
+      onComplete: () => corpseSprite.setTint(0x756e66),
+    });
+    this.tweens.add({ targets: shadow, alpha: 0.2, scaleX: 1.35, scaleY: 0.6, duration: 420 });
+    this.createDust(boss.x - fallSign * 12, boss.y + 3);
+  }
+
   private resetMonsterView(monster: MonsterState, view: MonsterView): void {
+    this.removeCorpse(monster.id);
     const direction = directionToFrame(monster.facing);
     this.tweens.killTweensOf(view.sprite);
     this.tweens.killTweensOf(view.shadow);

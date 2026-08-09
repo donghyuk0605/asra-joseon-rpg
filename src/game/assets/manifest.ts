@@ -215,6 +215,10 @@ export const ASSETS = {
     },
   },
   props: {
+    siegeDestruction: {
+      key: 'siege-destruction-atlas-v1',
+      path: '/assets/environment/props/siege-destruction-atlas-v1.png',
+    },
     betaRoadsideProps: {
       key: 'beta-roadside-props-v1',
       path: '/assets/environment/beta/beta-roadside-props-v1.webp',
