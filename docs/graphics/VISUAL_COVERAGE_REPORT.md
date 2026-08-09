@@ -11,9 +11,9 @@
 | 모듈 조합 지역 | 35개 |
 | 몬스터 종류 / 실제 시각 키 | 61종 / 38개 |
 | 공유 외형 몬스터 | 34종 |
-| 아이템 / 장착 월드 외형 공백 | 60종 / 35종 |
+| 아이템 / 장착 월드 외형 공백 | 60종 / 27종 |
 | 등록된 환경 객체 자산 | 34개 |
-| 배포 자산 | 452개 · 300.9MB |
+| 배포 자산 | 460개 · 301.0MB |
 | 미참조 배포 자산 | 138개 |
 | 동일 내용 중복 | 11묶음 · 3.3MB 회수 가능 |
 | 코드 렌더 도형 / 고정 실물 후보 | 130곳 / 0곳 |
@@ -30,7 +30,7 @@
 | bosses | 13 | 15.6MB |
 | items | 77 | 3.1MB |
 | fx | 4 | 1.2MB |
-| weapons | 10 | 147.2KB |
+| weapons | 18 | 303.5KB |
 
 ## 몬스터 외형 재사용 위험
 
@@ -61,30 +61,22 @@
 | 철비늘 변경 전포 (frontier-lamellar-coat) | armor | missing-armor-layer |
 | 매눈 활깍지 (falcon-eye-bracer) | charm | missing-charm-layer |
 | 은호 엄니 부적 (silver-tiger-charm) | charm | missing-charm-layer |
-| 치악산 곰발 건틀릿 (bear-claw-gauntlet) | weapon | missing-world-weapon |
-| 치악산 발톱도 (chiaksan-claw-knife) | weapon | missing-world-weapon |
 | 강릉 해태 수호패 (haetae-ward-charm) | charm | missing-charm-layer |
 | 경포 해풍각궁 (gangneung-sea-bow) | weapon | missing-world-weapon |
 | 경포 해안정찰 전포 (coastal-scout-coat) | armor | missing-armor-layer |
 | 해주 백학 깃부적 (crane-feather-talisman) | charm | missing-charm-layer |
 | 해주 갈대 망토 (haeju-reed-cape) | armor | missing-armor-layer |
-| 염전 제사의 소도 (saltfield-ritual-knife) | weapon | missing-world-weapon |
 | 거제 해무 소금목걸이 (sea-salt-amulet) | charm | missing-charm-layer |
-| 견내량 닻환도 (geoje-anchor-hwando) | weapon | missing-world-weapon |
 | 의주 흑각 전궁 (uiju-black-horn-bow) | weapon | missing-world-weapon |
-| 황주 월철 장창 (hwangju-moonsteel-spear) | weapon | missing-world-weapon |
 | 재령 여우령 패 (jaeryeong-fox-charm) | charm | missing-charm-layer |
 | 안주 흑찰 전포 (anju-frontier-coat) | armor | missing-armor-layer |
-| 평창 표범아도 (pyeongchang-leopard-knife) | weapon | missing-world-weapon |
 | 삼척 해풍각궁 (samcheok-seawind-bow) | weapon | missing-world-weapon |
 | 가평 백화령 부적 (gapyeong-birch-talisman) | charm | missing-charm-layer |
 | 양주 봉수 사자패 (yangju-beacon-seal) | charm | missing-charm-layer |
 | 여주 강옥 패 (yeoju-river-jade) | charm | missing-charm-layer |
 | 공주 유장 도포 (gongju-scholar-coat) | armor | missing-armor-layer |
-| 청주 요화 환도 (cheongju-kiln-hwando) | weapon | missing-world-weapon |
 | 이천 진혼 백자 (icheon-spirit-jar) | charm | missing-charm-layer |
 | 보령 조철 닻패 (boryeong-tidal-anchor) | charm | missing-charm-layer |
-| 군산 수몰 소도 (gunsan-drowned-blade) | weapon | missing-world-weapon |
 | 남원 살풀이 죽적 (namwon-bamboo-flute) | charm | missing-charm-layer |
 | 통영 삼도 신호고 (tongyeong-signal-drum) | charm | missing-charm-layer |
 

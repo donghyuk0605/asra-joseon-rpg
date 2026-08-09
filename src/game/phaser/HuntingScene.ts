@@ -1940,16 +1940,22 @@ export class HuntingScene extends Phaser.Scene {
       this.simulation.unlockAllWorldMapNodesForPlaytest();
     }
     if (import.meta.env.DEV) {
-      const requestedElement = new URLSearchParams(window.location.search).get('element');
-      const playtestWeapon = requestedElement === 'fire' ? 'ember-hwando'
+      const playtestParams = new URLSearchParams(window.location.search);
+      const requestedWeaponId = playtestParams.get('weapon');
+      const requestedWeapon = requestedWeaponId && requestedWeaponId in ITEM_CATALOG
+        && ITEM_CATALOG[requestedWeaponId as ItemId].slot === 'weapon'
+        ? requestedWeaponId as ItemId
+        : null;
+      const requestedElement = playtestParams.get('element');
+      const playtestWeapon = requestedWeapon ?? (requestedElement === 'fire' ? 'ember-hwando'
         : requestedElement === 'ice' ? 'frost-hwando'
           : requestedElement === 'lightning' ? 'storm-hwando'
             : requestedElement === 'poison' ? 'venom-hwando'
               : requestedElement === 'wind' ? 'gale-hwando'
                 : requestedElement === 'earth' ? 'earth-hwando'
-                  : requestedElement === 'shadow' ? 'shadow-hwando' : null;
+                  : requestedElement === 'shadow' ? 'shadow-hwando' : null);
       if (playtestWeapon) this.toggleDevEquipment(playtestWeapon);
-      if (new URLSearchParams(window.location.search).get('armor') === 'tiger') {
+      if (playtestParams.get('armor') === 'tiger') {
         this.toggleDevEquipment('tiger-pelt-armor');
       }
     }

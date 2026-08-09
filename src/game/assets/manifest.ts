@@ -390,6 +390,30 @@ export const ASSETS = {
     'shadow-hwando': {
       key: 'weapon-shadow-hwando-world-v1', path: '/assets/weapons/shadow-hwando-world-v1.png', grip: { x: 128, y: 50 },
     },
+    'bear-claw-gauntlet': {
+      key: 'weapon-bear-claw-gauntlet-world-v1', path: '/assets/weapons/bear-claw-gauntlet-world-v1.png', grip: { x: 128, y: 50 },
+    },
+    'chiaksan-claw-knife': {
+      key: 'weapon-chiaksan-claw-knife-world-v1', path: '/assets/weapons/chiaksan-claw-knife-world-v1.png', grip: { x: 128, y: 50 },
+    },
+    'saltfield-ritual-knife': {
+      key: 'weapon-saltfield-ritual-knife-world-v1', path: '/assets/weapons/saltfield-ritual-knife-world-v1.png', grip: { x: 128, y: 50 },
+    },
+    'geoje-anchor-hwando': {
+      key: 'weapon-geoje-anchor-hwando-world-v1', path: '/assets/weapons/geoje-anchor-hwando-world-v1.png', grip: { x: 128, y: 50 },
+    },
+    'hwangju-moonsteel-spear': {
+      key: 'weapon-hwangju-moonsteel-spear-world-v1', path: '/assets/weapons/hwangju-moonsteel-spear-world-v1.png', grip: { x: 128, y: 50 },
+    },
+    'pyeongchang-leopard-knife': {
+      key: 'weapon-pyeongchang-leopard-knife-world-v1', path: '/assets/weapons/pyeongchang-leopard-knife-world-v1.png', grip: { x: 128, y: 50 },
+    },
+    'cheongju-kiln-hwando': {
+      key: 'weapon-cheongju-kiln-hwando-world-v1', path: '/assets/weapons/cheongju-kiln-hwando-world-v1.png', grip: { x: 128, y: 50 },
+    },
+    'gunsan-drowned-blade': {
+      key: 'weapon-gunsan-drowned-blade-world-v1', path: '/assets/weapons/gunsan-drowned-blade-world-v1.png', grip: { x: 128, y: 50 },
+    },
   },
   villageCommoner: { key: 'joseon-village-commoner-v1', path: '/assets/characters/joseon-village-commoner-v1.png' },
   villageFieldPloughman: {

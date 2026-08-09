@@ -545,15 +545,35 @@ describe('player equipment layer manifest', () => {
       'shadow-hwando': {
         key: 'weapon-shadow-hwando-world-v1', path: '/assets/weapons/shadow-hwando-world-v1.png', grip: { x: 128, y: 50 },
       },
+      'bear-claw-gauntlet': {
+        key: 'weapon-bear-claw-gauntlet-world-v1', path: '/assets/weapons/bear-claw-gauntlet-world-v1.png', grip: { x: 128, y: 50 },
+      },
+      'chiaksan-claw-knife': {
+        key: 'weapon-chiaksan-claw-knife-world-v1', path: '/assets/weapons/chiaksan-claw-knife-world-v1.png', grip: { x: 128, y: 50 },
+      },
+      'saltfield-ritual-knife': {
+        key: 'weapon-saltfield-ritual-knife-world-v1', path: '/assets/weapons/saltfield-ritual-knife-world-v1.png', grip: { x: 128, y: 50 },
+      },
+      'geoje-anchor-hwando': {
+        key: 'weapon-geoje-anchor-hwando-world-v1', path: '/assets/weapons/geoje-anchor-hwando-world-v1.png', grip: { x: 128, y: 50 },
+      },
+      'hwangju-moonsteel-spear': {
+        key: 'weapon-hwangju-moonsteel-spear-world-v1', path: '/assets/weapons/hwangju-moonsteel-spear-world-v1.png', grip: { x: 128, y: 50 },
+      },
+      'pyeongchang-leopard-knife': {
+        key: 'weapon-pyeongchang-leopard-knife-world-v1', path: '/assets/weapons/pyeongchang-leopard-knife-world-v1.png', grip: { x: 128, y: 50 },
+      },
+      'cheongju-kiln-hwando': {
+        key: 'weapon-cheongju-kiln-hwando-world-v1', path: '/assets/weapons/cheongju-kiln-hwando-world-v1.png', grip: { x: 128, y: 50 },
+      },
+      'gunsan-drowned-blade': {
+        key: 'weapon-gunsan-drowned-blade-world-v1', path: '/assets/weapons/gunsan-drowned-blade-world-v1.png', grip: { x: 128, y: 50 },
+      },
     });
   });
 
   it('keeps elemental world weapons as transparent 256px runtime parts', () => {
-    for (const itemId of [
-      'ember-hwando', 'frost-hwando', 'storm-hwando', 'venom-hwando',
-      'gale-hwando', 'earth-hwando', 'shadow-hwando',
-    ] as const) {
-      const asset = ASSETS.playerWeapons[itemId];
+    for (const asset of Object.values(ASSETS.playerWeapons)) {
       const png = readFileSync(new URL(`../../../public${asset.path}`, import.meta.url));
       expect(png.subarray(1, 4).toString()).toBe('PNG');
       expect(png.readUInt32BE(16)).toBe(256);
