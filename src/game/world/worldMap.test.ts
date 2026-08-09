@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { GameSimulation } from '../simulation/GameSimulation';
+import { MAP_WIDTH, REGION_ORIGINS } from './layout';
 import { REGIONS } from './regions';
 import {
   TRAVEL_ATLAS_GROUPS,
@@ -53,12 +54,23 @@ describe('large-city world map travel', () => {
     ]));
   });
 
-  it('ships a raster map rather than a geometric or SVG placeholder', () => {
-    const path = 'public/assets/ui/joseon-regional-world-map-v1.webp';
-    expect(existsSync(path)).toBe(true);
-    const header = readFileSync(path).subarray(0, 12).toString('ascii');
+  it('ships a portrait raster master map rather than a geometric or SVG placeholder', () => {
+    const sourcePath = 'assets/ui/world-map/joseon-vertical-world-map-source-v2.png';
+    const runtimePath = 'public/assets/ui/joseon-vertical-world-map-v2.webp';
+    expect(existsSync(sourcePath)).toBe(true);
+    expect(existsSync(runtimePath)).toBe(true);
+    const source = readFileSync(sourcePath);
+    expect(source.subarray(1, 4).toString()).toBe('PNG');
+    expect(source.readUInt32BE(16)).toBe(1_024);
+    expect(source.readUInt32BE(20)).toBe(1_536);
+    const header = readFileSync(runtimePath).subarray(0, 12).toString('ascii');
     expect(header.startsWith('RIFF')).toBe(true);
     expect(header.endsWith('WEBP')).toBe(true);
+    expect(readFileSync(runtimePath).byteLength).toBeGreaterThan(350_000);
+    const hud = readFileSync('src/game/ui/Hud.ts', 'utf8');
+    const styles = readFileSync('src/styles.css', 'utf8');
+    expect(hud).toContain('/assets/ui/joseon-vertical-world-map-v2.webp');
+    expect(styles).toContain('aspect-ratio: 2 / 3');
   });
 
   it('maps all nine war landmarks to stable atlas frames including Hanseong', () => {
@@ -107,6 +119,36 @@ describe('large-city world map travel', () => {
       routes: [],
       travelDays: 0,
     });
+  });
+
+  it('lands every macro-map destination on walkable ground with room to move', () => {
+    for (const node of WORLD_MAP_NODES) {
+      const game = new GameSimulation(node.destination);
+      const collision = game as unknown as {
+        isRoutePointClear: (point: { x: number; y: number }, bodyRadius: number) => boolean;
+      };
+      const origin = REGION_ORIGINS[node.destination];
+      const arrival = { x: origin.x + MAP_WIDTH / 2, y: origin.y + node.arrivalY };
+      expect(collision.isRoutePointClear(arrival, 22), `${node.id}:${node.destination}`).toBe(true);
+      expect([
+        { x: arrival.x - 40, y: arrival.y },
+        { x: arrival.x + 40, y: arrival.y },
+        { x: arrival.x, y: arrival.y - 40 },
+        { x: arrival.x, y: arrival.y + 40 },
+      ].some((point) => collision.isRoutePointClear(point, 22)), `${node.id}:movement`).toBe(true);
+    }
+  });
+
+  it('can actually travel to every unlocked macro-map destination', () => {
+    for (const node of WORLD_MAP_NODES) {
+      const game = new GameSimulation('village');
+      expect(game.unlockAllWorldMapNodesForPlaytest()).toBe(true);
+      expect(game.travelByWorldMap(node.destination), node.id).toBe('traveled');
+      expect(game.region, node.id).toBe(node.destination);
+      const origin = REGION_ORIGINS[node.destination];
+      expect(game.player.x, node.id).toBe(origin.x + MAP_WIDTH / 2);
+      expect(game.player.y, node.id).toBe(origin.y + node.arrivalY);
+    }
   });
 
   it('assigns every surface region to exactly one macro-map node', () => {

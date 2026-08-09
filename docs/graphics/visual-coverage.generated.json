@@ -10,9 +10,9 @@
     "items": 60,
     "itemWorldVisualGaps": 0,
     "propAssetEntries": 34,
-    "publicAssetFiles": 525,
-    "publicAssetBytes": 344141903,
-    "referencedAssetPaths": 393,
+    "publicAssetFiles": 526,
+    "publicAssetBytes": 344624443,
+    "referencedAssetPaths": 394,
     "missingReferencedPaths": 0,
     "unreferencedPublicFiles": 132,
     "duplicateContentGroups": 3,
@@ -39,8 +39,8 @@
     },
     {
       "domain": "ui",
-      "files": 46,
-      "bytes": 32541347
+      "files": 47,
+      "bytes": 33023887
     },
     {
       "domain": "bosses",

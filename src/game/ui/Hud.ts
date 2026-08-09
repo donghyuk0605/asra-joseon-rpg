@@ -971,8 +971,8 @@ export class Hud {
     )) {
       if (enabled) control.disabled = true;
     }
-    this.text('world-map-kicker', enabled ? '幽行輿地 · GHOST ATLAS' : '三軍攻城 · FACTION WAR');
-    this.text('world-map-title', enabled ? '유령 여행 전도' : '삼군 공성 전황도');
+    this.text('world-map-kicker', enabled ? '幽行輿地 · GHOST ATLAS' : '天下路圖 · WORLD ATLAS');
+    this.text('world-map-title', enabled ? '유령 여행 전도' : '월영 천하 종주도');
     this.text(
       'world-map-copy',
       enabled
@@ -3297,16 +3297,16 @@ export class Hud {
       <button class="world-map-backdrop" data-action="world-map-backdrop" aria-label="전체 지도 닫기" aria-hidden="true" tabindex="-1"></button>
       <section class="world-map-panel" id="world-map-panel" role="dialog" aria-modal="true" aria-labelledby="world-map-title" aria-hidden="true" inert>
         <header>
-          <div><span data-id="world-map-kicker">三軍攻城 · FACTION WAR</span><strong id="world-map-title" data-id="world-map-title">삼군 공성 전황도</strong></div>
-          <p data-id="world-map-copy">군사 거점의 공방전과 한성·조선 명읍의 역참길을 함께 살핍니다.</p>
+          <div><span data-id="world-map-kicker">天下路圖 · WORLD ATLAS</span><strong id="world-map-title" data-id="world-map-title">월영 천하 종주도</strong></div>
+          <p data-id="world-map-copy">장백산에서 조선의 역로와 남해 해로를 지나 왜국 원정지까지 한 흐름으로 살핍니다.</p>
           <button class="world-map-exit-button" data-action="travel-exit" aria-label="유령 여행을 끝내고 시작 화면으로 돌아가기"><span>旅</span><b>여행 종료</b></button>
           <button data-action="world-map-close" aria-label="전체 지도 닫기">×</button>
         </header>
         <div class="world-map-body">
           <div class="world-map-viewport">
-            <div class="world-map-canvas" aria-label="조선과 주변 전장의 군사 거점 지도">
-              <img src="/assets/ui/joseon-regional-world-map-v1.webp" alt="조선, 만주, 일본 오사카를 잇는 고지도">
-              <div class="world-map-cartouche" aria-hidden="true"><span>大東輿行</span><b>천하 행군도</b><small>육로 · 해로 · 성곽</small></div>
+            <div class="world-map-canvas" aria-label="장백산에서 조선과 오사카까지 세로로 이어지는 군사 거점 지도">
+              <img src="/assets/ui/joseon-vertical-world-map-v2.webp" alt="만주, 조선, 울릉, 대마도와 오사카가 세로로 이어진 조선 다크 판타지 대지도">
+              <div class="world-map-cartouche" aria-hidden="true"><span>大東輿行</span><b>천하 종주도</b><small>북로 · 역로 · 해로</small></div>
               ${worldMapRoutes}
               ${landmarkMapNodes}
               ${settlementMapPins}

@@ -48,6 +48,15 @@ export type TravelAtlasGroup = {
   regions: readonly RegionId[];
 };
 
+const EPISODE2_VERTICAL_MAP_POSITIONS: Record<string, { mapX: number; mapY: number }> = {
+  'northwest-road': { mapX: 31, mapY: 27 },
+  'mountain-road': { mapX: 67, mapY: 52 },
+  'central-river': { mapX: 46, mapY: 60 },
+  'west-coast': { mapX: 28, mapY: 58 },
+  'honam-road': { mapX: 35, mapY: 75 },
+  'yeongnam-road': { mapX: 61, mapY: 73 },
+};
+
 export const WORLD_MAP_NODES = [
   {
     id: 'jurchen',
@@ -60,8 +69,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 6,
     destination: 'jurchenvillage',
     regions: JURCHEN_REGION_IDS,
-    mapX: 23,
-    mapY: 18,
+    mapX: 49,
+    mapY: 10,
     arrivalY: 760,
   },
   {
@@ -75,8 +84,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 5,
     destination: 'manchufrontier',
     regions: ['manchufrontier'],
-    mapX: 36,
-    mapY: 29,
+    mapX: 28,
+    mapY: 22,
     arrivalY: 790,
   },
   {
@@ -90,8 +99,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 4,
     destination: 'pyongyangouter',
     regions: ['pyongyangouter', 'pyongyanggate', 'pyongyanginner'],
-    mapX: 43,
-    mapY: 40,
+    mapX: 37,
+    mapY: 32,
     arrivalY: 820,
   },
   {
@@ -112,8 +121,8 @@ export const WORLD_MAP_NODES = [
       'namhansanseong',
       'ganghwado',
     ],
-    mapX: 47,
-    mapY: 53,
+    mapX: 43,
+    mapY: 47,
     arrivalY: 820,
   },
   {
@@ -126,8 +135,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 2,
     destination: 'gaeseong',
     regions: ['gaeseong'],
-    mapX: 43,
-    mapY: 47,
+    mapX: 38,
+    mapY: 41,
     arrivalY: 820,
   },
   {
@@ -141,8 +150,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 2,
     destination: 'yeongwol',
     regions: ['solgogae', 'village', 'mistwood', 'yeongwol', 'yeongwolhq', 'minepass', 'moonfield'],
-    mapX: 53,
-    mapY: 59,
+    mapX: 59,
+    mapY: 54,
     arrivalY: 820,
   },
   {
@@ -156,8 +165,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 3,
     destination: 'jeonju',
     regions: ['jeonjufield', 'jeonjugate', 'jeonju'],
-    mapX: 42,
-    mapY: 69,
+    mapX: 37,
+    mapY: 68,
     arrivalY: 820,
   },
   {
@@ -171,8 +180,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 4,
     destination: 'busanjin',
     regions: ['busanjin'],
-    mapX: 54,
-    mapY: 76,
+    mapX: 58,
+    mapY: 79,
     arrivalY: 820,
   },
   {
@@ -186,8 +195,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 3,
     destination: 'ulleungcoast',
     regions: ['ulleungdo', 'ulleungcoast', 'ulleungmeadow', 'ulleunghunt', 'ulleungridge', 'ulleungvillage'],
-    mapX: 67,
-    mapY: 58,
+    mapX: 81,
+    mapY: 39,
     arrivalY: 690,
   },
   {
@@ -213,8 +222,8 @@ export const WORLD_MAP_NODES = [
       'tsushimahunt',
       'izuhara',
     ],
-    mapX: 82,
-    mapY: 76,
+    mapX: 83,
+    mapY: 87,
     arrivalY: 850,
   },
   {
@@ -227,8 +236,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 1,
     destination: 'suwon',
     regions: ['suwon'],
-    mapX: 47,
-    mapY: 60,
+    mapX: 43,
+    mapY: 53,
     arrivalY: 820,
   },
   {
@@ -241,8 +250,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 2,
     destination: 'chungju',
     regions: ['chungju', 'tangeumdae'],
-    mapX: 53,
-    mapY: 65,
+    mapX: 52,
+    mapY: 59,
     arrivalY: 820,
   },
   {
@@ -256,7 +265,7 @@ export const WORLD_MAP_NODES = [
     destination: 'andong',
     regions: ['andong'],
     mapX: 61,
-    mapY: 67,
+    mapY: 63,
     arrivalY: 820,
   },
   {
@@ -269,8 +278,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 3,
     destination: 'haeju',
     regions: ['haeju'],
-    mapX: 30,
-    mapY: 45,
+    mapX: 23,
+    mapY: 39,
     arrivalY: 820,
   },
   {
@@ -297,8 +306,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 3,
     destination: 'gangneung',
     regions: ['gangneung'],
-    mapX: 66,
-    mapY: 43,
+    mapX: 69,
+    mapY: 44,
     arrivalY: 820,
   },
   {
@@ -311,8 +320,8 @@ export const WORLD_MAP_NODES = [
     travelDays: 4,
     destination: 'geoje',
     regions: ['geoje'],
-    mapX: 66,
-    mapY: 86,
+    mapX: 48,
+    mapY: 84,
     arrivalY: 820,
   },
   ...EPISODE2_CLUSTERS.map((cluster) => ({
@@ -325,8 +334,8 @@ export const WORLD_MAP_NODES = [
     travelDays: cluster.travelDays,
     destination: cluster.regions[0],
     regions: cluster.regions,
-    mapX: cluster.mapX,
-    mapY: cluster.mapY,
+    mapX: EPISODE2_VERTICAL_MAP_POSITIONS[cluster.id]?.mapX ?? cluster.mapX,
+    mapY: EPISODE2_VERTICAL_MAP_POSITIONS[cluster.id]?.mapY ?? cluster.mapY,
     arrivalY: 820,
   })),
 ] as const satisfies readonly WorldMapNode[];
@@ -387,8 +396,8 @@ export const worldMapRouteGeometry = (route: WorldMapRoute): {
   const to = worldMapNodeById.get(route.to);
   if (!from || !to) throw new Error(`Unknown world-map route endpoint: ${route.id}`);
   const dx = to.mapX - from.mapX;
-  // The map stage is 3:2; convert vertical percentage to stage-width units.
-  const dy = (to.mapY - from.mapY) * (2 / 3);
+  // The remade map stage is 2:3; convert vertical percentage to stage-width units.
+  const dy = (to.mapY - from.mapY) * (3 / 2);
   return {
     x: from.mapX,
     y: from.mapY,

@@ -8,8 +8,8 @@ describe('full world map UI', () => {
 
   it('places war landmarks and famous-town pins on the map while preserving the travel index', () => {
     expect(hud).toContain('class="menu-seal map-seal"');
-    expect(hud).toContain('/assets/ui/joseon-regional-world-map-v1.webp');
-    expect(hud).toContain('삼군 공성 전황도');
+    expect(hud).toContain('/assets/ui/joseon-vertical-world-map-v2.webp');
+    expect(hud).toContain('월영 천하 종주도');
     expect(hud).toContain('data-world-region');
     expect(hud).toContain('data-world-stronghold');
     expect(hud).toContain(".filter((node) => 'landmarkFrame' in node)");
@@ -56,9 +56,10 @@ describe('full world map UI', () => {
     expect(styles).toContain('.world-map-node.is-selected');
   });
 
-  it('keeps map art and coordinate pins in the same three-by-two stage', () => {
+  it('keeps map art and coordinate pins in the same two-by-three portrait stage', () => {
     expect(hud).toContain('class="world-map-viewport"');
-    expect(styles).toContain('aspect-ratio: 3 / 2');
+    expect(styles).toContain('aspect-ratio: 2 / 3');
+    expect(styles).toContain("calc((100dvh - 164px) * .6667)");
     expect(styles).toContain('object-fit: fill');
     expect(styles).toContain('left: var(--map-x) !important');
     expect(styles).toContain('top: var(--map-y) !important');
