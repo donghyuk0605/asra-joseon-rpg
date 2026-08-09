@@ -437,17 +437,21 @@ const createMist = (
   const count = mobileProfile ? 2 : 4;
   for (let index = 0; index < count; index += 1) {
     const mist = tag(
-      scene.add.ellipse(
+      scene.add.sprite(
         origin.x + 180 + (index * 373) % 1180,
         origin.y + 180 + (index * 211) % 650,
-        260 + index * 45,
-        54 + index * 8,
-        0xc3d0c7,
-        0.035 + layout.mist * 0.055,
-      ).setDepth(origin.y + 100 + index),
+        ASSETS.props.regionalWeather.key,
+        4 + index % 2,
+      )
+        .setScale(1.25 + index * 0.08)
+        .setTint(0xc3d0c7)
+        .setAlpha(0.14 + layout.mist * 0.2)
+        .setBlendMode(Phaser.BlendModes.SCREEN)
+        .setDepth(origin.y + 100 + index),
       region,
       `mist-bank-${index}`,
     );
+    mist.setData('weatherKind', 'mist').setData('weatherFrames', '4-5');
     const startX = mist.x;
     trackTween(bus, scene.tweens.add({
       targets: mist,
@@ -457,6 +461,8 @@ const createMist = (
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut',
+      onYoyo: () => mist.setFrame(Number(mist.frame.name) === 4 ? 5 : 4),
+      onRepeat: () => mist.setFrame(Number(mist.frame.name) === 4 ? 5 : 4),
     }));
   }
 };

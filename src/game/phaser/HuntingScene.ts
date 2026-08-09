@@ -66,6 +66,7 @@ import {
   JURCHEN_STAGE_COPY,
 } from '../world/jurchenCampaign';
 import { CAMPAIGN_FIELD_ROUTES } from '../world/fieldRoutes';
+import { CAMPAIGN_STRUCTURE_COLLIDERS } from '../world/campaignStructures';
 import {
   isJurchenStructureKind,
   JURCHEN_EXPANSION_LAYOUTS,
@@ -127,6 +128,13 @@ import { BETA_ROADSIDE_PROP_PLACEMENTS } from '../world/betaRoadsideProps';
 import { createExtendedRegionMotion } from './extendedRegionMotion';
 import { EPISODE2_REGION_LAYOUTS, isEpisode2Region } from '../world/episode2Regions';
 import { createEpisode2RegionWorld } from './episode2RegionMotion';
+import { createRegionalWeatherMotion } from './regionalWeatherMotion';
+import { createWarBanner } from './warBannerMotion';
+import {
+  REGIONAL_WEATHER_REGION_IDS,
+  regionalWeatherParticleCount,
+  regionalWeatherProfile,
+} from '../world/regionalWeather';
 import {
   SIEGE_MACHINE_SITES,
   SIEGE_RUIN_SITES,
@@ -1684,6 +1692,11 @@ export class HuntingScene extends Phaser.Scene {
         endFrame: 3,
       });
     }
+    this.load.spritesheet(ASSETS.props.regionalWeather.key, ASSETS.props.regionalWeather.path, {
+      frameWidth: 256,
+      frameHeight: 256,
+      endFrame: 7,
+    });
     this.load.spritesheet(ASSETS.props.episode2VillageProps.key, ASSETS.props.episode2VillageProps.path, {
       frameWidth: 384,
       frameHeight: 384,
@@ -1975,6 +1988,7 @@ export class HuntingScene extends Phaser.Scene {
     this.createJoseonTownWorlds();
     this.createCampaignWorld();
     this.createFrontierCampProps();
+    this.createRegionalWeatherWorlds();
     this.createSiegePresentation();
     this.time.delayedCall(1800, () => this.loadBossAssetsInBackground());
     this.createVillage();
@@ -5880,6 +5894,9 @@ export class HuntingScene extends Phaser.Scene {
       const asset = this.royalRefugeAsset(routeId);
       if (this.textures.exists(asset.key)) this.createRoyalRefugeWorld(routeId);
     }
+    this.game.canvas.dataset.castleAssembly = `${new Set(
+      CAMPAIGN_STRUCTURE_COLLIDERS.map((structure) => structure.region),
+    ).size}:${CAMPAIGN_STRUCTURE_COLLIDERS.length}`;
     const routePlaque = (
       region: RegionId,
       localX: number,
@@ -6141,6 +6158,7 @@ export class HuntingScene extends Phaser.Scene {
       ['pyongyangouter', 0xcbd9e0], ['pyongyanggate', 0x96b6c4], ['pyongyanginner', 0xb6c5c9],
       ['namhansanseong', 0xc7c9be], ['ganghwado', 0xaac4cc],
     ] as Array<[RegionId, number]>) {
+      if (regionalWeatherProfile(region)) continue;
       const origin = REGION_ORIGINS[region];
       const count = this.mobileProfile ? 4 : 9;
       for (let index = 0; index < count; index += 1) {
@@ -6738,28 +6756,19 @@ export class HuntingScene extends Phaser.Scene {
       });
 
       for (const [index, localX] of [470, 1066].entries()) {
-        const banner = this.add.image(
-          origin.x + localX,
-          origin.y + stage.bannerY + (index % 2) * 12,
-          ASSETS.frontierCampProps.key,
-          index % 2,
-        ).setDisplaySize(148, 148)
-          .setOrigin(0.5, 0.94)
-          .setFlipX(index % 2 === 1)
-          .setDepth(origin.y + stage.bannerY - 2);
-        const bannerScaleX = banner.scaleX;
-        if (!this.mobileProfile && !this.gameSettings.reducedMotion) {
-          this.tweens.add({
-            targets: banner,
-            scaleX: { from: bannerScaleX * 0.985, to: bannerScaleX * 1.015 },
-            angle: { from: -0.7, to: 0.7 },
-            duration: 1450 + index * 260,
-            yoyo: true,
-            repeat: -1,
-            ease: 'Sine.easeInOut',
-          });
-        }
-        banner.setData('pyongyang-banner', stage.region);
+        const banner = createWarBanner(this, {
+          region: stage.region,
+          x: origin.x + localX,
+          y: origin.y + stage.bannerY + (index % 2) * 12,
+          direction: index % 2 === 0 ? 1 : -1,
+          tint: stage.region === 'pyongyanginner' ? 0x8e473f : 0x6f7f88,
+          scale: 0.35,
+          name: `pyongyang-banner-${stage.region}-${index}`,
+          reducedMotion: this.gameSettings.reducedMotion,
+          duration: 760 + index * 110,
+        });
+        banner.pole.setData('pyongyang-banner', stage.region);
+        banner.cloth.setData('pyongyang-banner', stage.region);
       }
     }
     this.syncPyongyangAdvanceGates(false);
@@ -7018,25 +7027,20 @@ export class HuntingScene extends Phaser.Scene {
       return image;
     };
 
-    const banners = [
-      prop(0, 310, 332, 0.34),
-      prop(1, 1220, 330, 0.32),
-      prop(4, 768, 308, 0.38),
-    ];
+    createWarBanner(this, {
+      region: 'manchufrontier', x: origin.x + 310, y: origin.y + 332,
+      direction: 1, tint: 0x99453d, scale: 0.34, name: 'frontier-banner-west',
+      reducedMotion: this.gameSettings.reducedMotion, duration: 780,
+    });
+    createWarBanner(this, {
+      region: 'manchufrontier', x: origin.x + 1220, y: origin.y + 330,
+      direction: -1, tint: 0x4f6475, scale: 0.32, name: 'frontier-banner-east',
+      reducedMotion: this.gameSettings.reducedMotion, duration: 880,
+    });
+    prop(4, 768, 308, 0.38);
     prop(2, 670, 318, 0.31);
     prop(3, 1110, 315, 0.28);
     prop(5, 875, 330, 0.31);
-    for (const [index, banner] of banners.entries()) {
-      this.tweens.add({
-        targets: banner,
-        angle: { from: -0.8, to: 0.8 },
-        scaleX: banner.scaleX * 0.985,
-        duration: 1700 + index * 260,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut',
-      });
-    }
   }
 
   private syncFrontierSouthGateState(animate = false): void {
@@ -7177,24 +7181,16 @@ export class HuntingScene extends Phaser.Scene {
       [470, 735, -1], [1066, 735, 1], [500, 470, -1], [1036, 470, 1], [610, 250, -1], [926, 250, 1],
     ];
     bannerPoints.forEach(([localX, localY, facing], index) => {
-      const banner = this.add.image(
-        origin.x + localX,
-        origin.y + localY,
-        ASSETS.frontierCampProps.key,
-        index % 2,
-      ).setDisplaySize(118, 118)
-        .setOrigin(0.5, 0.94)
-        .setFlipX(facing < 0)
-        .setDepth(origin.y + localY + 2);
-      const bannerScaleX = banner.scaleX;
-      this.tweens.add({
-        targets: banner,
-        scaleX: { from: bannerScaleX * 0.985, to: bannerScaleX * 1.015 },
-        angle: { from: -1.2 * facing, to: 1.6 * facing },
-        duration: 920 + index * 125,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut',
+      createWarBanner(this, {
+        region: 'jeonjugate',
+        x: origin.x + localX,
+        y: origin.y + localY,
+        direction: facing < 0 ? -1 : 1,
+        tint: index % 2 === 0 ? 0xa14c42 : 0xc19a55,
+        scale: 0.29,
+        name: `jeonju-war-banner-${index}`,
+        reducedMotion: this.gameSettings.reducedMotion,
+        duration: 690 + index * 45,
       });
     });
   }
@@ -7482,52 +7478,30 @@ export class HuntingScene extends Phaser.Scene {
       });
     }
 
-    const fogBands = [
-      { x: 360, y: 462, w: 390, h: 76, depth: 410, duration: 9200 },
-      { x: 1010, y: 540, w: 470, h: 88, depth: 530, duration: 11400 },
-      { x: 690, y: 805, w: 520, h: 72, depth: 790, duration: 12800 },
-    ];
-    for (const band of fogBands) {
-      const fog = this.add.ellipse(band.x, band.y, band.w, band.h, 0xb9c3ae, 0.035).setDepth(band.depth);
-      this.tweens.add({
-        targets: fog,
-        x: band.x + 96,
-        alpha: { from: 0.018, to: 0.055 },
-        duration: band.duration,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut',
-      });
-    }
     this.createSwayingCanopies();
     this.createWindField();
+  }
+
+  private createRegionalWeatherWorlds(): void {
+    let totalParticles = 0;
+    for (const region of REGIONAL_WEATHER_REGION_IDS) {
+      totalParticles += createRegionalWeatherMotion(
+        this,
+        region,
+        REGION_ORIGINS[region],
+        this.gameSettings.graphicsQuality,
+        this.mobileProfile,
+        this.gameSettings.reducedMotion,
+      );
+    }
+    this.game.canvas.dataset.weatherAtlas = `${ASSETS.props.regionalWeather.key}:8`;
+    this.game.canvas.dataset.weatherProfiles = `${REGIONAL_WEATHER_REGION_IDS.length}:${totalParticles}`;
   }
 
   private createJapanAtmosphere(): void {
     const requestedRegion = new URLSearchParams(window.location.search).get('region') as RegionId | null;
     if (document.body.dataset.bootCampaign !== 'japan'
       && !(requestedRegion && isJapanRegion(requestedRegion))) return;
-
-    const osaka = REGION_ORIGINS.osaka;
-    for (let index = 0; index < (this.mobileProfile ? 5 : 14); index += 1) {
-      const rain = this.add.rectangle(
-        osaka.x + 150 + (index * 101) % 1230,
-        osaka.y + 130 + (index * 151) % 700,
-        2,
-        28 + index % 4 * 6,
-        0xb9c8cb,
-        0.12,
-      ).setRotation(-0.14).setDepth(osaka.y + 930 + index);
-      this.tweens.add({
-        targets: rain,
-        x: rain.x - 30,
-        y: rain.y + 148,
-        alpha: { from: 0.04, to: 0.2 },
-        duration: 820 + index * 31,
-        delay: index * 90,
-        repeat: -1,
-      });
-    }
 
     const settsu = REGION_ORIGINS.settsuvillage;
     for (let index = 0; index < (this.mobileProfile ? 2 : 5); index += 1) {
@@ -9991,6 +9965,18 @@ export class HuntingScene extends Phaser.Scene {
 
   private syncAmbientWorldState(activeRegion: RegionId): void {
     const visibleRegions = this.activeRenderRegions(activeRegion);
+    const activeWeather = regionalWeatherProfile(activeRegion);
+    const weatherCount = activeWeather
+      ? regionalWeatherParticleCount(
+        activeWeather,
+        this.gameSettings.graphicsQuality,
+        this.mobileProfile,
+        this.gameSettings.reducedMotion,
+      )
+      : 0;
+    this.game.canvas.dataset.weatherVisual = activeWeather
+      ? `${activeRegion}:${activeWeather.kind}:${weatherCount}`
+      : `${activeRegion}:clear:0`;
     const animateOnlyActive = this.mobileProfile
       || this.gameSettings.graphicsQuality === 'performance'
       || this.gameSettings.reducedMotion;
@@ -10004,6 +9990,16 @@ export class HuntingScene extends Phaser.Scene {
     }
     for (const entry of this.ambientWorldObjects) {
       entry.object.setVisible(entry.region === null || visibleRegions.has(entry.region));
+    }
+    for (const candidate of this.children.list) {
+      if (!(candidate instanceof Phaser.GameObjects.Sprite)
+        || candidate.getData('warBannerPart') !== 'cloth-moving') continue;
+      const bannerRegion = candidate.getData('defaultObjectComposedRegion') as RegionId | undefined;
+      const shouldAnimate = !this.gameSettings.reducedMotion
+        && bannerRegion !== undefined
+        && animatedRegions.has(bannerRegion);
+      if (shouldAnimate && candidate.anims.isPaused) candidate.anims.resume();
+      else if (!shouldAnimate && !candidate.anims.isPaused) candidate.anims.pause();
     }
     this.syncFrontierSouthGateState(false);
     this.syncPyongyangAdvanceGates(false);

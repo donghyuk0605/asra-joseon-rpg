@@ -231,6 +231,10 @@ export const ASSETS = {
       key: 'episode2-waterwheel-wheel-v1',
       path: '/assets/environment/props/episode2-waterwheel-wheel-v1.png',
     },
+    regionalWeather: {
+      key: 'regional-weather-vfx-atlas-v1',
+      path: '/assets/environment/weather/regional-weather-vfx-atlas-v1.png',
+    },
     ambient: {
       reedCluster: {
         key: 'reed-cluster-ambient-v1',
