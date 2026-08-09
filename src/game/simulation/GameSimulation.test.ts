@@ -929,6 +929,8 @@ describe('GameSimulation', () => {
       attackCooldown: 0,
     });
     expect(game.player.targetId).toBe(monster?.id);
+    const durableMonster = game.prepareMonsterForPlaytest('bandit', 999);
+    expect(durableMonster).toMatchObject({ hp: 999, maxHp: 999 });
     expect(game.prepareMonsterForPlaytest('episode2-red-fox')).toBeNull();
   });
 

@@ -3621,9 +3621,17 @@ export class GameSimulation {
   prepareMonsterForPlaytest(kind: MonsterKind, remainingHp?: number): MonsterState | null {
     const monster = this.monsters.find((entry) => entry.region === this.region && entry.kind === kind);
     if (!monster) return null;
+    const requestedHp = Number.isFinite(remainingHp) && (remainingHp ?? 0) > 0
+      ? Math.round(remainingHp as number)
+      : monster.maxHp;
     monster.x = this.player.x + 96;
     monster.y = this.player.y - 4;
-    monster.hp = Math.min(monster.maxHp, Math.max(1, Math.round(remainingHp ?? monster.maxHp)));
+    // This is a development-only presentation hook. Allow an oversized HP
+    // request to keep the target alive long enough to observe complete attack
+    // and recovery cycles in a real browser, while preserving the hp/maxHp
+    // invariant expected by the simulation.
+    monster.maxHp = Math.max(monster.maxHp, requestedHp);
+    monster.hp = Math.max(1, requestedHp);
     monster.alive = true;
     monster.aggro = true;
     monster.aiState = 'alert';

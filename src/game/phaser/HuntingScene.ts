@@ -29,6 +29,13 @@ import {
 import { PLAYER_CHARM_VISUALS, playerCharmAttachmentForFrame } from './playerCharmLayer';
 import { bowAttachmentForFrame } from './playerBowLayer';
 import { resolvePlayerAttackVisual, resolvePlayerMovementVisual } from './playerAttackVisual';
+import {
+  PLAYER_WALK_FRAME_RATE,
+  playerActionTimeline,
+  playerFrameQaFromSearch,
+  playerGaitPose,
+  type PlayerActionCadence,
+} from './playerMotionPresentation';
 import { protagonistTextureMatchesOrigin } from '../player/protagonistVisuals';
 import { isPointBehindOccluder } from './buildingOcclusion';
 import { monsterScaleForRegion } from './pyongyangSoldierScale';
@@ -883,6 +890,7 @@ export class HuntingScene extends Phaser.Scene {
     durationMs: number;
   } | null = null;
   private skillVisualNonce = 0;
+  private playerActionFrameNonce = 0;
   private playerPreviousWalkFrame = -1;
   private publishedPlayerVisualSignature = '';
   private playerDefeated = false;
@@ -3706,12 +3714,12 @@ export class HuntingScene extends Phaser.Scene {
       this.anims.create({
         key: `player-walk-unequipped-${row}`,
         frames: this.anims.generateFrameNumbers(ASSETS.playerUnequipped.key, { start: row * 8, end: row * 8 + 3 }),
-        frameRate: 11, repeat: -1,
+        frameRate: PLAYER_WALK_FRAME_RATE, repeat: -1,
       });
       this.anims.create({
         key: `player-walk-weapon-${row}`,
         frames: this.anims.generateFrameNumbers(ASSETS.playerWeaponReadyBody.key, { start: row * 8, end: row * 8 + 3 }),
-        frameRate: 11, repeat: -1,
+        frameRate: PLAYER_WALK_FRAME_RATE, repeat: -1,
       });
       this.anims.create({
         key: `player-attack-fist-${row}`,
@@ -3726,7 +3734,7 @@ export class HuntingScene extends Phaser.Scene {
       this.anims.create({
         key: `player-frontier-walk-${row}`,
         frames: this.anims.generateFrameNumbers(ASSETS.frontierArcher.key, { start: row * 8, end: row * 8 + 3 }),
-        frameRate: 11, repeat: -1,
+        frameRate: PLAYER_WALK_FRAME_RATE, repeat: -1,
       });
       this.anims.create({
         key: `player-frontier-attack-${row}`,
@@ -3736,7 +3744,7 @@ export class HuntingScene extends Phaser.Scene {
       this.anims.create({
         key: `player-frontier-melee-walk-${row}`,
         frames: this.anims.generateFrameNumbers(ASSETS.frontierMelee.key, { start: row * 8, end: row * 8 + 3 }),
-        frameRate: 11, repeat: -1,
+        frameRate: PLAYER_WALK_FRAME_RATE, repeat: -1,
       });
       this.anims.create({
         key: `player-frontier-melee-attack-${row}`,
@@ -3747,7 +3755,7 @@ export class HuntingScene extends Phaser.Scene {
         this.anims.create({
           key: `player-mudang-walk-${row}`,
           frames: this.anims.generateFrameNumbers(ASSETS.osakaMudang.key, { start: row * 8, end: row * 8 + 3 }),
-          frameRate: 11, repeat: -1,
+          frameRate: PLAYER_WALK_FRAME_RATE, repeat: -1,
         });
         this.anims.create({
           key: `player-mudang-attack-${row}`,
@@ -3862,7 +3870,7 @@ export class HuntingScene extends Phaser.Scene {
             start: row * 8,
             end: row * 8 + 3,
           }),
-          frameRate: 11,
+          frameRate: PLAYER_WALK_FRAME_RATE,
           repeat: -1,
         });
       }
@@ -9477,6 +9485,34 @@ export class HuntingScene extends Phaser.Scene {
     return resolvePlayerAttackVisual(style, row);
   }
 
+  private playPlayerAuthoredActionFrames(
+    textureKey: string,
+    row: number,
+    flip: boolean,
+    cadence: PlayerActionCadence,
+  ): void {
+    const nonce = ++this.playerActionFrameNonce;
+    const timeline = playerActionTimeline(cadence);
+    const showFrame = (column: 4 | 5 | 6 | 7, phase: string) => {
+      if (nonce !== this.playerActionFrameNonce || this.playerDefeated || this.attackLock <= 0) return;
+      const frame = row * 8 + column;
+      this.playerSprite.anims.stop();
+      this.playerSprite.setTexture(textureKey, frame)
+        .setPosition(0, 0).setRotation(0).setScale(PLAYER_SCALE)
+        .setOrigin(0.5, 0.97).setFlipX(flip).setTint(0xffffff);
+      this.game.canvas.dataset.playerFrame = String(frame);
+      this.game.canvas.dataset.playerFrameColumn = String(column);
+      this.game.canvas.dataset.playerActionPhase = phase;
+      document.body.dataset.playerFrame = String(frame);
+      document.body.dataset.playerActionPhase = phase;
+      this.syncPlayerEquipmentLayers();
+    };
+    for (const actionFrame of timeline) {
+      if (actionFrame.atMs === 0) showFrame(actionFrame.column, actionFrame.phase);
+      else this.time.delayedCall(actionFrame.atMs, () => showFrame(actionFrame.column, actionFrame.phase));
+    }
+  }
+
   private publishPlayerVisualState(
     textureKey: string,
     animationKey: string,
@@ -9492,6 +9528,10 @@ export class HuntingScene extends Phaser.Scene {
     document.body.dataset.playerAnimation = animationKey;
     document.body.dataset.playerPose = pose;
     document.body.dataset.playerVisualMatch = matched ? 'matched' : 'mismatch';
+    if (pose !== 'attack') {
+      document.body.dataset.playerActionPhase = 'none';
+      this.game.canvas.dataset.playerActionPhase = 'none';
+    }
     this.game.canvas.dataset.playerOrigin = origin;
     this.game.canvas.dataset.playerTexture = textureKey;
     this.game.canvas.dataset.playerVisualMatch = matched ? 'matched' : 'mismatch';
@@ -9607,9 +9647,10 @@ export class HuntingScene extends Phaser.Scene {
         .setTint(0xffffff);
       this.playPlayerWalkPreservingGait(visual.animationKey);
       const frameOffset = Number(this.playerSprite.frame.name) % 8;
-      const contactFrame = frameOffset === 0 || frameOffset === 2;
-      this.playerShadow.setAlpha(contactFrame ? 0.37 : 0.32).setScale(contactFrame ? 1 : 0.94, contactFrame ? 0.84 : 0.78);
-      if (frameOffset !== this.playerPreviousWalkFrame && contactFrame) {
+      const gait = playerGaitPose(frameOffset, flip, this.gameSettings.reducedMotion);
+      this.playerSprite.setPosition(gait.x, gait.y).setRotation(gait.rotation);
+      this.playerShadow.setAlpha(gait.shadowAlpha).setScale(gait.shadowScaleX, gait.shadowScaleY);
+      if (frameOffset !== this.playerPreviousWalkFrame && gait.contact) {
         this.createDust(
           player.x - Math.cos(movementFacing) * 9,
           player.y - Math.sin(movementFacing) * 5,
@@ -9654,18 +9695,17 @@ export class HuntingScene extends Phaser.Scene {
     }
     const layers = resolvePlayerLayers(this.simulation.equipment, this.simulation.inventory);
     const facingFrame = directionToFrame(this.simulation.player.facing);
-    const requestedFrameQa = import.meta.env.DEV
-      ? Number(new URLSearchParams(window.location.search).get('playerframeqa'))
-      : Number.NaN;
-    const qaFrame = Number.isFinite(requestedFrameQa)
-      ? Phaser.Math.Clamp(Math.floor(requestedFrameQa), 0, 39)
-      : null;
+    const qaFrame = playerFrameQaFromSearch(window.location.search, import.meta.env.DEV);
     if (qaFrame !== null) {
       this.playerSprite.anims.stop();
       this.playerSprite.setFrame(qaFrame);
     }
     const rawFrame = qaFrame ?? Number(this.playerSprite.frame.name);
-    const frameState = playerFrameState(rawFrame, this.playerSprite.flipX, facingFrame.row);
+    const normalizedRawFrame = Number.isFinite(rawFrame) ? rawFrame : facingFrame.row * 8;
+    this.game.canvas.dataset.playerFrame = String(normalizedRawFrame);
+    this.game.canvas.dataset.playerFrameColumn = String(normalizedRawFrame % 8);
+    document.body.dataset.playerFrame = String(normalizedRawFrame);
+    const frameState = playerFrameState(normalizedRawFrame, this.playerSprite.flipX, facingFrame.row);
     const frame = frameForPlayerLayer(frameState.row, frameState.column);
     const { row, column, flip } = frameState;
     const bodyVisible = this.playerSprite.visible && this.playerRoot.visible;
@@ -10552,9 +10592,13 @@ export class HuntingScene extends Phaser.Scene {
       const visualNonce = ++this.skillVisualNonce;
       this.tweens.killTweensOf(this.playerActionRoot);
       this.playerActionRoot.setPosition(0, 0).setRotation(0).setScale(1).setAlpha(1);
-      this.playerSprite.setTexture(visual.textureKey).setScale(PLAYER_SCALE).setOrigin(0.5, 0.97).setFlipX(flip).play(visual.animationKey, true);
-      this.syncPlayerEquipmentLayers();
       this.attackLock = event.skillId === 'leap-strike' ? 0.72 : shamanSkill ? 0.68 : archerSkill ? 0.64 : 0.58;
+      this.playPlayerAuthoredActionFrames(
+        visual.textureKey,
+        row,
+        flip,
+        shamanSkill ? 'ritual' : archerSkill ? 'bow' : 'blade',
+      );
       if (event.skillId === 'leap-strike' || event.skillId === 'moon-dash') {
         this.skillWorldMotion = {
           skillId: event.skillId,
@@ -10614,11 +10658,16 @@ export class HuntingScene extends Phaser.Scene {
       this.publishPlayerVisualState(visual.textureKey, visual.animationKey, 'attack');
       this.tweens.killTweensOf(this.playerActionRoot);
       this.playerActionRoot.setPosition(0, 0).setRotation(0).setScale(1).setAlpha(1);
-      this.playerSprite.setTexture(visual.textureKey).setPosition(0, 0).setRotation(0)
-        .setScale(PLAYER_SCALE).setOrigin(0.5, 0.97).setFlipX(flip)
-        .setTint(0xffffff).play(visual.animationKey, true);
-      this.syncPlayerEquipmentLayers();
       this.attackLock = frontierBow ? 0.58 : event.style === 'weapon' ? 0.5 : 0.38;
+      this.playPlayerAuthoredActionFrames(
+        visual.textureKey,
+        row,
+        flip,
+        frontierBow ? 'bow'
+          : this.simulation.isOsakaMudang() ? 'ritual'
+            : this.simulation.isGwanghaePrince() ? 'blade'
+              : event.style === 'fist' ? 'fist' : 'blade',
+      );
       const target = this.simulation.monsters.find((entry) => entry.id === event.targetId)
         ?? (this.simulation.boss?.id === event.targetId ? this.simulation.boss : null);
       const angle = target
@@ -10836,9 +10885,9 @@ export class HuntingScene extends Phaser.Scene {
       const target = this.simulation.monsters.find((monster) => monster.id === event.targetId);
       if (target) {
         const { row, flip } = directionToFrame(this.simulation.player.facing);
-        this.playerSprite.setTexture(ASSETS.frontierArcher.key).setFlipX(flip)
-          .play(`player-frontier-attack-${row}`, true);
         this.attackLock = 0.62;
+        this.publishPlayerVisualState(ASSETS.frontierArcher.key, `player-frontier-attack-${row}`, 'attack');
+        this.playPlayerAuthoredActionFrames(ASSETS.frontierArcher.key, row, flip, 'bow');
         this.firePlayerArrow(target);
         this.alertMarker(this.simulation.player.x, this.simulation.player.y - 128, '하진: “지금이다!”', 1150);
       }
@@ -12155,6 +12204,7 @@ export class HuntingScene extends Phaser.Scene {
     const fallSign = Math.abs(horizontal) > 0.1 ? Math.sign(horizontal) : 1;
 
     this.playerDefeated = true;
+    this.playerActionFrameNonce += 1;
     this.attackLock = 0;
     this.tweens.killTweensOf(this.playerActionRoot);
     this.playerActionRoot.setPosition(0, 0).setRotation(0).setScale(1).setAlpha(1);
@@ -12199,6 +12249,7 @@ export class HuntingScene extends Phaser.Scene {
     this.tweens.killTweensOf(this.playerSprite);
     this.tweens.killTweensOf(this.playerShadow);
     this.anims.resumeAll();
+    this.playerActionFrameNonce += 1;
     this.playerDefeated = false;
     this.lastPlayerSimulationPosition = { x: player.x, y: player.y };
     this.playerRoot.setPosition(player.x, player.y).setDepth(player.y + 10).setAlpha(1);

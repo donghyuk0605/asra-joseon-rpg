@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { ASSETS } from '../assets/manifest';
+import { PLAYER_WALK_FRAME_RATE } from './playerMotionPresentation';
 import sceneSource from './HuntingScene.ts?raw';
 
 interface GaitMetrics {
@@ -90,7 +91,8 @@ describe('Gwanghae walk regression', () => {
     expect(animationMethod).toContain('for (let row = 0; row < 5; row += 1)');
     expect(playerWalkBlock).toContain('start: row * 8');
     expect(playerWalkBlock).toContain('end: row * 8 + 3');
-    expect(playerWalkBlock).toContain('frameRate: 11');
+    expect(PLAYER_WALK_FRAME_RATE).toBe(8);
+    expect(playerWalkBlock).toContain('frameRate: PLAYER_WALK_FRAME_RATE');
     expect(playerWalkBlock).toContain('repeat: -1');
 
     const syncMethod = methodSource(
