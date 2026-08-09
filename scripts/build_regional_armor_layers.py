@@ -167,7 +167,7 @@ def main() -> None:
     base_body = load_rgba("joseon-hero-base-body-v8.png")
     ready_body = load_rgba("joseon-hero-weapon-ready-body-v3.png")
     hajin_bow = load_rgba("hajin-frontier-archer-actions-v2.png")
-    hajin_melee = load_rgba("harlan-melee-ready-actions-v1.png")
+    hajin_melee = load_rgba("hajin-frontier-melee-actions-v2.png")
 
     clean_normal = {
         key: body_locked(load_rgba(path), base_body)

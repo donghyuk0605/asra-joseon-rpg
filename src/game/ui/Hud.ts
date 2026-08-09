@@ -7,6 +7,7 @@ import type {
   WeaponElement,
 } from '../simulation/types';
 import { ASSETS } from '../assets/manifest';
+import { PROTAGONIST_VISUALS } from '../player/protagonistVisuals';
 import { resolvePlayerLayers } from '../phaser/playerVisualMode';
 import { REGIONS, type RegionId } from '../world/regions';
 import { isJapanRegion, JAPAN_STAGE_COPY } from '../world/japanCampaign';
@@ -1563,15 +1564,16 @@ export class Hud {
     this.text('pause-region', snapshot.region === 'dungeon'
       ? `${region.name} ${snapshot.dungeonFloor}층`
       : frontierSector ? `${region.name} · ${frontierSector.name}` : region.name);
-    const className = frontierArcher ? '활잡이' : osakaMudang ? '무당' : gwanghaePrince ? '왕세자' : '무사';
-    const characterName = frontierArcher ? '하진' : osakaMudang ? '연화' : gwanghaePrince ? '왕세자 광해' : '김동혁';
+    const protagonistVisual = PROTAGONIST_VISUALS[snapshot.playerOrigin];
+    const className = protagonistVisual.className;
+    const characterName = protagonistVisual.displayName;
     this.text('pause-level', `${className} ${player.level}품 · 전투력 ${this.combatPower(snapshot).toLocaleString('ko-KR')}`);
     this.updateSettingsControls(snapshot.settings);
     this.updateMinimap(snapshot);
     this.root.querySelector('.location-plaque')?.classList.toggle('is-safe', region.safe);
     playerPanel?.classList.toggle('is-low-hp', playerLowHp);
     this.root.classList.toggle('is-player-low-hp', playerLowHp);
-    this.text('player-level', `${frontierArcher ? '북방 활잡이' : osakaMudang ? '망향 무당' : gwanghaePrince ? '조선 왕세자' : '무사'} · ${player.level}품`);
+    this.text('player-level', `${protagonistVisual.levelTitle} · ${player.level}품`);
     this.text('player-name', characterName);
     const inventoryTitle = this.root.querySelector<HTMLElement>('#inventory-title');
     if (inventoryTitle) inventoryTitle.textContent = `${characterName}의 행낭`;
@@ -1593,19 +1595,9 @@ export class Hud {
     if (resetAttributes) resetAttributes.disabled = Object.values(snapshot.attributes.allocations).every((value) => value === 0);
     const portrait = this.root.querySelector<HTMLImageElement>('.player-portrait-image');
     if (portrait) {
-      const portraitPath = frontierArcher
-        ? '/assets/ui/harlan-portrait-v1.png'
-        : osakaMudang
-          ? '/assets/ui/yeonhwa-portrait-v1.webp'
-          : gwanghaePrince
-            ? '/assets/ui/gwanghae-crown-prince-portrait-v1.webp'
-            : '/assets/ui/kim-donghyeok-portrait-v1.png';
+      const portraitPath = protagonistVisual.portraitPath;
       if (portrait.getAttribute('src') !== portraitPath) portrait.src = portraitPath;
-      portrait.alt = frontierArcher
-        ? '북방 활잡이 하진 초상'
-        : osakaMudang
-          ? '망향 무당 연화 초상'
-          : gwanghaePrince ? '조선 왕세자 광해 초상' : '김동혁 초상';
+      portrait.alt = protagonistVisual.portraitAlt;
       portrait.parentElement?.setAttribute('aria-label', portrait.alt);
     }
     this.root.querySelector('.minimap-player')?.setAttribute(

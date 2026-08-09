@@ -29,6 +29,7 @@ import {
 import { PLAYER_CHARM_VISUALS, playerCharmAttachmentForFrame } from './playerCharmLayer';
 import { bowAttachmentForFrame } from './playerBowLayer';
 import { resolvePlayerAttackVisual, resolvePlayerMovementVisual } from './playerAttackVisual';
+import { protagonistTextureMatchesOrigin } from '../player/protagonistVisuals';
 import { isPointBehindOccluder } from './buildingOcclusion';
 import { monsterScaleForRegion } from './pyongyangSoldierScale';
 import { ARCHER_ACTIVE_SKILL_IDS, SHAMAN_ACTIVE_SKILL_IDS, SWORD_ACTIVE_SKILL_IDS } from '../skills/catalog';
@@ -847,6 +848,7 @@ export class HuntingScene extends Phaser.Scene {
   } | null = null;
   private skillVisualNonce = 0;
   private playerPreviousWalkFrame = -1;
+  private publishedPlayerVisualSignature = '';
   private playerDefeated = false;
   private hudAccumulator = HUD_UPDATE_INTERVAL;
   private menuOpen = false;
@@ -9350,6 +9352,26 @@ export class HuntingScene extends Phaser.Scene {
     return resolvePlayerAttackVisual(style, row);
   }
 
+  private publishPlayerVisualState(
+    textureKey: string,
+    animationKey: string,
+    pose: 'idle' | 'walk' | 'attack' | 'defeated',
+  ): void {
+    const origin = this.simulation.getPlayerOrigin();
+    const matched = protagonistTextureMatchesOrigin(origin, textureKey);
+    const signature = `${origin}:${textureKey}:${animationKey}:${pose}:${matched}`;
+    if (signature === this.publishedPlayerVisualSignature) return;
+    this.publishedPlayerVisualSignature = signature;
+    document.body.dataset.renderedPlayerOrigin = origin;
+    document.body.dataset.playerTexture = textureKey;
+    document.body.dataset.playerAnimation = animationKey;
+    document.body.dataset.playerPose = pose;
+    document.body.dataset.playerVisualMatch = matched ? 'matched' : 'mismatch';
+    this.game.canvas.dataset.playerOrigin = origin;
+    this.game.canvas.dataset.playerTexture = textureKey;
+    this.game.canvas.dataset.playerVisualMatch = matched ? 'matched' : 'mismatch';
+  }
+
   private createTravelGhostVisual(): void {
     if (this.travelGhostAura || this.travelGhostCore) return;
     this.travelGhostAura = this.add.ellipse(0, -36, 82, 116, 0x79e7ff, 0.22)
@@ -9444,6 +9466,11 @@ export class HuntingScene extends Phaser.Scene {
     // walk animation play in place whenever collision resolution stopped the
     // actor against a wall, tree, or water boundary.
     const isMoving = visualMovement.moving;
+    this.publishPlayerVisualState(
+      visual.textureKey,
+      isMoving ? visual.animationKey : 'idle',
+      isMoving ? 'walk' : 'idle',
+    );
     this.playerSprite.setFlipX(flip);
 
     if (isMoving) {
@@ -10371,6 +10398,7 @@ export class HuntingScene extends Phaser.Scene {
       const shamanSkill = SHAMAN_ACTIVE_SKILL_IDS.includes(event.skillId);
       const archerSkill = ARCHER_ACTIVE_SKILL_IDS.includes(event.skillId);
       const visual = this.currentPlayerAttackVisual('weapon', row);
+      this.publishPlayerVisualState(visual.textureKey, visual.animationKey, 'attack');
       const visualNonce = ++this.skillVisualNonce;
       this.tweens.killTweensOf(this.playerActionRoot);
       this.playerActionRoot.setPosition(0, 0).setRotation(0).setScale(1).setAlpha(1);
@@ -10433,6 +10461,7 @@ export class HuntingScene extends Phaser.Scene {
       const frontierArcher = this.simulation.isFrontierArcher();
       const frontierBow = frontierArcher && this.simulation.isBowEquipped();
       const visual = this.currentPlayerAttackVisual(event.style, row);
+      this.publishPlayerVisualState(visual.textureKey, visual.animationKey, 'attack');
       this.tweens.killTweensOf(this.playerActionRoot);
       this.playerActionRoot.setPosition(0, 0).setRotation(0).setScale(1).setAlpha(1);
       this.playerSprite.setTexture(visual.textureKey).setPosition(0, 0).setRotation(0)
@@ -11911,6 +11940,7 @@ export class HuntingScene extends Phaser.Scene {
     const player = this.simulation.player;
     const direction = directionToFrame(player.facing);
     const visual = this.currentPlayerMovementVisual(direction.row);
+    this.publishPlayerVisualState(visual.textureKey, 'defeated', 'defeated');
     const horizontal = Math.cos(player.facing);
     const fallSign = Math.abs(horizontal) > 0.1 ? Math.sign(horizontal) : 1;
 
@@ -11954,6 +11984,7 @@ export class HuntingScene extends Phaser.Scene {
     const player = this.simulation.player;
     const direction = directionToFrame(player.facing);
     const visual = this.currentPlayerMovementVisual(direction.row);
+    this.publishPlayerVisualState(visual.textureKey, 'idle', 'idle');
     this.tweens.killTweensOf(this.playerActionRoot);
     this.tweens.killTweensOf(this.playerSprite);
     this.tweens.killTweensOf(this.playerShadow);

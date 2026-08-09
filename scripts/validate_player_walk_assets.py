@@ -52,10 +52,14 @@ def mask_iou(a: set[tuple[int, int]], b: set[tuple[int, int]]) -> float:
     return len(a & b) / len(a | b)
 
 
-def assert_alternating_walk(atlas: Image.Image, label: str) -> None:
+def assert_alternating_walk(
+    atlas: Image.Image,
+    label: str,
+    max_contact_pose_iou: float = MAX_CONTACT_POSE_IOU,
+) -> None:
     for row in range(ROWS):
         overlap = mask_iou(lower_body_mask(frame(atlas, row, 0)), lower_body_mask(frame(atlas, row, 2)))
-        if overlap >= MAX_CONTACT_POSE_IOU:
+        if overlap >= max_contact_pose_iou:
             raise AssertionError(
                 f"{label} row {row} columns 0/2 lower-body IoU {overlap:.3f}; feet read as sliding"
             )
@@ -113,6 +117,10 @@ def main() -> None:
     ready_tiger = open_atlas(ROOT / "public/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png")
     previous_hajin = open_atlas(ROOT / "public/assets/characters/harlan-frontier-archer-actions-v1.png")
     hajin = open_atlas(ROOT / "public/assets/characters/hajin-frontier-archer-actions-v2.png")
+    previous_hajin_melee = open_atlas(ROOT / "public/assets/characters/harlan-melee-ready-actions-v1.png")
+    hajin_melee = open_atlas(ROOT / "public/assets/characters/hajin-frontier-melee-actions-v2.png")
+    previous_yeonhwa = open_atlas(ROOT / "public/assets/characters/osaka-mudang-actions-v1.png")
+    yeonhwa = open_atlas(ROOT / "public/assets/characters/osaka-mudang-actions-v2.png")
     previous_gwanghae = open_atlas(ROOT / "public/assets/characters/joseon-gwanghae-actions-v1.png")
     gwanghae = open_atlas(ROOT / "public/assets/characters/joseon-gwanghae-actions-v2.png")
 
@@ -125,6 +133,12 @@ def main() -> None:
     assert_full_walk_modeling(hajin, "Hajin frontier archer")
     assert_alternating_walk(hajin, "Hajin frontier archer")
     assert_only_walk_changed(hajin, previous_hajin, "Hajin frontier archer v2")
+    assert_full_walk_modeling(hajin_melee, "Hajin frontier melee")
+    assert_alternating_walk(hajin_melee, "Hajin frontier melee", 0.945)
+    assert_only_walk_changed(hajin_melee, previous_hajin_melee, "Hajin frontier melee v2")
+    assert_full_walk_modeling(yeonhwa, "Yeonhwa Osaka mudang")
+    assert_alternating_walk(yeonhwa, "Yeonhwa Osaka mudang", 0.92)
+    assert_only_walk_changed(yeonhwa, previous_yeonhwa, "Yeonhwa Osaka mudang v2")
     assert_full_walk_modeling(gwanghae, "Crown Prince Gwanghae")
     assert_alternating_walk(gwanghae, "Crown Prince Gwanghae")
     assert_only_walk_changed(gwanghae, previous_gwanghae, "Crown Prince Gwanghae v2")
@@ -148,7 +162,7 @@ def main() -> None:
             )
     print(
         "Player weapon-ready walk assets inherit the approved alternating base gait; "
-        "all five source directions are body-locked, grounded, and uniquely modeled."
+        "Kim, Hajin, Yeonhwa, and Gwanghae are body-locked, grounded, and uniquely modeled in all five source directions."
     )
 
 

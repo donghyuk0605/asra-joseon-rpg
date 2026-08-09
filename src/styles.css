@@ -2219,29 +2219,25 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
 }
 .hot-slot { width: 57px; height: 57px; border-color: #6e5733; background: radial-gradient(circle at 50% 40%, #242824, #060807 76%); }
 .hot-slot:hover { border-color: #e2b96b !important; }
-.skill-icon { display: block; width: 42px; height: 42px; margin: 1px auto 0; background-image: url('/assets/ui/joseon-skill-icon-atlas-v1.png'); background-size: 300% 100%; background-repeat: no-repeat; filter: drop-shadow(0 2px 3px #000); }
+.skill-icon { display: block; width: 42px; height: 42px; margin: 1px auto 0; background-image: url('/assets/ui/skills/beta-skill-icon-atlas-v1.webp'); background-size: 600% 300%; background-repeat: no-repeat; filter: drop-shadow(0 2px 3px #000); }
 .skill-whirlwind { background-position: 0 0; }
-.skill-leap { background-position: 50% 0; }
-.skill-dash { background-position: 100% 0; }
-.skill-haemosu-volley { background-position: 0 0; filter: hue-rotate(73deg) saturate(1.24) brightness(1.12) drop-shadow(0 2px 3px #000); }
-.skill-falcon-seeker { background-position: 50% 0; filter: hue-rotate(145deg) saturate(1.08) brightness(1.05) drop-shadow(0 2px 3px #000); }
-.skill-iron-cavalry-shot { background-position: 100% 0; filter: sepia(.2) hue-rotate(172deg) saturate(.82) brightness(1.08) drop-shadow(0 2px 3px #000); }
-.skill-crescent-arrow-rain { background-position: 50% 0; filter: hue-rotate(208deg) saturate(1.35) brightness(1.16) drop-shadow(0 2px 3px #000); }
-.skill-tidebreaker-step {
-  background-image: url('/assets/ui/skills/episode2/episode2-tidebreaker-step-v1.png');
-  background-position: center;
-  background-size: contain;
-}
-.skill-beacon-volley {
-  background-image: url('/assets/ui/skills/episode2/episode2-beacon-volley-v1.png');
-  background-position: center;
-  background-size: contain;
-}
-.skill-great-bow-mastery { background-position: 0 0; filter: sepia(.28) hue-rotate(54deg) saturate(1.12) brightness(1.02) drop-shadow(0 2px 3px #000); }
-.skill-spirit-bell { background-position: 0 0; filter: hue-rotate(148deg) saturate(.82) brightness(1.3) drop-shadow(0 2px 4px #000); }
-.skill-talisman-flame { background-position: 50% 0; filter: hue-rotate(128deg) saturate(1.18) brightness(1.16) drop-shadow(0 2px 4px #000); }
-.skill-soul-binding { background-position: 100% 0; filter: hue-rotate(168deg) saturate(.72) brightness(1.22) drop-shadow(0 2px 4px #000); }
-.skill-possession { background-position: 50% 0; filter: hue-rotate(190deg) saturate(1.42) brightness(1.3) drop-shadow(0 2px 4px #000); }
+.skill-leap { background-position: 20% 0; }
+.skill-dash { background-position: 40% 0; }
+.skill-crescent { background-position: 60% 0; }
+.skill-tidebreaker-step { background-position: 80% 0; }
+.skill-blade-mastery { background-position: 100% 0; }
+.skill-haemosu-volley { background-position: 0 50%; }
+.skill-falcon-seeker { background-position: 20% 50%; }
+.skill-iron-cavalry-shot { background-position: 40% 50%; }
+.skill-crescent-arrow-rain { background-position: 60% 50%; }
+.skill-beacon-volley { background-position: 80% 50%; }
+.skill-great-bow-mastery { background-position: 100% 50%; }
+.skill-spirit-bell { background-position: 0 100%; }
+.skill-talisman-flame { background-position: 20% 100%; }
+.skill-soul-binding { background-position: 40% 100%; }
+.skill-possession { background-position: 60% 100%; }
+.skill-iron-body { background-position: 80% 100%; }
+.skill-insight { background-position: 100% 100%; }
 .skill-slot::after {
   content: "";
   position: absolute;
@@ -3615,11 +3611,6 @@ body.reduce-game-motion *, body.reduce-game-motion *::before, body.reduce-game-m
 
 /* Martial arts side panel + companion party --------------------------------
    These final overrides intentionally keep the battlefield visible. */
-.skill-crescent { background-position: 100% 0; filter: hue-rotate(38deg) brightness(1.16) drop-shadow(0 2px 3px #000); }
-.skill-blade-mastery { background-position: 0 0; filter: sepia(.35) brightness(.92) drop-shadow(0 2px 3px #000); }
-.skill-iron-body { background-position: 50% 0; filter: grayscale(.28) sepia(.3) drop-shadow(0 2px 3px #000); }
-.skill-insight { background-position: 100% 0; filter: hue-rotate(245deg) saturate(.72) drop-shadow(0 2px 3px #000); }
-
 #hud.is-skill-tree-open .skill-tree-backdrop {
   background: linear-gradient(90deg, rgba(1, 3, 2, .16), rgba(1, 3, 2, .3) 55%, rgba(1, 3, 2, .72));
 }
@@ -5567,6 +5558,30 @@ body.world-map-open { overflow: hidden; }
   .skill-discipline .skill-branches { grid-template-columns: 1fr; }
   .skill-discipline .skill-branches::before { top: 4%; bottom: 4%; left: 29px; width: 2px; height: auto; }
   .skill-node[data-skill-tier] { grid-column: 1; }
+  .skill-discipline .skill-node {
+    min-height: 82px;
+    grid-template-columns: 45px minmax(0, 1fr) 76px;
+    grid-template-rows: 1fr;
+    justify-items: stretch;
+    gap: 6px;
+    padding: 6px;
+    text-align: left;
+  }
+  .skill-discipline .skill-node > .skill-icon {
+    align-self: center;
+    width: 43px;
+    height: 43px;
+  }
+  .skill-discipline .skill-node > div { align-self: center; }
+  .skill-discipline .skill-node p { display: none; }
+  .skill-discipline .skill-node > button {
+    grid-column: 3;
+    align-self: stretch;
+    height: auto;
+    min-height: 43px;
+    margin: 0;
+    padding: 3px;
+  }
 }
 
 .ui-scale-settings {

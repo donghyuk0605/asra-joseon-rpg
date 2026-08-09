@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 describe('RPG inventory interaction and raster UI', () => {
   const hudSource = readFileSync(new URL('./Hud.ts', import.meta.url), 'utf8');
+  const protagonistVisuals = readFileSync(new URL('../player/protagonistVisuals.ts', import.meta.url), 'utf8');
   const styles = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8');
 
   it('uses a stable rapid-tap detector so rerendered item buttons still equip', () => {
@@ -33,7 +34,8 @@ describe('RPG inventory interaction and raster UI', () => {
   it('uses dedicated raster art for the player portrait and quest order', () => {
     expect(existsSync(new URL('../../../public/assets/ui/kim-donghyeok-portrait-v1.png', import.meta.url))).toBe(true);
     expect(existsSync(new URL('../../../public/assets/ui/joseon-quest-order-v1.png', import.meta.url))).toBe(true);
-    expect(hudSource).toContain('/assets/ui/kim-donghyeok-portrait-v1.png');
+    expect(hudSource).toContain('PROTAGONIST_VISUALS[snapshot.playerOrigin]');
+    expect(protagonistVisuals).toContain('/assets/ui/kim-donghyeok-portrait-v1.png');
     expect(hudSource).toContain('/assets/ui/joseon-quest-order-v1.png');
     expect(hudSource).toContain('bar-stat-label">HP');
     expect(hudSource).toContain('bar-stat-label">EXP');

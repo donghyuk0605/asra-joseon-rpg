@@ -394,7 +394,7 @@ describe('player equipment layer manifest', () => {
 
   it('ships dedicated 8-direction bow and sword-ready atlases for Hajin', () => {
     expect(ASSETS.frontierArcher.path).toBe('/assets/characters/hajin-frontier-archer-actions-v2.png');
-    expect(ASSETS.frontierMelee.path).toBe('/assets/characters/harlan-melee-ready-actions-v1.png');
+    expect(ASSETS.frontierMelee.path).toBe('/assets/characters/hajin-frontier-melee-actions-v2.png');
     for (const asset of [ASSETS.frontierArcher, ASSETS.frontierMelee]) {
       const png = readFileSync(new URL(`../../../public${asset.path}`, import.meta.url));
       expect(png.subarray(1, 4).toString()).toBe('PNG');
@@ -405,7 +405,7 @@ describe('player equipment layer manifest', () => {
   });
 
   it('ships Yeonhwa as a normalized 40-frame mudang atlas with an Osaka battlefield', () => {
-    expect(ASSETS.osakaMudang.path).toBe('/assets/characters/osaka-mudang-actions-v1.png');
+    expect(ASSETS.osakaMudang.path).toBe('/assets/characters/osaka-mudang-actions-v2.png');
     const atlas = readFileSync(new URL(`../../../public${ASSETS.osakaMudang.path}`, import.meta.url));
     expect(atlas.subarray(1, 4).toString()).toBe('PNG');
     expect(atlas.readUInt32BE(16)).toBe(256 * 8);

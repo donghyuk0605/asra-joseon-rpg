@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 describe('story chronicle', () => {
   const hud = readFileSync(new URL('./Hud.ts', import.meta.url), 'utf8');
   const scene = readFileSync(new URL('../phaser/HuntingScene.ts', import.meta.url), 'utf8');
+  const protagonistVisuals = readFileSync(new URL('../player/protagonistVisuals.ts', import.meta.url), 'utf8');
   const styles = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8');
 
   it('tracks the expanded playable campaign chapters instead of showing isolated flavor text', () => {
@@ -36,7 +37,8 @@ describe('story chronicle', () => {
     expect(hud).toContain("chapters: '11장'");
     expect(hud).toContain('운명의 다섯 막');
     expect(hud).toContain("'조선 왕세자 · 분조 지휘'");
-    expect(hud).toContain('/assets/ui/gwanghae-crown-prince-portrait-v1.webp');
+    expect(hud).toContain('PROTAGONIST_VISUALS[snapshot.playerOrigin]');
+    expect(protagonistVisuals).toContain('/assets/ui/gwanghae-crown-prince-portrait-v1.webp');
     expect(hud).toContain('? snapshot.questProgress.label');
     expect(hud).toContain('현재 전투 예비병');
   });
