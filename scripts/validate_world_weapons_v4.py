@@ -35,7 +35,7 @@ def main() -> None:
             raise ValueError(f"Invalid transparent margin: {path} {bounds}")
         if any(image.getpixel(point)[3] != 0 for point in ((0, 0), (255, 0), (0, 255), (255, 255))):
             raise ValueError(f"Opaque corner: {path}")
-        opaque = sum(1 for value in alpha.get_flattened_data() if value > 16)
+        opaque = sum(1 for value in alpha.getdata() if value > 16)
         if opaque < 2_000:
             raise ValueError(f"Unreadable silhouette: {path} {opaque}")
         grip_pixels = sum(

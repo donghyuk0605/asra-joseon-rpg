@@ -8,13 +8,13 @@
     "uniqueMonsterAssets": 38,
     "sharedMonsterKinds": 34,
     "items": 60,
-    "itemWorldVisualGaps": 5,
+    "itemWorldVisualGaps": 0,
     "propAssetEntries": 34,
-    "publicAssetFiles": 472,
-    "publicAssetBytes": 311601936,
-    "referencedAssetPaths": 343,
+    "publicAssetFiles": 495,
+    "publicAssetBytes": 323057931,
+    "referencedAssetPaths": 363,
     "missingReferencedPaths": 0,
-    "unreferencedPublicFiles": 129,
+    "unreferencedPublicFiles": 132,
     "duplicateContentGroups": 3,
     "duplicateReclaimableBytes": 51350,
     "versionFamilies": 79,
@@ -28,14 +28,14 @@
       "bytes": 181854193
     },
     {
+      "domain": "characters",
+      "files": 80,
+      "bytes": 49440382
+    },
+    {
       "domain": "monsters",
       "files": 34,
       "bytes": 38450041
-    },
-    {
-      "domain": "characters",
-      "files": 57,
-      "bytes": 37984387
     },
     {
       "domain": "ui",
@@ -2077,7 +2077,7 @@
         "path": "/assets/items/frontier-lamellar-coat-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-armor-layer"
+      "worldPresentation": "armor-layer-ready"
     },
     {
       "id": "falcon-eye-bracer",
@@ -2308,7 +2308,7 @@
         "path": "/assets/items/coastal-scout-coat-v2.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-armor-layer"
+      "worldPresentation": "armor-layer-ready"
     },
     {
       "id": "crane-feather-talisman",
@@ -2330,7 +2330,7 @@
         "path": "/assets/items/haeju-reed-cape-v2.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-armor-layer"
+      "worldPresentation": "armor-layer-ready"
     },
     {
       "id": "saltfield-ritual-knife",
@@ -2451,7 +2451,7 @@
         "path": "/assets/items/episode2/episode2-anju-frontier-coat-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-armor-layer"
+      "worldPresentation": "armor-layer-ready"
     },
     {
       "id": "pyeongchang-leopard-knife",
@@ -2517,7 +2517,7 @@
         "path": "/assets/items/episode2/episode2-gongju-scholar-coat-v1.png"
       },
       "groundPresentation": "inventory-icon-reuse",
-      "worldPresentation": "missing-armor-layer"
+      "worldPresentation": "armor-layer-ready"
     },
     {
       "id": "cheongju-kiln-hwando",
@@ -2630,38 +2630,7 @@
       "worldPresentation": "not-applicable"
     }
   ],
-  "itemWorldVisualGaps": [
-    {
-      "id": "frontier-lamellar-coat",
-      "name": "철비늘 변경 전포",
-      "slot": "armor",
-      "reason": "missing-armor-layer"
-    },
-    {
-      "id": "coastal-scout-coat",
-      "name": "경포 해안정찰 전포",
-      "slot": "armor",
-      "reason": "missing-armor-layer"
-    },
-    {
-      "id": "haeju-reed-cape",
-      "name": "해주 갈대 망토",
-      "slot": "armor",
-      "reason": "missing-armor-layer"
-    },
-    {
-      "id": "anju-frontier-coat",
-      "name": "안주 흑찰 전포",
-      "slot": "armor",
-      "reason": "missing-armor-layer"
-    },
-    {
-      "id": "gongju-scholar-coat",
-      "name": "공주 유장 도포",
-      "slot": "armor",
-      "reason": "missing-armor-layer"
-    }
-  ],
+  "itemWorldVisualGaps": [],
   "props": [
     {
       "id": "props.betaRoadsideProps",
@@ -2965,6 +2934,10 @@
       "bytes": 583271
     },
     {
+      "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.webp",
+      "bytes": 411646
+    },
+    {
       "path": "/assets/characters/joseon-hero-tiger-pelt-layer-v1.png",
       "bytes": 458361
     },
@@ -2975,6 +2948,10 @@
     {
       "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png",
       "bytes": 495475
+    },
+    {
+      "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp",
+      "bytes": 341820
     },
     {
       "path": "/assets/characters/joseon-hero-unequipped-v2.png",
@@ -3003,6 +2980,10 @@
     {
       "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.png",
       "bytes": 602034
+    },
+    {
+      "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp",
+      "bytes": 424534
     },
     {
       "path": "/assets/characters/joseon-hero-weapon-attack-body-v1.png",
@@ -3492,6 +3473,56 @@
       ]
     },
     {
+      "family": "/assets/characters/joseon-hero-hunter-weapon-ready-layer",
+      "files": [
+        {
+          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.png",
+          "bytes": 561200
+        },
+        {
+          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.webp",
+          "bytes": 174822
+        },
+        {
+          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.png",
+          "bytes": 583271
+        },
+        {
+          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.webp",
+          "bytes": 411646
+        },
+        {
+          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v3.png",
+          "bytes": 556371
+        }
+      ]
+    },
+    {
+      "family": "/assets/characters/joseon-hero-warden-weapon-ready-layer",
+      "files": [
+        {
+          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.png",
+          "bytes": 584740
+        },
+        {
+          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.webp",
+          "bytes": 182102
+        },
+        {
+          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.png",
+          "bytes": 602034
+        },
+        {
+          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp",
+          "bytes": 424534
+        },
+        {
+          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v3.png",
+          "bytes": 578240
+        }
+      ]
+    },
+    {
       "family": "/assets/characters/joseon-hero-weapon-ready-body",
       "files": [
         {
@@ -3538,44 +3569,23 @@
       ]
     },
     {
-      "family": "/assets/characters/joseon-hero-hunter-weapon-ready-layer",
+      "family": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer",
       "files": [
         {
-          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.png",
-          "bytes": 561200
+          "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v1.png",
+          "bytes": 473717
         },
         {
-          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.webp",
-          "bytes": 174822
+          "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png",
+          "bytes": 495475
         },
         {
-          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.png",
-          "bytes": 583271
+          "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp",
+          "bytes": 341820
         },
         {
-          "path": "/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.webp",
-          "bytes": 411646
-        }
-      ]
-    },
-    {
-      "family": "/assets/characters/joseon-hero-warden-weapon-ready-layer",
-      "files": [
-        {
-          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.png",
-          "bytes": 584740
-        },
-        {
-          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.webp",
-          "bytes": 182102
-        },
-        {
-          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.png",
-          "bytes": 602034
-        },
-        {
-          "path": "/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp",
-          "bytes": 424534
+          "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v3.png",
+          "bytes": 476464
         }
       ]
     },
@@ -3618,23 +3628,6 @@
         {
           "path": "/assets/environment/ulleung-government-district-v3.webp",
           "bytes": 387290
-        }
-      ]
-    },
-    {
-      "family": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer",
-      "files": [
-        {
-          "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v1.png",
-          "bytes": 473717
-        },
-        {
-          "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png",
-          "bytes": 495475
-        },
-        {
-          "path": "/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp",
-          "bytes": 341820
         }
       ]
     },
@@ -5050,182 +5043,182 @@
       "source": "this.travelGhostCore = this.add.ellipse(0, -34, 46, 88, 0xd5f9ff, 0.16)"
     },
     {
-      "line": 10115,
+      "line": 10113,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 6, 118, 34, 0x080605, 0.56);"
     },
     {
-      "line": 10116,
+      "line": 10114,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(0, 5, 142, 48, 0x5b1616, 0.18).setStrokeStyle(3, 0xe4ae58, 0.88);"
     },
     {
-      "line": 10130,
+      "line": 10128,
       "primitive": "graphics",
       "source": "const hp = this.add.graphics();"
     },
     {
-      "line": 10255,
+      "line": 10253,
       "primitive": "rectangle",
       "source": "const beam = this.add.rectangle(drop.x, drop.y - 38, 5, 88, rarityStyle.color, rarityStyle.notable ? 0.19 : 0.08);"
     },
     {
-      "line": 10256,
+      "line": 10254,
       "primitive": "ellipse",
       "source": "const glow = this.add.ellipse(drop.x, drop.y + 3, 58, 21, rarityStyle.color, 0.17)"
     },
     {
-      "line": 10893,
+      "line": 10891,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(monster.x, monster.y + 4, 94, 32, 0x4e120f, 0.08)"
     },
     {
-      "line": 10961,
+      "line": 10959,
       "primitive": "graphics",
       "source": "const strike = this.add.graphics().setDepth(target.y + 18).setBlendMode(Phaser.BlendModes.ADD);"
     },
     {
-      "line": 10992,
+      "line": 10990,
       "primitive": "ellipse",
       "source": "const rally = this.add.ellipse(monster.x, monster.y + 2, 92, 34, 0x7f4b20, 0.08)"
     },
     {
-      "line": 11178,
+      "line": 11176,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(player.x, player.y + 3, 54, 22, 0x8ad5e8, 0.08)"
     },
     {
-      "line": 11196,
+      "line": 11194,
       "primitive": "ellipse",
       "source": "const aura = this.add.ellipse(player.x, player.y + 4, 58, 24, 0x9edff0, 0.04)"
     },
     {
-      "line": 11350,
+      "line": 11348,
       "primitive": "graphics",
       "source": "const fx = this.add.graphics().setDepth(to.y + 24).setBlendMode(Phaser.BlendModes.ADD);"
     },
     {
-      "line": 11509,
+      "line": 11507,
       "primitive": "graphics",
       "source": "const slash = this.add.graphics({ x: fromX, y: fromY }).setDepth(1900).setRotation(angle).setScale(0.65);"
     },
     {
-      "line": 11551,
+      "line": 11549,
       "primitive": "circle",
       "source": "const ember = this.add.circle("
     },
     {
-      "line": 11572,
+      "line": 11570,
       "primitive": "graphics",
       "source": "const ice = this.add.graphics({ x: target.x, y: target.y - 45 }).setDepth(target.y + 18);"
     },
     {
-      "line": 11598,
+      "line": 11596,
       "primitive": "circle",
       "source": "const bubble = this.add.circle("
     },
     {
-      "line": 11618,
+      "line": 11616,
       "primitive": "graphics",
       "source": "const wind = this.add.graphics({ x: target.x, y: target.y - 46 }).setDepth(target.y + 18);"
     },
     {
-      "line": 11630,
+      "line": 11628,
       "primitive": "graphics",
       "source": "const quake = this.add.graphics({ x: target.x, y: target.y - 4 }).setDepth(target.y + 17);"
     },
     {
-      "line": 11645,
+      "line": 11643,
       "primitive": "circle",
       "source": "const shadow = this.add.circle(target.x, target.y - 48, secondary ? 18 : 30, 0x5d3a88, 0.5)"
     },
     {
-      "line": 11668,
+      "line": 11666,
       "primitive": "graphics",
       "source": "const lightning = this.add.graphics().setDepth(Math.max(start.y, end.y) + 40);"
     },
     {
-      "line": 11714,
+      "line": 11712,
       "primitive": "graphics",
       "source": "const warning = this.add.graphics().setDepth(1880);"
     },
     {
-      "line": 11767,
+      "line": 11765,
       "primitive": "graphics",
       "source": "const shock = this.add.graphics({ x, y }).setDepth(1900).setRotation(angle);"
     },
     {
-      "line": 11783,
+      "line": 11781,
       "primitive": "graphics",
       "source": "const trail = this.add.graphics({ x, y }).setDepth(1895).setRotation(angle);"
     },
     {
-      "line": 11821,
+      "line": 11819,
       "primitive": "ellipse",
       "source": "const stain = this.add.ellipse(0, 7, isLowQuadrupedMonster(monster.kind) ? 72 : 58, isLowQuadrupedMonster(monster.kind) ? 22 : 18, 0x361916, 0.14);"
     },
     {
-      "line": 11822,
+      "line": 11820,
       "primitive": "ellipse",
       "source": "const shadow = this.add.ellipse(0, 4, isLowQuadrupedMonster(monster.kind) ? 78 : 62, isLowQuadrupedMonster(monster.kind) ? 24 : 20, 0x090907, 0.34);"
     },
     {
-      "line": 11853,
+      "line": 11851,
       "primitive": "circle",
       "source": "const fireball = this.add.circle(monster.x, monster.y - 42, 32, 0xff5a20, 0.72)"
     },
     {
-      "line": 12132,
+      "line": 12130,
       "primitive": "graphics",
       "source": "const tracer = this.add.graphics().setDepth(Math.max(monster.y, target.y) + 74);"
     },
     {
-      "line": 12135,
+      "line": 12133,
       "primitive": "circle",
       "source": "const flash = this.add.circle(startX, startY, 16, 0xffbf5f, 0.74)"
     },
     {
-      "line": 12138,
+      "line": 12136,
       "primitive": "circle",
       "source": "const smoke = this.add.circle(startX, startY, 9, 0xc9c1ae, 0.42)"
     },
     {
-      "line": 12271,
+      "line": 12269,
       "primitive": "graphics",
       "source": "const impact = this.add.graphics({ x, y }).setDepth(1950);"
     },
     {
-      "line": 12309,
+      "line": 12307,
       "primitive": "rectangle",
       "source": "const shard = this.add.rectangle("
     },
     {
-      "line": 12340,
+      "line": 12338,
       "primitive": "ellipse",
       "source": "const ring = this.add.ellipse(x, y + 20, 54, 22, color, 0.08)"
     },
     {
-      "line": 12343,
+      "line": 12341,
       "primitive": "ellipse",
       "source": "const inner = this.add.ellipse(x, y + 20, 32, 13, 0xffffff, 0.08)"
     },
     {
-      "line": 12428,
+      "line": 12426,
       "primitive": "circle",
       "source": "const mote = this.add.circle("
     },
     {
-      "line": 12454,
+      "line": 12452,
       "primitive": "rectangle",
       "source": "const pulse = this.add.rectangle("
     },
     {
-      "line": 12472,
+      "line": 12470,
       "primitive": "ellipse",
       "source": "const dust = this.add.ellipse(x, y, 18, 7, 0x8c7659, 0.38).setDepth(y - 2);"
     },
     {
-      "line": 12494,
+      "line": 12492,
       "primitive": "graphics",
       "source": "const warning = this.add.graphics({ x, y }).setDepth(y - 1).setRotation(angle);"
     }

@@ -360,11 +360,12 @@ describe('player equipment layer manifest', () => {
     expect(ASSETS.playerArmorLayer).toEqual({
       key: 'joseon-hero-armor-layer-v4', path: '/assets/characters/joseon-hero-armor-layer-v4.png',
     });
-    expect(ASSETS.playerArmorLayers).toEqual({
+    expect(ASSETS.playerArmorLayers).toMatchObject({
       'hunter-durumagi': { key: 'joseon-hero-armor-layer-v4', path: '/assets/characters/joseon-hero-armor-layer-v4.png' },
       'warden-durumagi': { key: 'joseon-hero-warden-layer-v2', path: '/assets/characters/joseon-hero-warden-layer-v2.png' },
       'tiger-pelt-armor': { key: 'joseon-hero-tiger-pelt-layer-v2', path: '/assets/characters/joseon-hero-tiger-pelt-layer-v2.png' },
     });
+    expect(Object.keys(ASSETS.playerArmorLayers)).toHaveLength(8);
   });
 
   it('ships one 40-frame weapon-ready body and matching clothing layers', () => {
@@ -372,20 +373,23 @@ describe('player equipment layer manifest', () => {
       key: 'joseon-hero-weapon-ready-body-v3',
       path: '/assets/characters/joseon-hero-weapon-ready-body-v3.png',
     });
-    expect(ASSETS.playerWeaponReadyArmorLayers).toEqual({
+    expect(ASSETS.playerWeaponReadyArmorLayers).toMatchObject({
       'hunter-durumagi': {
-        key: 'joseon-hero-hunter-weapon-ready-layer-v2',
-        path: '/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.webp',
+        key: 'joseon-hero-hunter-weapon-ready-layer-v3',
+        path: '/assets/characters/joseon-hero-hunter-weapon-ready-layer-v3.png',
       },
       'warden-durumagi': {
-        key: 'joseon-hero-warden-weapon-ready-layer-v2',
-        path: '/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp',
+        key: 'joseon-hero-warden-weapon-ready-layer-v3',
+        path: '/assets/characters/joseon-hero-warden-weapon-ready-layer-v3.png',
       },
       'tiger-pelt-armor': {
-        key: 'joseon-hero-tiger-pelt-weapon-ready-layer-v2',
-        path: '/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp',
+        key: 'joseon-hero-tiger-pelt-weapon-ready-layer-v3',
+        path: '/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v3.png',
       },
     });
+    expect(Object.keys(ASSETS.playerWeaponReadyArmorLayers)).toHaveLength(8);
+    expect(Object.keys(ASSETS.frontierArmorLayers)).toHaveLength(8);
+    expect(Object.keys(ASSETS.frontierWeaponReadyArmorLayers)).toHaveLength(8);
   });
 
   it('ships dedicated 8-direction bow and sword-ready atlases for Hajin', () => {

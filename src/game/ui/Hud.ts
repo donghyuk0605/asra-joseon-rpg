@@ -2732,6 +2732,11 @@ export class Hud {
         ? ASSETS.playerArmorLayers[armor.id as keyof typeof ASSETS.playerArmorLayers]
         : undefined;
       const frontierArcher = snapshot.playerOrigin === 'frontier-archer';
+      const frontierArmorAsset = armor
+        ? weapon?.weaponClass === 'bow'
+          ? ASSETS.frontierArmorLayers[armor.id as keyof typeof ASSETS.frontierArmorLayers]
+          : ASSETS.frontierWeaponReadyArmorLayers[armor.id as keyof typeof ASSETS.frontierWeaponReadyArmorLayers]
+        : undefined;
       const osakaMudang = snapshot.playerOrigin === 'osaka-mudang';
       const gwanghaePrince = snapshot.playerOrigin === 'gwanghae-prince';
       const characterSheet = osakaMudang
@@ -2744,6 +2749,7 @@ export class Hud {
         <span class="avatar-rune"></span>
         <span class="avatar-sprite" style="--character-sheet:url('${characterSheet}')"></span>
         ${!frontierArcher && !osakaMudang && !gwanghaePrince && layers.armor && armorAsset ? `<span class="avatar-sprite avatar-armor-layer" style="--character-sheet:url('${armorAsset.path}')"></span>` : ''}
+        ${frontierArcher && layers.armor && frontierArmorAsset ? `<span class="avatar-sprite avatar-armor-layer" style="--character-sheet:url('${frontierArmorAsset.path}')"></span>` : ''}
         ${!osakaMudang && !gwanghaePrince && layers.weapon && weapon && weapon.weaponClass !== 'bow' ? `<img class="avatar-weapon-layer" src="${weapon.iconPath}" alt="">` : ''}
         <span class="avatar-ground"></span>
         <div class="avatar-caption"><b>${characterName}</b><small>${osakaMudang

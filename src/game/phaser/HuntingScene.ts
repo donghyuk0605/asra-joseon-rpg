@@ -1736,12 +1736,12 @@ export class HuntingScene extends Phaser.Scene {
     this.load.spritesheet(ASSETS.ulleungOppressedVillager.key, ASSETS.ulleungOppressedVillager.path, {
       frameWidth: PLAYER_ACTION_FRAME.width, frameHeight: PLAYER_ACTION_FRAME.height, endFrame: 39,
     });
-    for (const armor of Object.values(ASSETS.playerArmorLayers)) {
-      this.load.spritesheet(armor.key, armor.path, {
-        frameWidth: PLAYER_ACTION_FRAME.width, frameHeight: PLAYER_ACTION_FRAME.height, endFrame: 39,
-      });
-    }
-    for (const armor of Object.values(ASSETS.playerWeaponReadyArmorLayers)) {
+    for (const armor of [
+      ...Object.values(ASSETS.playerArmorLayers),
+      ...Object.values(ASSETS.playerWeaponReadyArmorLayers),
+      ...Object.values(ASSETS.frontierArmorLayers),
+      ...Object.values(ASSETS.frontierWeaponReadyArmorLayers),
+    ]) {
       this.load.spritesheet(armor.key, armor.path, {
         frameWidth: PLAYER_ACTION_FRAME.width, frameHeight: PLAYER_ACTION_FRAME.height, endFrame: 39,
       });
@@ -2003,8 +2003,12 @@ export class HuntingScene extends Phaser.Scene {
           Number.isFinite(requestedEnemyHp) && requestedEnemyHp > 0 ? requestedEnemyHp : undefined,
         );
       }
-      if (playtestParams.get('armor') === 'tiger') {
-        this.toggleDevEquipment('tiger-pelt-armor');
+      const requestedArmorId = playtestParams.get('armor') === 'tiger'
+        ? 'tiger-pelt-armor'
+        : playtestParams.get('armor');
+      if (requestedArmorId && requestedArmorId in ITEM_CATALOG
+        && ITEM_CATALOG[requestedArmorId as ItemId].slot === 'armor') {
+        this.toggleDevEquipment(requestedArmorId as ItemId);
       }
     }
     this.createMonsterViews();
@@ -9476,14 +9480,12 @@ export class HuntingScene extends Phaser.Scene {
       return;
     }
     const frontierArcher = this.simulation.isFrontierArcher();
-    const frontierBow = frontierArcher && this.simulation.isBowEquipped();
-    if (frontierBow) {
-      this.playerArmorSprite.setVisible(false);
-    }
     const armor = this.simulation.getEquippedDefinition('armor');
     const weaponReady = this.playerSprite.texture.key === ASSETS.playerWeaponReadyBody.key
       || this.playerSprite.texture.key === ASSETS.frontierMelee.key;
-    const armorAssets = weaponReady ? ASSETS.playerWeaponReadyArmorLayers : ASSETS.playerArmorLayers;
+    const armorAssets = frontierArcher
+      ? weaponReady ? ASSETS.frontierWeaponReadyArmorLayers : ASSETS.frontierArmorLayers
+      : weaponReady ? ASSETS.playerWeaponReadyArmorLayers : ASSETS.playerArmorLayers;
     const armorAsset = armor
       ? armorAssets[armor.id as keyof typeof armorAssets]
       : undefined;
@@ -9492,7 +9494,7 @@ export class HuntingScene extends Phaser.Scene {
     }
 
     this.playerArmorSprite
-      .setVisible(Boolean(!frontierArcher && layers.armor && armorAsset && bodyVisible))
+      .setVisible(Boolean(layers.armor && armorAsset && bodyVisible))
       .setFrame(frame)
       .setPosition(this.playerSprite.x, this.playerSprite.y)
       .setRotation(this.playerSprite.rotation)

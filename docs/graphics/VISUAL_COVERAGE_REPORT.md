@@ -11,10 +11,10 @@
 | 모듈 조합 지역 | 35개 |
 | 몬스터 종류 / 실제 시각 키 | 61종 / 38개 |
 | 공유 외형 몬스터 | 34종 |
-| 아이템 / 장착 월드 외형 공백 | 60종 / 5종 |
+| 아이템 / 장착 월드 외형 공백 | 60종 / 0종 |
 | 등록된 환경 객체 자산 | 34개 |
-| 배포 자산 | 472개 · 297.2MB |
-| 미참조 배포 자산 | 129개 |
+| 배포 자산 | 495개 · 308.1MB |
+| 미참조 배포 자산 | 132개 |
 | 동일 내용 중복 | 3묶음 · 50.1KB 회수 가능 |
 | 코드 렌더 도형 / 고정 실물 후보 | 130곳 / 0곳 |
 | 존재하지 않는 참조 | 0개 |
@@ -24,8 +24,8 @@
 | 영역 | 파일 | 용량 |
 | --- | --- | --- |
 | environment | 203 | 173.4MB |
+| characters | 80 | 47.2MB |
 | monsters | 34 | 36.7MB |
-| characters | 57 | 36.2MB |
 | ui | 46 | 31.0MB |
 | bosses | 11 | 14.1MB |
 | items | 77 | 3.1MB |
@@ -53,11 +53,6 @@
 
 | 아이템 | 슬롯 | 공백 |
 | --- | --- | --- |
-| 철비늘 변경 전포 (frontier-lamellar-coat) | armor | missing-armor-layer |
-| 경포 해안정찰 전포 (coastal-scout-coat) | armor | missing-armor-layer |
-| 해주 갈대 망토 (haeju-reed-cape) | armor | missing-armor-layer |
-| 안주 흑찰 전포 (anju-frontier-coat) | armor | missing-armor-layer |
-| 공주 유장 도포 (gongju-scholar-coat) | armor | missing-armor-layer |
 
 ## 고정 실물로 의심되는 코드 도형
 
@@ -73,13 +68,13 @@
 ## 버전·포맷 중복 계열
 
 - `/assets/characters/joseon-hero-base-body`: `/assets/characters/joseon-hero-base-body-v4.png`, `/assets/characters/joseon-hero-base-body-v5.png`, `/assets/characters/joseon-hero-base-body-v6.png`, `/assets/characters/joseon-hero-base-body-v7.png`, `/assets/characters/joseon-hero-base-body-v8.png`
+- `/assets/characters/joseon-hero-hunter-weapon-ready-layer`: `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.webp`, `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.webp`, `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v3.png`
+- `/assets/characters/joseon-hero-warden-weapon-ready-layer`: `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.webp`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v3.png`
 - `/assets/characters/joseon-hero-weapon-ready-body`: `/assets/characters/joseon-hero-weapon-ready-body-v1.png`, `/assets/characters/joseon-hero-weapon-ready-body-v1.webp`, `/assets/characters/joseon-hero-weapon-ready-body-v2.png`, `/assets/characters/joseon-hero-weapon-ready-body-v2.webp`, `/assets/characters/joseon-hero-weapon-ready-body-v3.png`
 - `/assets/characters/joseon-hero-armor-layer`: `/assets/characters/joseon-hero-armor-layer-v1.png`, `/assets/characters/joseon-hero-armor-layer-v2.png`, `/assets/characters/joseon-hero-armor-layer-v3.png`, `/assets/characters/joseon-hero-armor-layer-v4.png`
-- `/assets/characters/joseon-hero-hunter-weapon-ready-layer`: `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.webp`, `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.webp`
-- `/assets/characters/joseon-hero-warden-weapon-ready-layer`: `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.webp`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp`
+- `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer`: `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp`, `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v3.png`
 - `/assets/environment/props/joseon-farm-plot-stages`: `/assets/environment/props/joseon-farm-plot-stages-v1.png`, `/assets/environment/props/joseon-farm-plot-stages-v2.png`, `/assets/environment/props/joseon-farm-plot-stages-v3.png`, `/assets/environment/props/joseon-farm-plot-stages-v4.png`
 - `/assets/environment/ulleung-government-district`: `/assets/environment/ulleung-government-district-v1.png`, `/assets/environment/ulleung-government-district-v2.png`, `/assets/environment/ulleung-government-district-v3.png`, `/assets/environment/ulleung-government-district-v3.webp`
-- `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer`: `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v1.png`, `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png`, `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp`
 - `/assets/environment/generated/gangneung-gyeongpo`: `/assets/environment/generated/gangneung-gyeongpo-v1.webp`, `/assets/environment/generated/gangneung-gyeongpo-v2.webp`, `/assets/environment/generated/gangneung-gyeongpo-v3.webp`
 - `/assets/environment/generated/geoje-naval-strait`: `/assets/environment/generated/geoje-naval-strait-v1.webp`, `/assets/environment/generated/geoje-naval-strait-v2.webp`, `/assets/environment/generated/geoje-naval-strait-v3.webp`
 - `/assets/environment/generated/haeju-saltfield`: `/assets/environment/generated/haeju-saltfield-v1.webp`, `/assets/environment/generated/haeju-saltfield-v2.webp`, `/assets/environment/generated/haeju-saltfield-v3.webp`
@@ -169,9 +164,11 @@
 - `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.png` (548.0KB)
 - `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v1.webp` (170.7KB)
 - `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.png` (569.6KB)
+- `/assets/characters/joseon-hero-hunter-weapon-ready-layer-v2.webp` (402.0KB)
 - `/assets/characters/joseon-hero-tiger-pelt-layer-v1.png` (447.6KB)
 - `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v1.png` (462.6KB)
 - `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.png` (483.9KB)
+- `/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp` (333.8KB)
 - `/assets/characters/joseon-hero-unequipped-v2.png` (841.0KB)
 - `/assets/characters/joseon-hero-unequipped-v3.png` (854.5KB)
 - `/assets/characters/joseon-hero-warden-layer-v1.png` (547.6KB)
@@ -179,6 +176,7 @@
 - `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.png` (571.0KB)
 - `/assets/characters/joseon-hero-warden-weapon-ready-layer-v1.webp` (177.8KB)
 - `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.png` (587.9KB)
+- `/assets/characters/joseon-hero-warden-weapon-ready-layer-v2.webp` (414.6KB)
 - `/assets/characters/joseon-hero-weapon-attack-body-v1.png` (897.4KB)
 - `/assets/characters/joseon-hero-weapon-only-v2.png` (710.1KB)
 - `/assets/characters/joseon-hero-weapon-only-v3.png` (724.8KB)

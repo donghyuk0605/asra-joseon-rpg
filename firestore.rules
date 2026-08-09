@@ -204,7 +204,7 @@ service cloud.firestore {
         && request.resource.data.body.size() <= 1200
         && request.resource.data.category in ['general', 'question', 'strategy', 'party']
         && validGuideProfile(request.resource.data.profile)
-        && request.resource.data.createdAt == request.time;
+        && request.resource.data.createdAt is timestamp;
       allow update, delete: if false;
 
       match /comments/{commentId} {
@@ -223,7 +223,7 @@ service cloud.firestore {
           && request.resource.data.body is string
           && request.resource.data.body.size() >= 2
           && request.resource.data.body.size() <= 500
-          && request.resource.data.createdAt == request.time;
+          && request.resource.data.createdAt is timestamp;
         allow update, delete: if false;
       }
     }
