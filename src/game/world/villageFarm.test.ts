@@ -35,26 +35,36 @@ describe('village farm livelihood', () => {
     expect(new Set(VILLAGE_FARMERS.map((farmer) => farmer.plotId)).size).toBe(VILLAGE_FARM_PLOTS.length);
   });
 
-  it('keeps the kitchen fields outside the central road and every farmer on the assigned soil', () => {
+  it('keeps both village crossing roads open and every farmer on the assigned soil', () => {
     expect(VILLAGE_FARM_PLOTS.map(({ x, y }) => [x, y])).toEqual([
-      [225, 510],
-      [435, 510],
-      [1100, 560],
-      [1320, 560],
+      [555, 360],
+      [555, 850],
+      [1015, 360],
+      [1190, 850],
     ]);
 
-    const road = { left: 645, right: 925 };
+    const northSouthRoad = { left: 645, right: 925 };
+    const eastWestRoad = { top: 390, bottom: 570 };
     for (const plot of VILLAGE_FARM_PLOTS) {
       const left = plot.x - plot.width / 2;
       const right = plot.x + plot.width / 2;
-      expect(right <= road.left - 20 || left >= road.right + 20, plot.id).toBe(true);
+      const top = plot.y - plot.height;
+      const bottom = plot.y;
+      expect(
+        right <= northSouthRoad.left - 20 || left >= northSouthRoad.right + 20,
+        `${plot.id} north/south road`,
+      ).toBe(true);
+      expect(
+        bottom <= eastWestRoad.top - 20 || top >= eastWestRoad.bottom + 20,
+        `${plot.id} east/west road`,
+      ).toBe(true);
 
       const farmer = VILLAGE_FARMERS.find((entry) => entry.plotId === plot.id)!;
       for (const point of farmer.points) {
         expect(point.x, `${farmer.id} x`).toBeGreaterThanOrEqual(left);
         expect(point.x, `${farmer.id} x`).toBeLessThanOrEqual(right);
-        expect(point.y, `${farmer.id} y`).toBeGreaterThanOrEqual(plot.y - plot.height);
-        expect(point.y, `${farmer.id} y`).toBeLessThanOrEqual(plot.y);
+        expect(point.y, `${farmer.id} y`).toBeGreaterThanOrEqual(top);
+        expect(point.y, `${farmer.id} y`).toBeLessThanOrEqual(bottom);
       }
     }
   });

@@ -61,7 +61,7 @@ describe('Joseon settlement and Crown Prince Gwanghae presentation', () => {
   it('keeps one camera strip while crossing all seven Joseon town maps', () => {
     expect(sceneSource).toContain('continuityCameraBoundsForRegion(event.region)');
     expect(sceneSource).toContain('isContinuousWorldNeighbor(previousCameraRegion, event.region)');
-    expect(sceneSource).toContain('continuityCameraBoundsForRegion(this.simulation.region)');
+    expect(sceneSource).toContain('safeCameraBoundsForRegion(this.simulation.region)');
     expect(sceneSource).toContain('for (const neighbor of continuityNeighborsForRegion(activeRegion))');
   });
 });

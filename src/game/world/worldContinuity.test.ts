@@ -3,6 +3,7 @@ import { GameSimulation } from '../simulation/GameSimulation';
 import { MAP_HEIGHT, MAP_WIDTH, REGION_ORIGINS } from './layout';
 import {
   continuityCameraBoundsForRegion,
+  safeCameraBoundsForRegion,
   continuityNeighborsForRegion,
   continuousWorldEdge,
   isContinuousWorldNeighbor,
@@ -157,6 +158,20 @@ describe('world terrain continuity graph', () => {
     for (const seam of WORLD_TERRAIN_SEAMS) {
       expect(sameContinuityCameraGroup(seam.from, seam.to), seam.id).toBe(true);
     }
+  });
+
+  it('clamps the Jeonju camera to its complete three-map column instead of an L-shaped empty cell', () => {
+    const field = safeCameraBoundsForRegion('jeonjufield');
+    expect(field).toEqual(safeCameraBoundsForRegion('jeonjugate'));
+    expect(field).toEqual(safeCameraBoundsForRegion('jeonju'));
+    expect(field).toMatchObject({
+      x: REGION_ORIGINS.jeonju.x,
+      y: REGION_ORIGINS.jeonju.y,
+      width: MAP_WIDTH,
+      height: MAP_HEIGHT * 3,
+    });
+    expect(field).not.toEqual(continuityCameraBoundsForRegion('jeonjufield'));
+    expect(safeCameraBoundsForRegion('village')).toEqual(continuityCameraBoundsForRegion('village'));
   });
 
   it('preserves a non-centred lane while crossing northern and southern borders', () => {

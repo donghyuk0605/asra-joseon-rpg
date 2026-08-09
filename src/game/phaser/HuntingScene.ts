@@ -128,6 +128,7 @@ import {
 } from '../world/joseonTowns';
 import {
   continuityCameraBoundsForRegion,
+  safeCameraBoundsForRegion,
   continuityNeighborsForRegion,
   isContinuousWorldNeighbor,
   WORLD_TERRAIN_SEAMS,
@@ -136,6 +137,7 @@ import {
 } from '../world/worldContinuity';
 import { treeSpeciesFrame, ULLEUNG_EDGE_TREE_SITES, type TreeSpecies } from '../world/treeSpecies';
 import { BETA_ROADSIDE_PROP_PLACEMENTS } from '../world/betaRoadsideProps';
+import { worldActorPresentationScale } from '../world/worldPresentationScale';
 import { createExtendedRegionMotion } from './extendedRegionMotion';
 import { EPISODE2_REGION_LAYOUTS, isEpisode2Region } from '../world/episode2Regions';
 import { createEpisode2RegionWorld } from './episode2RegionMotion';
@@ -7667,23 +7669,43 @@ export class HuntingScene extends Phaser.Scene {
       const image = this.add.image(x, y, ASSETS.props.betaRoadsideProps.key, prop.frame)
         .setDisplaySize(prop.size, prop.size)
         .setOrigin(0.5, 0.9)
+        .setFlipX(Boolean(prop.flipX))
         .setDepth(y - 1);
+      if (prop.tint) image.setTint(prop.tint);
+      image
+        .setName(`beta-roadside-prop-${prop.id}`)
+        .setData('grandDistrictProp', prop.id)
+        .setData('defaultObjectComposedRegion', prop.region);
       this.registerLazyAmbientObject(image, prop.region);
-      if (prop.frame !== 4) continue;
-      const ember = this.add.circle(x, y - prop.size * 0.3, prop.size * 0.13, 0xe57435, 0.14)
-        .setBlendMode(Phaser.BlendModes.ADD)
-        .setDepth(y);
-      this.registerLazyAmbientObject(ember, prop.region);
-      this.tweens.add({
-        targets: ember,
-        alpha: { from: 0.08, to: 0.22 },
-        scale: { from: 0.84, to: 1.12 },
-        duration: 960,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut',
-      });
+      if (prop.frame === 4) {
+        const ember = this.add.circle(x, y - prop.size * 0.3, prop.size * 0.13, 0xe57435, 0.14)
+          .setBlendMode(Phaser.BlendModes.ADD)
+          .setDepth(y);
+        ember
+          .setData('grandDistrictProp', prop.id)
+          .setData('defaultObjectComposedRegion', prop.region);
+        this.registerLazyAmbientObject(ember, prop.region);
+        this.tweens.add({
+          targets: ember,
+          alpha: { from: 0.08, to: 0.22 },
+          scale: { from: 0.84, to: 1.12 },
+          duration: 960,
+          yoyo: true,
+          repeat: -1,
+          ease: 'Sine.easeInOut',
+        });
+      } else if (prop.frame === 1 || prop.frame === 2) {
+        this.tweens.add({
+          targets: image,
+          angle: { from: prop.flipX ? 0.35 : -0.35, to: prop.flipX ? -0.7 : 0.7 },
+          duration: 2600 + (prop.x % 5) * 170,
+          yoyo: true,
+          repeat: -1,
+          ease: 'Sine.easeInOut',
+        });
+      }
     }
+    this.game.canvas.dataset.grandDistrictProps = String(BETA_ROADSIDE_PROP_PLACEMENTS.length);
   }
 
   private createVillage(): void {
@@ -8455,7 +8477,9 @@ export class HuntingScene extends Phaser.Scene {
     for (const npc of this.villageNpcs) {
       const npcRegion = this.regionAtWorldPoint(npc.root.x, npc.root.y);
       const visible = npcRegion === null || visibleRegions.has(npcRegion);
-      npc.root.setVisible(visible);
+      npc.root
+        .setScale(npcRegion ? worldActorPresentationScale(npcRegion) : 1)
+        .setVisible(visible);
       npc.label.setVisible(visible);
       npc.rallyMarker?.setVisible(visible);
       const interactionEnabled = visible && this.gameMode !== 'travel';
@@ -9152,7 +9176,8 @@ export class HuntingScene extends Phaser.Scene {
       const speed = Math.hypot(follower.velocity.x, follower.velocity.y);
       const attacking = view.sprite.anims.isPlaying
         && view.sprite.anims.currentAnim?.key.startsWith(`monster-attack-${follower.visualKind}-`);
-      view.root.setPosition(follower.x, follower.y).setDepth(follower.y + 2).setVisible(true);
+      view.root.setPosition(follower.x, follower.y).setDepth(follower.y + 2)
+        .setScale(worldActorPresentationScale(this.simulation.region)).setVisible(true);
       view.sprite.setFlipX(direction.flip);
       if (!attacking) {
         view.sprite.setPosition(0, 0).setRotation(0).setScale(view.baseScale)
@@ -9210,7 +9235,9 @@ export class HuntingScene extends Phaser.Scene {
       : undefined;
     const root = this.add.container(monster.x, monster.y, roleLabel
       ? [shadow, ring, sprite, intentCue, roleLabel]
-      : [shadow, ring, sprite, intentCue]).setDepth(monster.y);
+      : [shadow, ring, sprite, intentCue])
+      .setDepth(monster.y)
+      .setScale(worldActorPresentationScale(monster.region));
     const hitZone = this.add.zone(monster.x, monster.y - 42, isLowQuadrupedMonster(monster.kind) ? 112 : 86, isLowQuadrupedMonster(monster.kind) ? 82 : 112)
       .setDepth(monster.y + 1).setInteractive({ cursor: friendly ? 'default' : COMBAT_CURSOR });
     hitZone.setData('monsterId', monster.id);
@@ -9555,7 +9582,9 @@ export class HuntingScene extends Phaser.Scene {
         this.playerActionRoot.setPosition(0, 0);
       }
     }
-    this.playerRoot.setPosition(renderX, renderY).setDepth(renderY + 10);
+    const actorScale = worldActorPresentationScale(this.simulation.region);
+    this.playerRoot.setPosition(renderX, renderY).setDepth(renderY + 10).setScale(actorScale);
+    this.game.canvas.dataset.worldActorScale = actorScale.toFixed(2);
     this.updateRegionPresentation();
     if (this.playerDefeated) return;
     if (this.attackLock > 0) return;
@@ -10196,6 +10225,7 @@ export class HuntingScene extends Phaser.Scene {
       const attackAnimationPlaying = view.sprite.anims.isPlaying
         && view.sprite.anims.currentAnim?.key.startsWith(`monster-attack-${monster.kind}-`);
       view.root.setVisible(monster.alive).setPosition(monster.x, monster.y).setDepth(monster.y)
+        .setScale(worldActorPresentationScale(monster.region))
         .setAlpha(travelSpectator ? 0.54 : 1);
       view.sprite.setVisible(monster.alive);
       view.shadow.setVisible(monster.alive);
@@ -10357,7 +10387,8 @@ export class HuntingScene extends Phaser.Scene {
     const direction = directionToFrame(boss.facing);
     const selected = this.simulation.player.targetId === boss.id;
     const attacking = view.sprite.anims.isPlaying && view.sprite.anims.currentAnim?.key.startsWith(`boss-attack-${boss.bossId}-`);
-    view.root.setVisible(boss.alive).setPosition(boss.x, boss.y).setDepth(boss.y + 2);
+    view.root.setVisible(boss.alive).setPosition(boss.x, boss.y).setDepth(boss.y + 2)
+      .setScale(worldActorPresentationScale(this.simulation.region));
     const travelSpectator = this.gameMode === 'travel';
     view.root.setAlpha(travelSpectator ? 0.54 : 1);
     view.hitZone.setVisible(boss.alive && !travelSpectator).setPosition(boss.x, boss.y - 60).setDepth(boss.y + 4);
@@ -12017,7 +12048,9 @@ export class HuntingScene extends Phaser.Scene {
       .setVisible(true).setPosition(0, 0).setRotation(0).setOrigin(0.5, pose.originY)
       .setScale(view.baseScale).setAlpha(1).setTint(corpseTint)
       .setFlipX(isLowQuadrupedMonster(monster.kind) ? direction.flip : fallSign < 0);
-    const corpseRoot = this.add.container(monster.x, monster.y, [stain, shadow, corpseSprite]).setDepth(monster.y - 1);
+    const corpseRoot = this.add.container(monster.x, monster.y, [stain, shadow, corpseSprite])
+      .setDepth(monster.y - 1)
+      .setScale(worldActorPresentationScale(monster.region));
     const corpse: CorpseView = {
       entityId: monster.id,
       entityKind: 'monster',
@@ -12771,7 +12804,7 @@ export class HuntingScene extends Phaser.Scene {
         ULLEUNG_WORLD_BOUNDS.height,
       );
     } else {
-      const continuityBounds = continuityCameraBoundsForRegion(this.simulation.region);
+      const continuityBounds = safeCameraBoundsForRegion(this.simulation.region);
       if (continuityBounds) {
         camera.setBounds(
           continuityBounds.x,

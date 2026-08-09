@@ -497,10 +497,29 @@ const CONTINUITY_CAMERA_GROUPS = [
   ...EPISODE2_CLUSTERS.map((cluster) => cameraGroup(`episode2-${cluster.id}`, cluster.regions)),
 ] as const;
 
+// The western mainland continuity graph is intentionally L-shaped. A single
+// rectangular Phaser bound for the complete graph exposes empty cells beneath
+// Wansan field when the player walks south. The Jeonju campaign itself is one
+// complete vertical strip, so its smaller envelope keeps all three connected
+// maps visible without ever revealing an unauthored black cell.
+const JEONJU_SAFE_CAMERA_BOUNDS = cameraGroup('jeonju-campaign-safe', [
+  'jeonju',
+  'jeonjugate',
+  'jeonjufield',
+]).bounds;
+
 export const continuityCameraBoundsForRegion = (
   region: RegionId,
 ): ContinuityCameraBounds | null => (
   CONTINUITY_CAMERA_GROUPS.find((group) => group.regions.includes(region))?.bounds ?? null
+);
+
+export const safeCameraBoundsForRegion = (
+  region: RegionId,
+): ContinuityCameraBounds | null => (
+  region === 'jeonju' || region === 'jeonjugate' || region === 'jeonjufield'
+    ? JEONJU_SAFE_CAMERA_BOUNDS
+    : continuityCameraBoundsForRegion(region)
 );
 
 export const sameContinuityCameraGroup = (

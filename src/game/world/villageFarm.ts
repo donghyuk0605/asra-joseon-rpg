@@ -32,14 +32,14 @@ export const FARM_WORK_LABELS: Record<FarmWorkAction, string> = {
 };
 
 export const VILLAGE_FARM_PLOTS: VillageFarmPlot[] = [
-  // Two compact kitchen-field strips sit between the village compounds and
-  // market perimeter. Keeping them outside x=645..925 preserves the broad
-  // north-south road, while their visible soil no longer overlaps the well,
-  // market awnings or the southern rock shelves.
-  { id: 'northwest-field', x: 225, y: 510, width: 190, height: 88, initialStage: 'furrowed' },
-  { id: 'southwest-field', x: 435, y: 510, width: 190, height: 88, initialStage: 'ripe' },
-  { id: 'northeast-field', x: 1100, y: 560, width: 190, height: 88, initialStage: 'sown' },
-  { id: 'southeast-field', x: 1320, y: 560, width: 190, height: 88, initialStage: 'growing' },
+  // The village has two real crossing roads: the 280px north/south avenue and
+  // the east/west route between Mistwood and Mine Pass. The former strips sat
+  // directly across the side gates. Four compact kitchen plots now occupy the
+  // alcoves above and below that crossing, leaving both axes fully walkable.
+  { id: 'northwest-field', x: 555, y: 360, width: 140, height: 76, initialStage: 'furrowed' },
+  { id: 'southwest-field', x: 555, y: 850, width: 140, height: 76, initialStage: 'ripe' },
+  { id: 'northeast-field', x: 1015, y: 360, width: 140, height: 76, initialStage: 'sown' },
+  { id: 'southeast-field', x: 1190, y: 850, width: 170, height: 76, initialStage: 'growing' },
 ];
 
 export const VILLAGE_FARMERS: VillageFarmer[] = [
@@ -53,7 +53,7 @@ export const VILLAGE_FARMERS: VillageFarmer[] = [
     tint: 0xffffff,
     scale: 0.52,
     speed: 22,
-    points: [{ x: 180, y: 466 }, { x: 270, y: 496 }],
+    points: [{ x: 525, y: 318 }, { x: 585, y: 338 }],
   },
   {
     id: 'seed-farmer-okbun',
@@ -65,7 +65,7 @@ export const VILLAGE_FARMERS: VillageFarmer[] = [
     tint: 0xffffff,
     scale: 0.54,
     speed: 21,
-    points: [{ x: 1055, y: 500 }, { x: 1145, y: 540 }],
+    points: [{ x: 985, y: 318 }, { x: 1045, y: 338 }],
   },
   {
     id: 'harvest-hand-bokchil',
@@ -77,7 +77,7 @@ export const VILLAGE_FARMERS: VillageFarmer[] = [
     tint: 0xbaa788,
     scale: 0.49,
     speed: 24,
-    points: [{ x: 390, y: 466 }, { x: 480, y: 496 }],
+    points: [{ x: 525, y: 808 }, { x: 585, y: 828 }],
   },
   {
     id: 'water-farmer-kkeutsun',
@@ -89,7 +89,7 @@ export const VILLAGE_FARMERS: VillageFarmer[] = [
     tint: 0xffffff,
     scale: 0.59,
     speed: 20,
-    points: [{ x: 1275, y: 500 }, { x: 1365, y: 540 }],
+    points: [{ x: 1150, y: 808 }, { x: 1230, y: 828 }],
   },
 ];
 
