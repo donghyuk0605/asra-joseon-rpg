@@ -1234,7 +1234,11 @@ const FIELD_OBSTACLES: readonly FieldObstacle[] = [
   { type: 'box', x: REGION_ORIGINS.yeongwol.x + 1171, y: REGION_ORIGINS.yeongwol.y + 916, width: 470, height: 92 },
   // Yeongwol command headquarters: raised main hall, side offices and southern
   // wall wings. The boss courtyard, hall stairs and return gate remain walkable.
-  { type: 'box', x: REGION_ORIGINS.yeongwolhq.x + 768, y: REGION_ORIGINS.yeongwolhq.y + 195, width: 590, height: 230 },
+  // The command hall has a real central threshold. The previous single 590px
+  // collider sealed the Wonju mountain-road arrival against the north edge,
+  // leaving players visible but unable to enter the headquarters courtyard.
+  { type: 'box', x: REGION_ORIGINS.yeongwolhq.x + 565, y: REGION_ORIGINS.yeongwolhq.y + 195, width: 185, height: 230 },
+  { type: 'box', x: REGION_ORIGINS.yeongwolhq.x + 971, y: REGION_ORIGINS.yeongwolhq.y + 195, width: 185, height: 230 },
   { type: 'box', x: REGION_ORIGINS.yeongwolhq.x + 270, y: REGION_ORIGINS.yeongwolhq.y + 430, width: 350, height: 360 },
   { type: 'box', x: REGION_ORIGINS.yeongwolhq.x + 1266, y: REGION_ORIGINS.yeongwolhq.y + 430, width: 350, height: 360 },
   { type: 'box', x: REGION_ORIGINS.yeongwolhq.x + 245, y: REGION_ORIGINS.yeongwolhq.y + 690, width: 300, height: 230 },
@@ -1244,7 +1248,11 @@ const FIELD_OBSTACLES: readonly FieldObstacle[] = [
   // Wansan hunting field: wetlands and rocky groves frame several very broad
   // clearings. The east-west military road and both timber bridges stay open.
   { type: 'box', x: REGION_ORIGINS.jeonjufield.x + 160, y: REGION_ORIGINS.jeonjufield.y + 300, width: 220, height: 560 },
-  { type: 'box', x: REGION_ORIGINS.jeonjufield.x + 1370, y: REGION_ORIGINS.jeonjufield.y + 360, width: 210, height: 620 },
+  // Split the eastern grove around the authored Wansan military road. A
+  // single tall collider used to trap arrivals in the 46px strip at the map
+  // edge even though the transition road was clearly painted through it.
+  { type: 'box', x: REGION_ORIGINS.jeonjufield.x + 1370, y: REGION_ORIGINS.jeonjufield.y + 210, width: 210, height: 300 },
+  { type: 'box', x: REGION_ORIGINS.jeonjufield.x + 1370, y: REGION_ORIGINS.jeonjufield.y + 620, width: 210, height: 160 },
   { type: 'circle', x: REGION_ORIGINS.jeonjufield.x + 360, y: REGION_ORIGINS.jeonjufield.y + 690, radius: 82 },
   { type: 'circle', x: REGION_ORIGINS.jeonjufield.x + 1180, y: REGION_ORIGINS.jeonjufield.y + 690, radius: 82 },
   { type: 'circle', x: REGION_ORIGINS.jeonjufield.x + 190, y: REGION_ORIGINS.jeonjufield.y + 650, radius: 78 },
@@ -3695,8 +3703,12 @@ export class GameSimulation {
       if (!isTravelAtlasRegion(destination)) return destination === 'dungeon' ? 'dungeon' : 'locked';
       if (this.region === destination) return 'same';
       const origin = REGION_ORIGINS[destination];
-      this.player.x = origin.x + MAP_WIDTH / 2;
-      this.player.y = origin.y + travelAtlasArrivalY(destination);
+      const arrival = this.resolveSafeRegionArrival(destination, {
+        x: origin.x + MAP_WIDTH / 2,
+        y: origin.y + travelAtlasArrivalY(destination),
+      });
+      this.player.x = arrival.x;
+      this.player.y = arrival.y;
       this.player.destination = null;
       this.player.targetId = null;
       this.player.lootTargetId = null;
@@ -3720,8 +3732,12 @@ export class GameSimulation {
     if (threatened) return 'combat';
 
     const origin = REGION_ORIGINS[node.destination];
-    this.player.x = origin.x + MAP_WIDTH / 2;
-    this.player.y = origin.y + node.arrivalY;
+    const arrival = this.resolveSafeRegionArrival(node.destination, {
+      x: origin.x + MAP_WIDTH / 2,
+      y: origin.y + node.arrivalY,
+    });
+    this.player.x = arrival.x;
+    this.player.y = arrival.y;
     this.player.destination = null;
     this.player.targetId = null;
     this.player.lootTargetId = null;
@@ -3773,6 +3789,7 @@ export class GameSimulation {
       'pyongyangouter', 'pyongyanggate', 'pyongyanginner',
       ...ROYAL_REFUGE_REGIONS,
       ...JAPAN_REGION_IDS,
+      ...ULLEUNG_REGION_IDS,
       ...EPISODE2_REGION_IDS,
       ...EXTENDED_REGION_IDS,
     ];
@@ -3940,6 +3957,9 @@ export class GameSimulation {
       : continuousVerticalTravel
       ? entrance === 'north' ? 12 : MAP_HEIGHT - 12
       : entrance === 'north' ? 210 : 840);
+    const safeArrival = this.resolveSafeRegionArrival(region, this.player);
+    this.player.x = safeArrival.x;
+    this.player.y = safeArrival.y;
     this.player.destination = null;
     this.player.targetId = null;
     this.player.lootTargetId = null;
@@ -9121,8 +9141,15 @@ export class GameSimulation {
   private collisionObstacles(): readonly FieldObstacle[] {
     const cacheKey = this.collisionObstacleStateKey();
     if (cacheKey === this.obstacleCacheKey) return this.obstacleCache;
+    const obstacles = this.buildCollisionObstacles(this.region);
+    this.obstacleCacheKey = cacheKey;
+    this.obstacleCache = obstacles;
+    return this.obstacleCache;
+  }
+
+  private buildCollisionObstacles(region: RegionId): FieldObstacle[] {
     const obstacles: FieldObstacle[] = [...FIELD_OBSTACLES, ...this.dungeonObstacles];
-    if (this.region === 'jurchenvillage' && this.isFrontierArcher() && !this.isJurchenUnified()) {
+    if (region === 'jurchenvillage' && this.isFrontierArcher() && !this.isJurchenUnified()) {
       const origin = REGION_ORIGINS.jurchenvillage;
       obstacles.push({
         type: 'box',
@@ -9132,8 +9159,8 @@ export class GameSimulation {
         height: 86,
       });
     }
-    if (isJurchenExpansionRegion(this.region) && !this.jurchenCleared.has(this.region)) {
-      const origin = REGION_ORIGINS[this.region];
+    if (isJurchenExpansionRegion(region) && !this.jurchenCleared.has(region)) {
+      const origin = REGION_ORIGINS[region];
       obstacles.push({
         type: 'box',
         x: origin.x + 768,
@@ -9142,7 +9169,7 @@ export class GameSimulation {
         height: 86,
       });
     }
-    if (this.region === 'manchufrontier' && this.isFrontierArcher() && !this.hajinSouthwardMarch) {
+    if (region === 'manchufrontier' && this.isFrontierArcher() && !this.hajinSouthwardMarch) {
       const origin = REGION_ORIGINS.manchufrontier;
       obstacles.push({
         type: 'box',
@@ -9152,8 +9179,8 @@ export class GameSimulation {
         height: 86,
       });
     }
-    if (isPyongyangRegion(this.region) && !this.pyongyangCleared.has(this.region)) {
-      const origin = REGION_ORIGINS[this.region];
+    if (isPyongyangRegion(region) && !this.pyongyangCleared.has(region)) {
+      const origin = REGION_ORIGINS[region];
       obstacles.push({
         type: 'box',
         x: origin.x + 768,
@@ -9162,10 +9189,10 @@ export class GameSimulation {
         height: 86,
       });
     }
-    if (isRoyalRefugeRegion(this.region)
-      && this.royalRefugeState.routeId === this.region
+    if (isRoyalRefugeRegion(region)
+      && this.royalRefugeState.routeId === region
       && !this.royalRefugeState.finalDefenseComplete) {
-      const origin = REGION_ORIGINS[this.region];
+      const origin = REGION_ORIGINS[region];
       const stageIndex = this.royalRefugeState.activeStageIndex ?? 0;
       if (stageIndex <= 0) {
         obstacles.push({
@@ -9186,9 +9213,53 @@ export class GameSimulation {
         });
       }
     }
-    this.obstacleCacheKey = cacheKey;
-    this.obstacleCache = obstacles;
-    return this.obstacleCache;
+    return obstacles;
+  }
+
+  /**
+   * Keeps authored transitions from spawning the player inside a building,
+   * tree root or temporary battle gate. The preferred lane is retained when
+   * it is valid; nearby points are considered in deterministic rings so save
+   * restore and repeated travel never jitter between different arrivals.
+   */
+  private resolveSafeRegionArrival(region: RegionId, preferred: Vec2): Vec2 {
+    const origin = REGION_ORIGINS[region];
+    const obstacles = this.buildCollisionObstacles(region);
+    const localPreferred = {
+      x: preferred.x - origin.x,
+      y: preferred.y - origin.y,
+    };
+    const bound = (point: Vec2): Vec2 => ({
+      x: origin.x + Math.max(12, Math.min(MAP_WIDTH - 12, point.x)),
+      y: origin.y + Math.max(12, Math.min(MAP_HEIGHT - 12, point.y)),
+    });
+    const candidates: Vec2[] = [bound(localPreferred)];
+    for (const radius of [28, 56, 84, 120, 168, 224, 288]) {
+      const inwardY = localPreferred.y < MAP_HEIGHT / 2 ? radius : -radius;
+      const inwardX = localPreferred.x < MAP_WIDTH / 2 ? radius : -radius;
+      for (const offset of [
+        { x: 0, y: inwardY },
+        { x: inwardX, y: 0 },
+        { x: -inwardX, y: 0 },
+        { x: 0, y: -inwardY },
+        { x: inwardX, y: inwardY },
+        { x: -inwardX, y: inwardY },
+        { x: inwardX, y: -inwardY },
+        { x: -inwardX, y: -inwardY },
+      ]) candidates.push(bound({
+        x: localPreferred.x + offset.x,
+        y: localPreferred.y + offset.y,
+      }));
+    }
+    candidates.push(bound({ x: MAP_WIDTH / 2, y: MAP_HEIGHT / 2 }));
+    const unique = candidates.filter((candidate, index, all) => all.findIndex((other) => (
+      Math.abs(other.x - candidate.x) < 0.5 && Math.abs(other.y - candidate.y) < 0.5
+    )) === index);
+    return unique.find((candidate) => this.isPointClearOfObstacles(
+      candidate,
+      PLAYER_COLLISION_RADIUS,
+      obstacles,
+    )) ?? preferred;
   }
 
   private activeCollisionObstacles(): readonly FieldObstacle[] {

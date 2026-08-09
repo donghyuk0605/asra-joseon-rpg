@@ -31,6 +31,7 @@ export type CampaignFieldRoute = Readonly<{
   entrance: 'north' | 'south';
   requiresClear: boolean;
   mode?: FieldRouteMode;
+  approach?: FieldRouteApproachPoint;
 }>;
 
 export type FieldExitGuide = Readonly<{
@@ -43,7 +44,11 @@ export type FieldExitGuide = Readonly<{
   mode: FieldRouteMode;
   label: string;
   requiresClear: boolean;
+  approachX: number;
+  approachY: number;
 }>;
+
+export type FieldRouteApproachPoint = Readonly<{ x: number; y: number }>;
 
 const route = (
   region: RegionId,
@@ -54,6 +59,7 @@ const route = (
   entrance: 'north' | 'south',
   requiresClear = false,
   mode?: FieldRouteMode,
+  approach?: FieldRouteApproachPoint,
 ): CampaignFieldRoute => Object.freeze({
   id: `${region}-${destination}-${localX}-${localY}`,
   region,
@@ -64,6 +70,7 @@ const route = (
   entrance,
   requiresClear,
   ...(mode ? { mode } : {}),
+  ...(approach ? { approach: Object.freeze({ ...approach }) } : {}),
 });
 
 const STATIC_CAMPAIGN_FIELD_ROUTES: readonly CampaignFieldRoute[] = [
@@ -88,31 +95,52 @@ const STATIC_CAMPAIGN_FIELD_ROUTES: readonly CampaignFieldRoute[] = [
   route('tsushimahunt', 768, 145, '이즈하라 산길 · 산림대 격파 후 개방', 'izuhara', 'south', true),
   route('izuhara', 768, 890, '북쪽 산길 · 아리아케 산림', 'tsushimahunt', 'north'),
   route('izuhara', 768, 145, '조선 해협 · 도주군 격파 후 부산진', 'busanjin', 'south', true),
-  route('jeonju', 112, 510, '서문 역참 · 부산진성 출정', 'busanjin', 'south'),
+  route('jeonju', 900, 600, '부산진 출정 파발역', 'busanjin', 'south'),
   route('busanjin', 768, 890, '남문 군로 · 전주성 귀환', 'jeonju', 'north'),
   route('busanjin', 1240, 500, '견내량 수군선 · 거제 수군진', 'geoje', 'south', false, 'ferry'),
   route('geoje', 1260, 700, '견내량 귀환선 · 부산진성', 'busanjin', 'north', false, 'ferry'),
   route('busanjin', 768, 145, '북문 군로 · 탄금대', 'tangeumdae', 'south'),
   route('tangeumdae', 768, 890, '남행 군로 · 부산진성', 'busanjin', 'north'),
-  route('tangeumdae', 768, 150, '한성 파발로 · 왜군 전멸 후 개방', 'gyeongbokgate', 'south'),
+  route('tangeumdae', 768, 150, '한성 파발로 · 왜군 전멸 후 개방', 'gyeongbokgate', 'south', true),
   route('gyeongbokgate', 768, 880, '남쪽 군로 · 탄금대', 'tangeumdae', 'north'),
   route('gyeongbokgate', 768, 145, '흥례문 · 근정전', 'gyeongbokcourt', 'south'),
   route('gyeongbokcourt', 768, 890, '금천교 · 광화문', 'gyeongbokgate', 'north'),
   route('gyeongbokcourt', 768, 140, '사정문 · 왕의 내전', 'gyeongbokinner', 'south'),
   route('gyeongbokinner', 768, 890, '근정전 회랑', 'gyeongbokcourt', 'north'),
-  route('gyeongbokinner', 1260, 520, '북방 군보 · 평양 내성', 'pyongyanginner', 'south'),
-  route('jurchenvillage', 768, 145, '북행 자작나무길 · 여진 통합 시작', 'changbaihunt', 'south'),
+  route('gyeongbokinner', 1120, 520, '북방 군보 · 평양 내성', 'pyongyanginner', 'south', false, undefined, { x: 1120, y: 520 }),
+  route('jurchenvillage', 768, 145, '북행 자작나무길 · 여진 통합 시작', 'changbaihunt', 'south', false, undefined, { x: 768, y: 190 }),
   route('jurchenvillage', 768, 890, '남쪽 목책문 · 세 부족 통합 후 압록 설욕전', 'manchufrontier', 'north'),
   route('manchufrontier', 768, 145, '북행 설원길 · 여진 부락', 'jurchenvillage', 'south'),
   route('manchufrontier', 768, 890, '남진 성문 · 평양 외성', 'pyongyangouter', 'north'),
-  route('pyongyangouter', 768, 145, '북행 설원길 · 압록 국경', 'manchufrontier', 'south'),
+  route('pyongyangouter', 768, 145, '북행 설원길 · 압록 국경', 'manchufrontier', 'south', true),
   route('pyongyangouter', 768, 890, '외성 남문 · 대동문', 'pyongyanggate', 'north', true),
-  route('pyongyanggate', 768, 145, '북곽 군로 · 평양 외성', 'pyongyangouter', 'south'),
+  route('pyongyanggate', 768, 145, '북곽 군로 · 평양 외성', 'pyongyangouter', 'south', true),
   route('pyongyanggate', 768, 890, '대동문 안길 · 평양 내성', 'pyongyanginner', 'north', true),
-  route('pyongyanginner', 768, 145, '대동문 회랑', 'pyongyanggate', 'south'),
+  route('pyongyanginner', 768, 145, '대동문 회랑', 'pyongyanggate', 'south', true),
   route('pyongyanginner', 768, 890, '한성 북로 · 경복궁 광화문', 'gyeongbokgate', 'north', true),
   route('namhansanseong', 768, 890, '왕실 후퇴로 · 경복궁 내전', 'gyeongbokinner', 'north', true),
   route('ganghwado', 768, 890, '갑곶 귀환선 · 경복궁 내전', 'gyeongbokinner', 'north', true, 'ferry'),
+
+  // The atlas already showed these trunk routes, but the authored fields were
+  // split into nine isolated local graphs. These reciprocal post roads, gates
+  // and ferries make every one of the 81 regions reachable through visible
+  // in-world exits instead of requiring an unexplained world-map teleport.
+  route('hanseongmarket', 1260, 500, '육조거리 · 광화문', 'gyeongbokgate', 'south', false, undefined, { x: 1260, y: 500 }),
+  route('gyeongbokgate', 1120, 820, '종루 · 운종가', 'hanseongmarket', 'north', false, undefined, { x: 1120, y: 820 }),
+  route('pyongyangouter', 768, 700, '황주 파발로 · 서북 관문길', 'hwangju', 'south'),
+  route('hwangju', 768, 890, '평양 북곽로 · 서북 대로', 'pyongyangouter', 'north'),
+  route('hanseongsouth', 1000, 720, '동북 봉수로 · 양주 송화고개', 'yangju', 'south', false, undefined, { x: 1000, y: 720 }),
+  route('yangju', 768, 890, '한성 남대문로 · 파발 귀환길', 'hanseongsouth', 'north'),
+  route('suwon', 960, 720, '이천 도요지로 · 남한강 동로', 'icheon', 'south', false, undefined, { x: 960, y: 720 }),
+  route('icheon', 768, 890, '수원 둔전로 · 북행 역로', 'suwon', 'north'),
+  route('haeju', 330, 600, '제물포 조운선 · 서해 염전로', 'jemulpo', 'south', false, 'ferry'),
+  route('jemulpo', 768, 890, '해주 염전포 · 북행 조운선', 'haeju', 'north', false, 'ferry'),
+  route('jeonju', 768, 780, '남원행 호남 역참', 'namwon', 'south'),
+  route('namwon', 768, 890, '전주성 감영로 · 북행 역로', 'jeonju', 'north'),
+  route('andong', 1080, 720, '상주 낙동 역원로 · 영남 군로', 'sangju', 'south'),
+  route('sangju', 768, 890, '안동부 서원길 · 북행 역로', 'andong', 'north'),
+  route('gangneung', 1200, 630, '울릉 도해선 · 경포 봉화 나루', 'ulleungcoast', 'south', false, 'ferry'),
+  route('ulleungcoast', 760, 145, '강릉 귀환선 · 동해 해송 나루', 'gangneung', 'south', false, 'ferry'),
 ];
 
 const JURCHEN_CAMPAIGN_FIELD_ROUTES: readonly CampaignFieldRoute[] =
@@ -164,6 +192,39 @@ const edgeAt = (x: number, y: number): FieldRouteEdge => {
   ))[0];
 };
 
+const approachPoint = (
+  x: number,
+  y: number,
+  edge: FieldRouteEdge,
+  horizontalInset: number,
+  verticalInset: number,
+): FieldRouteApproachPoint => {
+  const margin = 40;
+  const candidate = edge === 'north'
+    ? { x, y: y + verticalInset }
+    : edge === 'south'
+      ? { x, y: y - verticalInset }
+      : edge === 'west'
+        ? { x: x + horizontalInset, y }
+        : { x: x - horizontalInset, y };
+  return Object.freeze({
+    x: Math.max(margin, Math.min(MAP_WIDTH - margin, candidate.x)),
+    y: Math.max(margin, Math.min(MAP_HEIGHT - margin, candidate.y)),
+  });
+};
+
+/** Walkable point just inside a clickable campaign sign or gate. */
+export const fieldRouteApproachPoint = (
+  routeEntry: Pick<CampaignFieldRoute, 'localX' | 'localY' | 'approach'>,
+): FieldRouteApproachPoint => routeEntry.approach ?? approachPoint(
+  routeEntry.localX, routeEntry.localY, edgeAt(routeEntry.localX, routeEntry.localY), 150, 126,
+);
+
+/** Walkable point used for HUD distance and whole-map collision audits. */
+export const fieldExitApproachPoint = (
+  exit: Pick<FieldExitGuide, 'approachX' | 'approachY'>,
+): FieldRouteApproachPoint => Object.freeze({ x: exit.approachX, y: exit.approachY });
+
 const modeBetween = (region: RegionId, destination: RegionId): FieldRouteMode => {
   if (worldTravelConnectionBetween(region, destination)) return 'ferry';
   if (isContinuousWorldNeighbor(region, destination)) return 'road';
@@ -179,6 +240,7 @@ const guide = (
   label = REGIONS[destination].name,
   requiresClear = false,
   forcedMode?: FieldRouteMode,
+  forcedApproach?: FieldRouteApproachPoint,
 ): FieldExitGuide => Object.freeze({
   id,
   region,
@@ -189,6 +251,8 @@ const guide = (
   mode: forcedMode ?? modeBetween(region, destination),
   label,
   requiresClear,
+  approachX: (forcedApproach ?? { x, y }).x,
+  approachY: (forcedApproach ?? { x, y }).y,
 });
 
 const seamGuideFor = (region: RegionId): FieldExitGuide[] => {
@@ -297,6 +361,7 @@ export const fieldExitGuidesForRegion = (region: RegionId): readonly FieldExitGu
       entry.label,
       entry.requiresClear,
       entry.mode,
+      fieldRouteApproachPoint(entry),
     ));
   const all = [
     ...campaign,

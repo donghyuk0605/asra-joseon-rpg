@@ -53,6 +53,7 @@ describe('Busanjin fortress renewal', () => {
     expect(source).toContain('createBusanjinFortressLayers');
     expect(source).toContain("addRasterCrop('south-gate-roof'");
     expect(source).toContain('for (const fieldRoute of CAMPAIGN_FIELD_ROUTES)');
+    expect(source).toContain('fieldRoute.approach');
     expect(CAMPAIGN_FIELD_ROUTES).toContainEqual(expect.objectContaining({
       region: 'busanjin',
       localX: 768,

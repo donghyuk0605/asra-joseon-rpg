@@ -3470,6 +3470,8 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
 }
 .minimap-exit.mode-ferry { border-color: #7dbac5; color: #d7f3ef; background: rgba(21, 57, 64, .92); }
 .minimap-exit.mode-portal { border-color: #a897d2; color: #eee4ff; background: rgba(50, 38, 70, .92); }
+.minimap-exit.is-conditional { border-style: dashed; box-shadow: 0 0 0 1px rgba(3, 5, 4, .88), 0 0 8px rgba(185, 75, 52, .62); }
+.minimap-exit.is-conditional::after { content: ''; position: absolute; right: -3px; top: -3px; width: 5px; height: 5px; border: 1px solid #f4c2a3; border-radius: 50%; background: #9e382c; }
 .minimap-exit.is-nearest { z-index: 4; animation: minimap-exit-pulse 1.15s ease-in-out infinite; }
 .minimap-vignette { position: absolute; inset: 0; box-shadow: inset 0 0 22px 7px rgba(5, 7, 5, .78); pointer-events: none; }
 .minimap-player {

@@ -18,7 +18,11 @@ import type { GameSettings, GraphicsQuality, UiScale } from '../settings/GameSet
 import { MAP_HEIGHT, MAP_WIDTH, REGION_ORIGINS } from '../world/layout';
 import { frontierSectorAt } from '../world/frontier';
 import { isJoseonTownRegion, JOSEON_TOWN_LAYOUTS } from '../world/joseonTowns';
-import { fieldExitGuidesForRegion, type FieldRouteEdge } from '../world/fieldRoutes';
+import {
+  fieldExitApproachPoint,
+  fieldExitGuidesForRegion,
+  type FieldRouteEdge,
+} from '../world/fieldRoutes';
 import {
   ACTIVE_SKILL_IDS,
   ARCHER_ACTIVE_SKILL_IDS,
@@ -2645,15 +2649,16 @@ export class Hud {
       targetMarker?.classList.remove('is-visible');
     }
     const exits = fieldExitGuidesForRegion(snapshot.region);
+    const routeModeLabel = { road: '육로', ferry: '배편', portal: '역참 이동' } as const;
     const exitsLayer = this.root.querySelector<HTMLElement>('[data-id="minimap-exits"]');
     if (exitsLayer && this.minimapExitRegion !== snapshot.region) {
       exitsLayer.replaceChildren(...exits.map((exit) => {
         const marker = document.createElement('i');
-        marker.className = `minimap-exit mode-${exit.mode} edge-${exit.edge}`;
+        marker.className = `minimap-exit mode-${exit.mode} edge-${exit.edge}${exit.requiresClear ? ' is-conditional' : ''}`;
         marker.dataset.exitId = exit.id;
         marker.style.setProperty('--minimap-exit-x', `${clampPercent((exit.x / MAP_WIDTH) * 100)}%`);
         marker.style.setProperty('--minimap-exit-y', `${clampPercent((exit.y / MAP_HEIGHT) * 100)}%`);
-        marker.title = `${exit.label}${exit.requiresClear ? ' · 전투 완료 후 개방' : ''}`;
+        marker.title = `${exit.label} · ${routeModeLabel[exit.mode]}${exit.requiresClear ? ' · 전투 조건' : ''}`;
         marker.textContent = this.routeArrow(exit.edge);
         return marker;
       }));
@@ -2663,8 +2668,10 @@ export class Hud {
     const localY = snapshot.player.y - origin.y;
     const nearestExit = exits.reduce<typeof exits[number] | null>((nearest, exit) => {
       if (!nearest) return exit;
-      const currentDistance = Math.hypot(exit.x - localX, exit.y - localY);
-      const nearestDistance = Math.hypot(nearest.x - localX, nearest.y - localY);
+      const currentApproach = fieldExitApproachPoint(exit);
+      const nearestApproach = fieldExitApproachPoint(nearest);
+      const currentDistance = Math.hypot(currentApproach.x - localX, currentApproach.y - localY);
+      const nearestDistance = Math.hypot(nearestApproach.x - localX, nearestApproach.y - localY);
       return currentDistance < nearestDistance ? exit : nearest;
     }, null);
     for (const marker of exitsLayer?.querySelectorAll<HTMLElement>('.minimap-exit') ?? []) {
@@ -2673,15 +2680,16 @@ export class Hud {
     const mobileGuide = this.root.querySelector<HTMLElement>('[data-id="mobile-route-guide"]');
     mobileGuide?.classList.toggle('has-no-route', !nearestExit);
     if (nearestExit) {
+      const approach = fieldExitApproachPoint(nearestExit);
       const distance = Math.max(1, Math.round(Math.hypot(
-        nearestExit.x - localX,
-        nearestExit.y - localY,
+        approach.x - localX,
+        approach.y - localY,
       ) / 10));
       const arrow = this.routeArrow(nearestExit.edge);
-      this.text('minimap-exit-summary', `${arrow} ${REGIONS[nearestExit.destination].name}`);
+      this.text('minimap-exit-summary', `${arrow} ${REGIONS[nearestExit.destination].name} · ${routeModeLabel[nearestExit.mode]}`);
       this.text('mobile-route-arrow', arrow);
       this.text('mobile-route-name', REGIONS[nearestExit.destination].name);
-      this.text('mobile-route-distance', nearestExit.requiresClear ? '봉쇄 가능' : `${distance}보`);
+      this.text('mobile-route-distance', nearestExit.requiresClear ? '전투 조건' : `${routeModeLabel[nearestExit.mode]} · ${distance}보`);
     } else {
       this.text('minimap-exit-summary', '지도 이동으로 연결');
       this.text('mobile-route-arrow', '地');

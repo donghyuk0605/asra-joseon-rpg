@@ -1,17 +1,24 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "summary": {
     "regions": 81,
     "regionsWithLocalExit": 81,
-    "localExitGuides": 142,
+    "localExitGuides": 158,
     "terrainSeams": 55,
     "ferryConnections": 3,
     "atlasNodes": 23,
     "atlasRoutes": 35,
     "atlasComponents": 1,
+    "localComponents": 1,
+    "blockedExitApproaches": 0,
+    "disconnectedExitApproaches": 0,
+    "unsafeAtlasArrivals": 0,
+    "blockedOpenCampaignRoutes": 0,
+    "unsafeCampaignArrivals": 0,
+    "unexpectedUnpairedLocalExits": 0,
     "road": 122,
-    "ferry": 9,
-    "portal": 11
+    "ferry": 13,
+    "portal": 23
   },
   "regionsWithoutExit": [],
   "regionsWithoutAtlasNode": [
@@ -55,6 +62,97 @@
       "requiresClear": true
     }
   ],
+  "unexpectedUnpairedLocalExits": [],
+  "localComponents": [
+    [
+      "andong",
+      "anju",
+      "awajicoast",
+      "baeksanvillage",
+      "blackpinehunt",
+      "boryeong",
+      "busanjin",
+      "changbaihunt",
+      "changdeokgung",
+      "cheongju",
+      "chungju",
+      "daegu",
+      "dungeon",
+      "gaeseong",
+      "ganghwado",
+      "gangneung",
+      "gapyeong",
+      "geoje",
+      "gongju",
+      "gunsan",
+      "gyeongbokcourt",
+      "gyeongbokgate",
+      "gyeongbokinner",
+      "haeju",
+      "hanseongmarket",
+      "hanseongsouth",
+      "heuksuvillage",
+      "hwangju",
+      "icheon",
+      "ikiport",
+      "izuhara",
+      "izumihunt",
+      "jaeryeong",
+      "jemulpo",
+      "jeonju",
+      "jeonjufield",
+      "jeonjugate",
+      "jinju",
+      "jurchenvillage",
+      "manchufrontier",
+      "minepass",
+      "mistwood",
+      "mokpo",
+      "moonfield",
+      "naju",
+      "namhansanseong",
+      "namwon",
+      "namyang",
+      "osaka",
+      "osakacastle",
+      "pyeongchang",
+      "pyongyanggate",
+      "pyongyanginner",
+      "pyongyangouter",
+      "sakaicity",
+      "samcheok",
+      "sangju",
+      "settsuvillage",
+      "shogunkeep",
+      "solgogae",
+      "songhuahunt",
+      "songhuavillage",
+      "suncheon",
+      "suwon",
+      "tangeumdae",
+      "tongyeong",
+      "tsushimahunt",
+      "uiju",
+      "ulleungcoast",
+      "ulleungdo",
+      "ulleunghunt",
+      "ulleungmeadow",
+      "ulleungridge",
+      "ulleungvillage",
+      "village",
+      "wonju",
+      "yamazakihunt",
+      "yangju",
+      "yeoju",
+      "yeongwol",
+      "yeongwolhq"
+    ]
+  ],
+  "blockedExitApproaches": [],
+  "disconnectedExitApproaches": [],
+  "unsafeAtlasArrivals": [],
+  "blockedOpenCampaignRoutes": [],
+  "unsafeCampaignArrivals": [],
   "atlasComponents": [
     [
       "andong",
@@ -93,7 +191,11 @@
           "destinationName": "달빛고을",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -107,28 +209,44 @@
           "destinationName": "월영 솔고개",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "mistwood",
           "destinationName": "청람 안개숲",
           "edge": "west",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 24,
+            "y": 480
+          }
         },
         {
           "destination": "minepass",
           "destinationName": "흑철 폐광고개",
           "edge": "east",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1512,
+            "y": 480
+          }
         },
         {
           "destination": "moonfield",
           "destinationName": "월하 그림자들",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 770,
+            "y": 1000
+          }
         }
       ]
     },
@@ -142,14 +260,22 @@
           "destinationName": "달빛고을",
           "edge": "east",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1512,
+            "y": 480
+          }
         },
         {
           "destination": "yeongwol",
           "destinationName": "영월 관아 앞 훈련마당",
           "edge": "west",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 24,
+            "y": 520
+          }
         }
       ]
     },
@@ -163,21 +289,33 @@
           "destinationName": "전주 완산벌 대사냥터",
           "edge": "west",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 24,
+            "y": 500
+          }
         },
         {
           "destination": "mistwood",
           "destinationName": "청람 안개숲",
           "edge": "east",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1512,
+            "y": 500
+          }
         },
         {
           "destination": "yeongwolhq",
           "destinationName": "영월 관아 지휘부",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -191,14 +329,22 @@
           "destinationName": "영월 관아 앞 훈련마당",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         },
         {
           "destination": "wonju",
           "destinationName": "원주 치악산역",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -212,14 +358,22 @@
           "destinationName": "영월 관아 앞 훈련마당",
           "edge": "east",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1512,
+            "y": 500
+          }
         },
         {
           "destination": "jeonjugate",
           "destinationName": "전주성 풍남문 대회전",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -233,14 +387,22 @@
           "destinationName": "전주성 대읍성",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "jeonjufield",
           "destinationName": "전주 완산벌 대사냥터",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -252,16 +414,35 @@
         {
           "destination": "busanjin",
           "destinationName": "부산진성 혈전",
-          "edge": "west",
+          "edge": "south",
           "mode": "portal",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 900,
+            "y": 474
+          }
+        },
+        {
+          "destination": "namwon",
+          "destinationName": "남원 광한 대숲",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 654
+          }
         },
         {
           "destination": "jeonjugate",
           "destinationName": "전주성 풍남문 대회전",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -275,7 +456,11 @@
           "destinationName": "셋쓰 달그림자 산촌",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -289,14 +474,22 @@
           "destinationName": "오사카 외항 포로촌",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "yamazakihunt",
           "destinationName": "야마자키 삼나무 사냥숲",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -310,14 +503,22 @@
           "destinationName": "셋쓰 달그림자 산촌",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "osakacastle",
           "destinationName": "오사카 성하마을",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -331,14 +532,22 @@
           "destinationName": "야마자키 삼나무 사냥숲",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "shogunkeep",
           "destinationName": "오사카 군선봉행 성채",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -352,14 +561,22 @@
           "destinationName": "오사카 성하마을",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "sakaicity",
           "destinationName": "사카이 자유항",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -373,14 +590,22 @@
           "destinationName": "오사카 군선봉행 성채",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "izumihunt",
           "destinationName": "이즈미 대나무 고개",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -394,14 +619,22 @@
           "destinationName": "사카이 자유항",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "awajicoast",
           "destinationName": "아와지 해협 사냥터",
           "edge": "north",
           "mode": "ferry",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -415,14 +648,22 @@
           "destinationName": "이즈미 대나무 고개",
           "edge": "south",
           "mode": "ferry",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "ikiport",
           "destinationName": "이키 고노우라 항구",
           "edge": "north",
           "mode": "ferry",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -436,14 +677,22 @@
           "destinationName": "아와지 해협 사냥터",
           "edge": "south",
           "mode": "ferry",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "tsushimahunt",
           "destinationName": "대마도 아리아케 산림",
           "edge": "north",
           "mode": "ferry",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -457,14 +706,22 @@
           "destinationName": "이키 고노우라 항구",
           "edge": "south",
           "mode": "ferry",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "izuhara",
           "destinationName": "대마도 이즈하라 성하",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -478,14 +735,22 @@
           "destinationName": "대마도 아리아케 산림",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "busanjin",
           "destinationName": "부산진성 혈전",
           "edge": "north",
           "mode": "portal",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -499,21 +764,33 @@
           "destinationName": "전주성 대읍성",
           "edge": "south",
           "mode": "portal",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "geoje",
           "destinationName": "거제 견내량 수군진",
           "edge": "east",
           "mode": "ferry",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1090,
+            "y": 500
+          }
         },
         {
           "destination": "tangeumdae",
           "destinationName": "탄금대 대회전",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -527,14 +804,22 @@
           "destinationName": "부산진성 혈전",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "gyeongbokgate",
           "destinationName": "경복궁 광화문",
           "edge": "north",
           "mode": "portal",
-          "requiresClear": false
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 276
+          }
         }
       ]
     },
@@ -548,14 +833,33 @@
           "destinationName": "탄금대 대회전",
           "edge": "south",
           "mode": "portal",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 754
+          }
         },
         {
           "destination": "gyeongbokcourt",
           "destinationName": "경복궁 근정전",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
+        },
+        {
+          "destination": "hanseongmarket",
+          "destinationName": "한성 종루·운종가",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 1120,
+            "y": 820
+          }
         }
       ]
     },
@@ -569,14 +873,22 @@
           "destinationName": "경복궁 광화문",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "gyeongbokinner",
           "destinationName": "경복궁 사정전·강녕전",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 266
+          }
         }
       ]
     },
@@ -590,14 +902,22 @@
           "destinationName": "경복궁 근정전",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "pyongyanginner",
           "destinationName": "평양성 내성",
           "edge": "east",
           "mode": "portal",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1120,
+            "y": 520
+          }
         }
       ]
     },
@@ -607,18 +927,37 @@
       "atlasNode": "hanseong",
       "exits": [
         {
+          "destination": "yangju",
+          "destinationName": "양주 송화 봉수로",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 1000,
+            "y": 720
+          }
+        },
+        {
           "destination": "hanseongmarket",
           "destinationName": "한성 종루·운종가",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 36
+          }
         },
         {
           "destination": "suwon",
           "destinationName": "수원 읍치 장터",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 988
+          }
         }
       ]
     },
@@ -628,18 +967,37 @@
       "atlasNode": "hanseong",
       "exits": [
         {
+          "destination": "gyeongbokgate",
+          "destinationName": "경복궁 광화문",
+          "edge": "east",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 1260,
+            "y": 500
+          }
+        },
+        {
           "destination": "changdeokgung",
           "destinationName": "창덕궁 · 왕세자 광해 분조청",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 36
+          }
         },
         {
           "destination": "hanseongsouth",
           "destinationName": "한성 숭례문·칠패장",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 988
+          }
         }
       ]
     },
@@ -653,14 +1011,22 @@
           "destinationName": "개성 송도 장시",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 36
+          }
         },
         {
           "destination": "hanseongmarket",
           "destinationName": "한성 종루·운종가",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 988
+          }
         }
       ]
     },
@@ -674,14 +1040,22 @@
           "destinationName": "창덕궁 · 왕세자 광해 분조청",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 988
+          }
         },
         {
           "destination": "haeju",
           "destinationName": "해주 염전포",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -691,18 +1065,37 @@
       "atlasNode": "suwon",
       "exits": [
         {
+          "destination": "icheon",
+          "destinationName": "이천 도요지",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 960,
+            "y": 720
+          }
+        },
+        {
           "destination": "hanseongsouth",
           "destinationName": "한성 숭례문·칠패장",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 36
+          }
         },
         {
           "destination": "chungju",
           "destinationName": "충주 목계나루",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 988
+          }
         }
       ]
     },
@@ -716,14 +1109,22 @@
           "destinationName": "수원 읍치 장터",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 36
+          }
         },
         {
           "destination": "andong",
           "destinationName": "안동부 서원길",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 988
+          }
         }
       ]
     },
@@ -733,11 +1134,26 @@
       "atlasNode": "andong",
       "exits": [
         {
+          "destination": "sangju",
+          "destinationName": "상주 낙동 역원",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 1080,
+            "y": 594
+          }
+        },
+        {
           "destination": "chungju",
           "destinationName": "충주 목계나루",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 36
+          }
         }
       ]
     },
@@ -751,14 +1167,22 @@
           "destinationName": "영월 관아 지휘부",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         },
         {
           "destination": "gangneung",
           "destinationName": "강릉 경포 봉화길",
           "edge": "east",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1512,
+            "y": 500
+          }
         }
       ]
     },
@@ -768,11 +1192,26 @@
       "atlasNode": "gangneung",
       "exits": [
         {
+          "destination": "ulleungcoast",
+          "destinationName": "울릉 해안 해송숲",
+          "edge": "east",
+          "mode": "ferry",
+          "requiresClear": false,
+          "approach": {
+            "x": 1050,
+            "y": 630
+          }
+        },
+        {
           "destination": "wonju",
           "destinationName": "원주 치악산역",
           "edge": "west",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 24,
+            "y": 500
+          }
         }
       ]
     },
@@ -782,11 +1221,26 @@
       "atlasNode": "haeju",
       "exits": [
         {
+          "destination": "jemulpo",
+          "destinationName": "제물포 월미 나루",
+          "edge": "west",
+          "mode": "ferry",
+          "requiresClear": false,
+          "approach": {
+            "x": 480,
+            "y": 600
+          }
+        },
+        {
           "destination": "gaeseong",
           "destinationName": "개성 송도 장시",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -800,7 +1254,11 @@
           "destinationName": "부산진성 혈전",
           "edge": "east",
           "mode": "ferry",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 1110,
+            "y": 700
+          }
         }
       ]
     },
@@ -810,11 +1268,26 @@
       "atlasNode": "episode2-northwest-road",
       "exits": [
         {
+          "destination": "pyongyangouter",
+          "destinationName": "평양성 북곽",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
+        },
+        {
           "destination": "jaeryeong",
           "destinationName": "재령 갈대벌",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -828,14 +1301,22 @@
           "destinationName": "황주 달고개 역참",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "anju",
           "destinationName": "안주 청천강진",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -849,14 +1330,22 @@
           "destinationName": "재령 갈대벌",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "uiju",
           "destinationName": "의주 용만관",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -870,7 +1359,11 @@
           "destinationName": "안주 청천강진",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -880,11 +1373,26 @@
       "atlasNode": "episode2-mountain-road",
       "exits": [
         {
+          "destination": "hanseongsouth",
+          "destinationName": "한성 숭례문·칠패장",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
+        },
+        {
           "destination": "gapyeong",
           "destinationName": "가평 잣나무 물레촌",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -898,14 +1406,22 @@
           "destinationName": "양주 송화 봉수로",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "pyeongchang",
           "destinationName": "평창 눈재 사냥터",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -919,14 +1435,22 @@
           "destinationName": "가평 잣나무 물레촌",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "samcheok",
           "destinationName": "삼척 죽서루 해풍길",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -940,7 +1464,11 @@
           "destinationName": "평창 눈재 사냥터",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -950,11 +1478,26 @@
       "atlasNode": "episode2-central-river",
       "exits": [
         {
+          "destination": "suwon",
+          "destinationName": "수원 읍치 장터",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
+        },
+        {
           "destination": "yeoju",
           "destinationName": "여주 신륵 나루",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -968,14 +1511,22 @@
           "destinationName": "이천 도요지",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "cheongju",
           "destinationName": "청주 상당 벌판",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -989,14 +1540,22 @@
           "destinationName": "여주 신륵 나루",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "gongju",
           "destinationName": "공주 금강진",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1010,7 +1569,11 @@
           "destinationName": "청주 상당 벌판",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -1020,11 +1583,26 @@
       "atlasNode": "episode2-west-coast",
       "exits": [
         {
+          "destination": "haeju",
+          "destinationName": "해주 염전포",
+          "edge": "south",
+          "mode": "ferry",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
+        },
+        {
           "destination": "namyang",
           "destinationName": "남양 염초장",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1038,14 +1616,22 @@
           "destinationName": "제물포 월미 나루",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "boryeong",
           "destinationName": "보령 오천 수영",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1059,14 +1645,22 @@
           "destinationName": "남양 염초장",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "gunsan",
           "destinationName": "군산 금강 하구",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1080,7 +1674,11 @@
           "destinationName": "보령 오천 수영",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -1090,11 +1688,26 @@
       "atlasNode": "episode2-honam-road",
       "exits": [
         {
+          "destination": "jeonju",
+          "destinationName": "전주성 대읍성",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
+        },
+        {
           "destination": "suncheon",
           "destinationName": "순천만 갈대포",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1108,14 +1721,22 @@
           "destinationName": "남원 광한 대숲",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "mokpo",
           "destinationName": "목포 유달진",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1129,14 +1750,22 @@
           "destinationName": "순천만 갈대포",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "naju",
           "destinationName": "나주 배꽃들",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1150,7 +1779,11 @@
           "destinationName": "목포 유달진",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -1160,11 +1793,26 @@
       "atlasNode": "episode2-yeongnam-road",
       "exits": [
         {
+          "destination": "andong",
+          "destinationName": "안동부 서원길",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
+        },
+        {
           "destination": "daegu",
           "destinationName": "대구 달성 약령장",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1178,14 +1826,22 @@
           "destinationName": "상주 낙동 역원",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "jinju",
           "destinationName": "진주 남강진",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1199,14 +1855,22 @@
           "destinationName": "대구 달성 약령장",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "tongyeong",
           "destinationName": "통영 삼도수군진",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1220,7 +1884,11 @@
           "destinationName": "진주 남강진",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     },
@@ -1234,14 +1902,22 @@
           "destinationName": "장백 자작나무 사냥터",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 190
+          }
         },
         {
           "destination": "manchufrontier",
           "destinationName": "압록 국경 전선",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         }
       ]
     },
@@ -1255,14 +1931,22 @@
           "destinationName": "여진 설원부락",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "baeksanvillage",
           "destinationName": "백산부 부족마을",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -1276,14 +1960,22 @@
           "destinationName": "장백 자작나무 사냥터",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "songhuahunt",
           "destinationName": "송화강 사슴벌 사냥터",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -1297,14 +1989,22 @@
           "destinationName": "백산부 부족마을",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "songhuavillage",
           "destinationName": "송화부 부족마을",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -1318,14 +2018,22 @@
           "destinationName": "송화강 사슴벌 사냥터",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "blackpinehunt",
           "destinationName": "흑송령 산짐승 사냥터",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -1339,14 +2047,22 @@
           "destinationName": "송화부 부족마을",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "heuksuvillage",
           "destinationName": "흑수부 부족마을·회맹장",
           "edge": "north",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -1360,14 +2076,22 @@
           "destinationName": "흑송령 산짐승 사냥터",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         },
         {
           "destination": "jurchenvillage",
           "destinationName": "여진 설원부락",
           "edge": "north",
           "mode": "portal",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         }
       ]
     },
@@ -1381,14 +2105,22 @@
           "destinationName": "여진 설원부락",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         },
         {
           "destination": "pyongyangouter",
           "destinationName": "평양성 북곽",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         }
       ]
     },
@@ -1402,14 +2134,33 @@
           "destinationName": "압록 국경 전선",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         },
         {
           "destination": "pyongyanggate",
           "destinationName": "평양성 대동문",
           "edge": "south",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
+        },
+        {
+          "destination": "hwangju",
+          "destinationName": "황주 달고개 역참",
+          "edge": "south",
+          "mode": "portal",
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 574
+          }
         }
       ]
     },
@@ -1423,14 +2174,22 @@
           "destinationName": "평양성 북곽",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         },
         {
           "destination": "pyongyanginner",
           "destinationName": "평양성 내성",
           "edge": "south",
           "mode": "road",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         }
       ]
     },
@@ -1444,14 +2203,22 @@
           "destinationName": "평양성 대동문",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 271
+          }
         },
         {
           "destination": "gyeongbokgate",
           "destinationName": "경복궁 광화문",
           "edge": "south",
           "mode": "portal",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         }
       ]
     },
@@ -1465,7 +2232,11 @@
           "destinationName": "경복궁 사정전·강녕전",
           "edge": "south",
           "mode": "portal",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         }
       ]
     },
@@ -1479,7 +2250,11 @@
           "destinationName": "경복궁 사정전·강녕전",
           "edge": "south",
           "mode": "ferry",
-          "requiresClear": true
+          "requiresClear": true,
+          "approach": {
+            "x": 768,
+            "y": 764
+          }
         }
       ]
     },
@@ -1493,14 +2268,22 @@
           "destinationName": "무영광산 지하",
           "edge": "north",
           "mode": "portal",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 770,
+            "y": 300
+          }
         },
         {
           "destination": "village",
           "destinationName": "달빛고을",
           "edge": "west",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 24,
+            "y": 480
+          }
         }
       ]
     },
@@ -1514,7 +2297,11 @@
           "destinationName": "달빛고을",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 770,
+            "y": 24
+          }
         }
       ]
     },
@@ -1528,7 +2315,11 @@
           "destinationName": "흑철 폐광고개",
           "edge": "south",
           "mode": "portal",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 255,
+            "y": 875
+          }
         }
       ]
     },
@@ -1542,14 +2333,22 @@
           "destinationName": "울릉 바람고개",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 670,
+            "y": 24
+          }
         },
         {
           "destination": "ulleungvillage",
           "destinationName": "울릉 관아",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1559,11 +2358,26 @@
       "atlasNode": "ulleung",
       "exits": [
         {
+          "destination": "gangneung",
+          "destinationName": "강릉 경포 봉화길",
+          "edge": "north",
+          "mode": "ferry",
+          "requiresClear": false,
+          "approach": {
+            "x": 760,
+            "y": 271
+          }
+        },
+        {
           "destination": "ulleungmeadow",
           "destinationName": "울릉 억새초원",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 810,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1577,14 +2391,22 @@
           "destinationName": "울릉 해안 해송숲",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "ulleunghunt",
           "destinationName": "약탈당한 울릉 해송마을",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1598,14 +2420,22 @@
           "destinationName": "울릉 억새초원",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 720,
+            "y": 24
+          }
         },
         {
           "destination": "ulleungridge",
           "destinationName": "울릉 바람고개",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 790,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1619,14 +2449,22 @@
           "destinationName": "약탈당한 울릉 해송마을",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         },
         {
           "destination": "ulleungdo",
           "destinationName": "울릉도 관청 감옥터",
           "edge": "south",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 1000
+          }
         }
       ]
     },
@@ -1640,7 +2478,11 @@
           "destinationName": "울릉도 관청 감옥터",
           "edge": "north",
           "mode": "road",
-          "requiresClear": false
+          "requiresClear": false,
+          "approach": {
+            "x": 768,
+            "y": 24
+          }
         }
       ]
     }

@@ -72,7 +72,11 @@ import {
   JURCHEN_REGION_IDS,
   JURCHEN_STAGE_COPY,
 } from '../world/jurchenCampaign';
-import { CAMPAIGN_FIELD_ROUTES } from '../world/fieldRoutes';
+import {
+  CAMPAIGN_FIELD_ROUTES,
+  fieldRouteApproachPoint,
+  type FieldRouteApproachPoint,
+} from '../world/fieldRoutes';
 import { CAMPAIGN_STRUCTURE_COLLIDERS } from '../world/campaignStructures';
 import {
   isJurchenStructureKind,
@@ -5524,7 +5528,6 @@ export class HuntingScene extends Phaser.Scene {
         this.populateJoseonTownRegion(region);
       }
     }
-    this.createHanseongPalaceLinks();
   }
 
   private populateJoseonTownRegion(region: JoseonTownRegionId): void {
@@ -5820,76 +5823,6 @@ export class HuntingScene extends Phaser.Scene {
     if (!this.load.isLoading()) this.load.start();
   }
 
-  private createHanseongPalaceLinks(): void {
-    const link = (
-      region: RegionId,
-      localX: number,
-      localY: number,
-      label: string,
-      destination: RegionId,
-      entrance: 'north' | 'south',
-    ) => {
-      const origin = REGION_ORIGINS[region];
-      const x = origin.x + localX;
-      const y = origin.y + localY;
-      const plaque = this.add.text(x, y, label, {
-        fontFamily: '"Noto Serif KR", serif',
-        fontSize: '12px',
-        fontStyle: 'bold',
-        color: '#e7d39f',
-        backgroundColor: 'rgba(25,18,12,0.82)',
-        padding: { x: 12, y: 7 },
-        stroke: '#17100b',
-        strokeThickness: 4,
-      }).setOrigin(0.5).setDepth(y + 2);
-      const zone = this.add.zone(x, y, 210, 62)
-        .setDepth(y + 3)
-        .setInteractive({ useHandCursor: true });
-      zone.setData('dungeonAction', `travel-${region}-${destination}`);
-      zone.on('pointerover', () => plaque.setColor('#fff0bf').setScale(1.04));
-      zone.on('pointerout', () => plaque.setColor('#e7d39f').setScale(1));
-      zone.on('pointerdown', (
-        _pointer: Phaser.Input.Pointer,
-        _lx: number,
-        _ly: number,
-        event: Phaser.Types.Input.EventData,
-      ) => {
-        event.stopPropagation();
-        if (this.menuOpen || this.gameMode === 'travel') return;
-        const distance = Phaser.Math.Distance.Between(
-          this.simulation.player.x,
-          this.simulation.player.y,
-          x,
-          y,
-        );
-        if (distance > 145) {
-          this.simulation.moveTo({ x, y: y + 42 });
-          this.destinationMark.setPosition(x, y + 42).setVisible(true).setAlpha(1).setScale(0.7);
-          this.tweens.add({
-            targets: this.destinationMark,
-            alpha: 0,
-            scale: 1.55,
-            duration: 520,
-            onComplete: () => this.destinationMark.setVisible(false),
-          });
-          this.alertMarker(x, y - 34, '입구 가까이 가서 다시 누르십시오');
-          return;
-        }
-        this.simulation.travelToCampaignRegion(destination, entrance);
-        if (isJoseonTownRegion(destination)) this.ensureJoseonTownNeighborhood(destination);
-        this.playerRoot.setPosition(this.simulation.player.x, this.simulation.player.y);
-        this.lastPlayerSimulationPosition = {
-          x: this.simulation.player.x,
-          y: this.simulation.player.y,
-        };
-        this.fitCamera();
-      });
-    };
-
-    link('hanseongmarket', 1260, 360, '육조거리 · 광화문', 'gyeongbokgate', 'south');
-    link('gyeongbokgate', 1260, 850, '종루 · 운종가', 'hanseongmarket', 'north');
-  }
-
   private createCampaignWorld(): void {
     this.createJurchenVillage();
     this.createFrontierBattlefield();
@@ -5913,6 +5846,7 @@ export class HuntingScene extends Phaser.Scene {
       destination: RegionId,
       entrance: 'north' | 'south',
       requiresClear = false,
+      authoredApproach?: FieldRouteApproachPoint,
     ) => {
       const origin = REGION_ORIGINS[region];
       const x = origin.x + localX;
@@ -5924,6 +5858,9 @@ export class HuntingScene extends Phaser.Scene {
             : localY
         : localY;
       const y = origin.y + presentationLocalY;
+      const approach = fieldRouteApproachPoint({ localX, localY, approach: authoredApproach });
+      const approachX = origin.x + approach.x;
+      const approachY = origin.y + approach.y;
       const flipSign = region.length % 2 === 0;
       const ground = this.add.image(x, y - 2, ASSETS.props.worldTransitionProps.key, 8)
         .setScale(this.mobileProfile ? 0.34 : 0.4)
@@ -5956,9 +5893,8 @@ export class HuntingScene extends Phaser.Scene {
           y,
         );
         if (distance > 150) {
-          const approachY = localY < MAP_HEIGHT / 2 ? y + 54 : y - 54;
-          this.simulation.moveTo({ x, y: approachY });
-          this.destinationMark.setPosition(x, approachY).setVisible(true).setAlpha(1).setScale(0.7);
+          this.simulation.moveTo({ x: approachX, y: approachY });
+          this.destinationMark.setPosition(approachX, approachY).setVisible(true).setAlpha(1).setScale(0.7);
           this.tweens.add({
             targets: this.destinationMark,
             alpha: 0,
@@ -6059,6 +5995,7 @@ export class HuntingScene extends Phaser.Scene {
             if (!continuousTravel) this.cameras.main.fadeIn(140, 16, 13, 10);
             return;
           }
+          if (isJoseonTownRegion(destination)) this.ensureJoseonTownNeighborhood(destination);
           this.playerRoot.setPosition(this.simulation.player.x, this.simulation.player.y);
           this.lastPlayerSimulationPosition = { x: this.simulation.player.x, y: this.simulation.player.y };
           if (!continuousTravel) {
@@ -6085,6 +6022,7 @@ export class HuntingScene extends Phaser.Scene {
         fieldRoute.destination,
         fieldRoute.entrance,
         fieldRoute.requiresClear,
+        fieldRoute.approach,
       );
     }
     this.syncJapanGatePlaques();
