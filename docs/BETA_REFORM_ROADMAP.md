@@ -1,5 +1,8 @@
 # 월영록 베타 대개혁 로드맵
 
+그래픽·이미지셋 분야의 전체 완료 기준과 81개 지역·61종 몬스터·60종 아이템의 상세 범위는
+[`BETA_GRAPHICS_REFORMATION_MASTERPLAN.md`](BETA_GRAPHICS_REFORMATION_MASTERPLAN.md)를 기준으로 한다.
+
 ## 1. 베타의 목표
 
 월영록 베타는 콘텐츠를 더 많이 붙이는 버전이 아니다. 현재 존재하는 주인공 4명, 지역 81곳,
