@@ -328,6 +328,10 @@ export const ASSETS = {
     key: 'beta-combat-impact-atlas-v1',
     path: '/assets/fx/beta-combat-impact-atlas-v1.png',
   },
+  elementalImpacts: {
+    key: 'beta-elemental-impact-atlas-v1',
+    path: '/assets/fx/beta-elemental-impact-atlas-v1.png',
+  },
   statusEffects: {
     key: 'beta-status-effects-v1',
     path: '/assets/ui/beta-status-effects-v1.png',

@@ -206,6 +206,27 @@ const GROUND_DROP_RARITY_STYLE: Record<ItemDefinition['rarity'], {
   영웅: { color: 0xd86f9a, label: '#ffb3d0', glyph: '✧', notable: true },
 };
 
+const ELEMENTAL_FX_ROW: Record<WeaponElement, number> = {
+  fire: 0,
+  ice: 1,
+  lightning: 2,
+  poison: 3,
+  wind: 4,
+  earth: 5,
+  shadow: 6,
+};
+
+const ELEMENTAL_REACTION_FX: Record<
+  Extract<GameEvent, { type: 'elemental-reaction' }>['reaction'],
+  readonly [WeaponElement, WeaponElement]
+> = {
+  'steam-burst': ['fire', 'wind'],
+  'frost-shatter': ['ice', 'earth'],
+  'toxic-ignition': ['poison', 'fire'],
+  firestorm: ['fire', 'wind'],
+  'ground-discharge': ['earth', 'lightning'],
+};
+
 type RemotePlayerView = {
   root: Phaser.GameObjects.Container;
   sprite: Phaser.GameObjects.Sprite;
@@ -1693,6 +1714,9 @@ export class HuntingScene extends Phaser.Scene {
     this.load.spritesheet(ASSETS.combatImpacts.key, ASSETS.combatImpacts.path, {
       frameWidth: 512, frameHeight: 512, endFrame: 3,
     });
+    this.load.spritesheet(ASSETS.elementalImpacts.key, ASSETS.elementalImpacts.path, {
+      frameWidth: 256, frameHeight: 256, endFrame: 27,
+    });
     this.load.spritesheet(ASSETS.frontierCombatFx.key, ASSETS.frontierCombatFx.path, {
       frameWidth: 512, frameHeight: 512, endFrame: 7,
     });
@@ -1819,6 +1843,9 @@ export class HuntingScene extends Phaser.Scene {
     const selectedOrigin = document.body.dataset.selectedOrigin;
     this.game.canvas.dataset.combatFxAtlas = this.textures.exists(ASSETS.combatImpacts.key)
       ? `${ASSETS.combatImpacts.key}:4`
+      : 'missing';
+    this.game.canvas.dataset.elementalFxAtlas = this.textures.exists(ASSETS.elementalImpacts.key)
+      ? `${ASSETS.elementalImpacts.key}:28`
       : 'missing';
     if (selectedOrigin === 'frontier-archer') {
       this.simulation.startFrontierArcherStory();
@@ -10539,12 +10566,24 @@ export class HuntingScene extends Phaser.Scene {
           firestorm: '화염 폭풍', 'ground-discharge': '지맥 방전',
         }[event.reaction];
         this.floatText(target.x, target.y - 126, `${label} -${event.damage}`, '#ffe1a3');
+        const [primaryElement, secondaryElement] = ELEMENTAL_REACTION_FX[event.reaction];
+        this.createElementalEffect(primaryElement, target.id);
+        this.time.delayedCall(this.gameSettings.reducedMotion ? 42 : 76, () => {
+          if (target.alive) this.createElementalEffect(secondaryElement, target.id, undefined, true);
+        });
         this.createImpactFx(target.x, target.y - 48, true);
         this.shakeCamera(95, 0.0048);
       }
     }
     if (event.type === 'elemental-heal') {
       this.floatText(this.simulation.player.x, this.simulation.player.y - 105, `흡혈 +${event.amount}`, '#c6a9ff');
+      this.createElementalEffectAt(
+        'shadow',
+        this.simulation.player.x,
+        this.simulation.player.y,
+        this.simulation.player.y + 18,
+        true,
+      );
     }
     if (event.type === 'boss-telegraph') this.drawBossTelegraph(event.patternId, event.origin, event.facing);
     if (event.type === 'boss-impact' && this.simulation.boss && this.bossView) {
@@ -11547,119 +11586,9 @@ export class HuntingScene extends Phaser.Scene {
   ): void {
     const target = this.simulation.monsters.find((monster) => monster.id === targetId);
     if (!target) return;
-    if (element === 'fire') {
-      const count = secondary ? 3 : 7;
-      for (let index = 0; index < count; index += 1) {
-        const ember = this.add.circle(
-          target.x + Phaser.Math.Between(-22, 22),
-          target.y - Phaser.Math.Between(20, 70),
-          Phaser.Math.Between(3, 7),
-          index % 2 ? 0xffb347 : 0xff4f1f,
-          0.88,
-        ).setBlendMode(Phaser.BlendModes.ADD).setDepth(target.y + 18);
-        this.tweens.add({
-          targets: ember,
-          x: ember.x + Phaser.Math.Between(-14, 14),
-          y: ember.y - Phaser.Math.Between(32, 72),
-          scale: 0.18,
-          alpha: 0,
-          duration: Phaser.Math.Between(260, 470),
-          ease: 'Cubic.easeOut',
-          onComplete: () => ember.destroy(),
-        });
-      }
-      return;
-    }
-    if (element === 'ice') {
-      const ice = this.add.graphics({ x: target.x, y: target.y - 45 }).setDepth(target.y + 18);
-      ice.lineStyle(3, 0xb9efff, 0.94);
-      for (let index = 0; index < 8; index += 1) {
-        const angle = Math.PI * 2 * index / 8;
-        const inner = secondary ? 8 : 13;
-        const outer = secondary ? 25 : 42;
-        ice.beginPath()
-          .moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner)
-          .lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer)
-          .strokePath();
-      }
-      ice.fillStyle(0x72d8ff, 0.16).fillCircle(0, 0, secondary ? 18 : 28);
-      this.tweens.add({
-        targets: ice,
-        scaleX: 1.32,
-        scaleY: 1.32,
-        alpha: 0,
-        duration: secondary ? 210 : 360,
-        ease: 'Cubic.easeOut',
-        onComplete: () => ice.destroy(),
-      });
-      return;
-    }
-    if (element === 'poison') {
-      const count = secondary ? 3 : 7;
-      for (let index = 0; index < count; index += 1) {
-        const bubble = this.add.circle(
-          target.x + Phaser.Math.Between(-24, 24),
-          target.y - Phaser.Math.Between(24, 72),
-          Phaser.Math.Between(3, 7),
-          index % 2 ? 0x9ee85d : 0x3e8d42,
-          0.78,
-        ).setStrokeStyle(1, 0xd9ff96, 0.65).setDepth(target.y + 18);
-        this.tweens.add({
-          targets: bubble,
-          y: bubble.y - Phaser.Math.Between(25, 55),
-          x: bubble.x + Phaser.Math.Between(-12, 12),
-          scale: 0.2,
-          alpha: 0,
-          duration: Phaser.Math.Between(330, 560),
-          onComplete: () => bubble.destroy(),
-        });
-      }
-      return;
-    }
-    if (element === 'wind') {
-      const wind = this.add.graphics({ x: target.x, y: target.y - 46 }).setDepth(target.y + 18);
-      wind.lineStyle(secondary ? 3 : 5, 0xbff8e8, 0.88);
-      for (let arc = 0; arc < (secondary ? 2 : 4); arc += 1) {
-        wind.beginPath().arc(0, 0, 20 + arc * 10, -1.2 + arc * 0.18, 1.05 + arc * 0.12).strokePath();
-      }
-      this.tweens.add({
-        targets: wind, x: wind.x + 42, scaleX: 1.25, alpha: 0,
-        duration: secondary ? 180 : 290, ease: 'Cubic.easeOut', onComplete: () => wind.destroy(),
-      });
-      return;
-    }
-    if (element === 'earth') {
-      const quake = this.add.graphics({ x: target.x, y: target.y - 4 }).setDepth(target.y + 17);
-      quake.lineStyle(secondary ? 3 : 5, 0xe1b06c, 0.9);
-      quake.strokeEllipse(0, 0, secondary ? 60 : 92, secondary ? 24 : 38);
-      for (let index = 0; index < 7; index += 1) {
-        const angle = Math.PI * 2 * index / 7;
-        quake.beginPath().moveTo(Math.cos(angle) * 18, Math.sin(angle) * 7)
-          .lineTo(Math.cos(angle + 0.12) * 50, Math.sin(angle + 0.12) * 20).strokePath();
-      }
-      this.tweens.add({
-        targets: quake, scaleX: 1.35, scaleY: 1.35, alpha: 0,
-        duration: secondary ? 220 : 380, ease: 'Cubic.easeOut', onComplete: () => quake.destroy(),
-      });
-      return;
-    }
-    if (element === 'shadow') {
-      const shadow = this.add.circle(target.x, target.y - 48, secondary ? 18 : 30, 0x5d3a88, 0.5)
-        .setStrokeStyle(secondary ? 2 : 4, 0xb592e8, 0.82)
-        .setBlendMode(Phaser.BlendModes.ADD)
-        .setDepth(target.y + 18);
-      this.tweens.add({
-        targets: shadow,
-        x: secondary ? shadow.x : this.simulation.player.x,
-        y: secondary ? shadow.y - 22 : this.simulation.player.y - 58,
-        scale: 0.2,
-        alpha: 0,
-        duration: secondary ? 260 : 420,
-        ease: 'Sine.easeIn',
-        onComplete: () => shadow.destroy(),
-      });
-      return;
-    }
+    this.createElementalEffectAt(element, target.x, target.y, target.y + 18, secondary);
+
+    if (element !== 'lightning') return;
 
     const from = fromTargetId
       ? this.simulation.monsters.find((monster) => monster.id === fromTargetId)
@@ -11669,8 +11598,9 @@ export class HuntingScene extends Phaser.Scene {
     const end = { x: target.x, y: target.y - 52 };
     const lightning = this.add.graphics().setDepth(Math.max(start.y, end.y) + 40);
     const points = [start];
-    for (let index = 1; index < 7; index += 1) {
-      const ratio = index / 7;
+    const segments = this.gameSettings.reducedMotion ? 4 : 7;
+    for (let index = 1; index < segments; index += 1) {
+      const ratio = index / segments;
       points.push({
         x: Phaser.Math.Linear(start.x, end.x, ratio) + Phaser.Math.Between(-10, 10),
         y: Phaser.Math.Linear(start.y, end.y, ratio) + Phaser.Math.Between(-9, 9),
@@ -11689,6 +11619,49 @@ export class HuntingScene extends Phaser.Scene {
       duration: secondary ? 170 : 230,
       ease: 'Stepped',
       onComplete: () => lightning.destroy(),
+    });
+  }
+
+  private createElementalEffectAt(
+    element: WeaponElement,
+    targetX: number,
+    targetY: number,
+    depth: number,
+    secondary = false,
+  ): void {
+    const baseFrame = ELEMENTAL_FX_ROW[element] * 4;
+    const effectX = targetX;
+    const effectY = element === 'earth' ? targetY - 18
+      : element === 'fire' ? targetY - 54
+        : element === 'lightning' ? targetY - 58 : targetY - 48;
+    const authoredScale = element === 'earth' ? 0.5
+      : element === 'fire' ? 0.48
+        : element === 'lightning' ? 0.44
+          : element === 'poison' ? 0.44 : 0.46;
+    const effectScale = authoredScale
+      * (secondary ? 0.7 : 1)
+      * (this.mobileProfile ? 0.92 : 1);
+    const frameSequence = secondary ? [1, 2, 3] : [0, 1, 2, 3];
+    const frameDuration = this.gameSettings.reducedMotion ? 38 : secondary ? 50 : 68;
+    const effect = this.add.sprite(effectX, effectY, ASSETS.elementalImpacts.key, baseFrame)
+      .setDepth(depth)
+      .setScale(effectScale * 0.94)
+      .setAlpha(secondary ? 0.82 : 0.96);
+    this.game.canvas.dataset.elementalFx = `${element}:${baseFrame}`;
+    frameSequence.slice(1).forEach((frame, index) => {
+      this.time.delayedCall(frameDuration * (index + 1), () => {
+        if (effect.active) effect.setFrame(baseFrame + frame);
+      });
+    });
+    this.tweens.add({
+      targets: effect,
+      scaleX: effectScale * 1.08,
+      scaleY: effectScale * 1.08,
+      alpha: 0,
+      delay: frameDuration * (frameSequence.length - 1),
+      duration: this.gameSettings.reducedMotion ? 54 : secondary ? 78 : 112,
+      ease: 'Cubic.easeOut',
+      onComplete: () => effect.destroy(),
     });
   }
 
