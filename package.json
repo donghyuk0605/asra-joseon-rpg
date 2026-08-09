@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "audit:graphics": "vite-node scripts/generate_graphics_coverage.ts",
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "node scripts/prune_dist_assets.mjs && node scripts/build_guide_host.mjs",

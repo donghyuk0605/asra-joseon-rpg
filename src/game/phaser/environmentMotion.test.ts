@@ -51,7 +51,7 @@ describe('dynamic island environment', () => {
     expect(scene).toContain('this.createJeonjuWarBanners(origin)');
     expect(scene).toContain('this.createJeonjuMarketMotion(origin)');
     expect(scene).toContain('targets: ripple');
-    expect(scene).toContain('targets: flag');
+    expect(scene).toContain('targets: banner');
     expect(scene).toContain('targets: awning');
     expect(scene).toContain('targets: smoke');
   });

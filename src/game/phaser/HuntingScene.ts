@@ -833,7 +833,7 @@ export class HuntingScene extends Phaser.Scene {
   private frontierSouthGateLabel: Phaser.GameObjects.Text | null = null;
   private readonly pyongyangAdvanceGates = new Map<PyongyangRegionId, {
     root: Phaser.GameObjects.Container;
-    doors: Phaser.GameObjects.Rectangle[];
+    barrier: Phaser.GameObjects.Image;
     label: Phaser.GameObjects.Text;
     open: boolean;
   }>();
@@ -6432,29 +6432,21 @@ export class HuntingScene extends Phaser.Scene {
   private createPyongyangBattlefieldDressings(): void {
     const stages: Array<{
       region: PyongyangRegionId;
-      gateColor: number;
-      bannerColor: number;
       label: string;
       bannerY: number;
     }> = [
       {
         region: 'pyongyangouter',
-        gateColor: 0x49372d,
-        bannerColor: 0x7f392d,
         label: '외성 전진문 · 수비대 제압 후 개방',
         bannerY: 760,
       },
       {
         region: 'pyongyanggate',
-        gateColor: 0x3f302a,
-        bannerColor: 0x82372d,
         label: '대동문 안길 · 전역 완료 후 개방',
         bannerY: 735,
       },
       {
         region: 'pyongyanginner',
-        gateColor: 0x392e2a,
-        bannerColor: 0x6d3028,
         label: '한성 북로 · 지휘부 제압 후 개방',
         bannerY: 720,
       },
@@ -6464,17 +6456,10 @@ export class HuntingScene extends Phaser.Scene {
       const origin = REGION_ORIGINS[stage.region];
       const gateY = origin.y + 920;
       const shadow = this.add.ellipse(0, 22, 302, 54, 0x100b09, 0.52);
-      const leftDoor = this.add.rectangle(-67, 0, 132, 58, stage.gateColor, 0.96)
-        .setStrokeStyle(3, 0xa98558, 0.72);
-      const rightDoor = this.add.rectangle(67, 0, 132, 58, stage.gateColor, 0.96)
-        .setStrokeStyle(3, 0xa98558, 0.72);
-      const crossbar = this.add.rectangle(0, 0, 252, 13, 0x241a15, 0.92)
-        .setStrokeStyle(2, 0x8c6a48, 0.66);
-      const leftPost = this.add.rectangle(-144, -1, 18, 78, 0x2c211b, 1)
-        .setStrokeStyle(2, 0x94704d, 0.76);
-      const rightPost = this.add.rectangle(144, -1, 18, 78, 0x2c211b, 1)
-        .setStrokeStyle(2, 0x94704d, 0.76);
-      const label = this.add.text(0, -62, stage.label, {
+      const barrier = this.add.image(0, 24, ASSETS.frontierCampProps.key, 4)
+        .setDisplaySize(330, 220)
+        .setOrigin(0.5, 0.9);
+      const label = this.add.text(0, -112, stage.label, {
         fontFamily: 'serif',
         fontSize: this.mobileProfile ? '11px' : '14px',
         fontStyle: 'bold',
@@ -6484,30 +6469,29 @@ export class HuntingScene extends Phaser.Scene {
         stroke: '#1c120d',
         strokeThickness: 4,
       }).setOrigin(0.5);
-      const root = this.add.container(origin.x + 768, gateY, [
-        shadow, leftDoor, rightDoor, crossbar, leftPost, rightPost, label,
-      ]).setDepth(gateY + 4);
+      const root = this.add.container(origin.x + 768, gateY, [shadow, barrier, label]).setDepth(gateY + 4);
       this.pyongyangAdvanceGates.set(stage.region, {
         root,
-        doors: [leftDoor, rightDoor, crossbar],
+        barrier,
         label,
         open: false,
       });
 
       for (const [index, localX] of [470, 1066].entries()) {
-        const pole = this.add.rectangle(0, 0, 6, 106, 0x34281e, 0.96).setOrigin(0.5, 1);
-        const flag = this.add.triangle(2, -92, 0, 0, 64, 18, 0, 37, stage.bannerColor, 0.92)
-          .setOrigin(0, 0.5)
-          .setStrokeStyle(2, 0xd1ad70, 0.5);
-        const banner = this.add.container(
+        const banner = this.add.image(
           origin.x + localX,
           origin.y + stage.bannerY + (index % 2) * 12,
-          [pole, flag],
-        ).setDepth(origin.y + stage.bannerY - 2);
+          ASSETS.frontierCampProps.key,
+          index % 2,
+        ).setDisplaySize(148, 148)
+          .setOrigin(0.5, 0.94)
+          .setFlipX(index % 2 === 1)
+          .setDepth(origin.y + stage.bannerY - 2);
+        const bannerScaleX = banner.scaleX;
         if (!this.mobileProfile && !this.gameSettings.reducedMotion) {
           this.tweens.add({
-            targets: flag,
-            scaleX: { from: 0.93, to: 1.04 },
+            targets: banner,
+            scaleX: { from: bannerScaleX * 0.985, to: bannerScaleX * 1.015 },
             angle: { from: -0.7, to: 0.7 },
             duration: 1450 + index * 260,
             yoyo: true,
@@ -6527,10 +6511,8 @@ export class HuntingScene extends Phaser.Scene {
       const progress = this.simulation.getPyongyangBattleProgress(region);
       const open = progress.cleared;
       gate.open = open;
-      this.tweens.killTweensOf(gate.doors);
-      gate.doors[0].setPosition(-67, 0).setAngle(0).setAlpha(1);
-      gate.doors[1].setPosition(67, 0).setAngle(0).setAlpha(1);
-      gate.doors[2].setPosition(0, 0).setAngle(0).setAlpha(1);
+      this.tweens.killTweensOf(gate.barrier);
+      gate.barrier.setPosition(0, 24).setAngle(0).setAlpha(1);
       gate.label
         .setText(open ? 'MISSION CLEAR · 전진문 개방' : `전진문 봉쇄 · 남은 수비군 ${progress.total - progress.defeated}`)
         .setColor(open ? '#b9dfa9' : '#efd5a1');
@@ -6544,26 +6526,12 @@ export class HuntingScene extends Phaser.Scene {
       }
       gate.root.setVisible(true).setAlpha(1);
       this.tweens.add({
-        targets: gate.doors[0],
-        x: -188,
-        angle: -7,
+        targets: gate.barrier,
+        x: 210,
+        y: 34,
+        angle: 9,
         alpha: 0,
         duration: 560,
-        ease: 'Cubic.easeIn',
-      });
-      this.tweens.add({
-        targets: gate.doors[1],
-        x: 188,
-        angle: 7,
-        alpha: 0,
-        duration: 560,
-        ease: 'Cubic.easeIn',
-      });
-      this.tweens.add({
-        targets: gate.doors[2],
-        y: -38,
-        alpha: 0,
-        duration: 430,
         ease: 'Cubic.easeIn',
         onComplete: () => gate.root.setVisible(false),
       });
@@ -6925,13 +6893,16 @@ export class HuntingScene extends Phaser.Scene {
 
     const reedPoints: Array<[number, number]> = [[275, 690], [390, 780], [1045, 420], [1135, 690], [1280, 850]];
     reedPoints.forEach(([localX, localY], index) => {
-      const root = this.add.container(origin.x + localX, origin.y + localY).setDepth(origin.y + localY + 2);
-      for (let blade = 0; blade < 4; blade += 1) {
-        root.add(this.add.rectangle((blade - 1.5) * 4, -11 - blade % 2 * 3, 2, 25 + blade * 2, 0x756f43, 0.48)
-          .setOrigin(0.5, 1).setRotation((blade - 1.5) * 0.13));
-      }
+      const reeds = this.add.image(
+        origin.x + localX,
+        origin.y + localY,
+        ASSETS.props.ambient.reedCluster.key,
+        index % 4,
+      ).setDisplaySize(66 + (index % 2) * 8, 66 + (index % 2) * 8)
+        .setOrigin(0.5, 0.94)
+        .setDepth(origin.y + localY + 2);
       this.tweens.add({
-        targets: root,
+        targets: reeds,
         angle: { from: -2 - index % 2, to: 3 + index % 3 },
         duration: 1700 + index * 190,
         yoyo: true,
@@ -6946,19 +6917,20 @@ export class HuntingScene extends Phaser.Scene {
       [470, 735, -1], [1066, 735, 1], [500, 470, -1], [1036, 470, 1], [610, 250, -1], [926, 250, 1],
     ];
     bannerPoints.forEach(([localX, localY, facing], index) => {
-      const pole = this.add.rectangle(origin.x + localX, origin.y + localY, 3, 64, 0x493729, 0.88)
-        .setOrigin(0.5, 1).setDepth(origin.y + localY + 1);
-      const flag = this.add.polygon(
-        pole.x + facing * 3,
-        pole.y - 54,
-        [0, 0, facing * 30, 5, facing * 25, 26, 0, 22],
-        index % 2 === 0 ? 0x733a32 : 0x65402d,
-        0.82,
-      ).setOrigin(0, 0.5).setDepth(origin.y + localY + 2);
+      const banner = this.add.image(
+        origin.x + localX,
+        origin.y + localY,
+        ASSETS.frontierCampProps.key,
+        index % 2,
+      ).setDisplaySize(118, 118)
+        .setOrigin(0.5, 0.94)
+        .setFlipX(facing < 0)
+        .setDepth(origin.y + localY + 2);
+      const bannerScaleX = banner.scaleX;
       this.tweens.add({
-        targets: flag,
-        scaleX: { from: 0.82, to: 1.08 },
-        angle: { from: -2 * facing, to: 3 * facing },
+        targets: banner,
+        scaleX: { from: bannerScaleX * 0.985, to: bannerScaleX * 1.015 },
+        angle: { from: -1.2 * facing, to: 1.6 * facing },
         duration: 920 + index * 125,
         yoyo: true,
         repeat: -1,
@@ -6972,17 +6944,21 @@ export class HuntingScene extends Phaser.Scene {
       [350, 610, -0.08], [455, 650, 0.06], [1085, 610, 0.07], [1190, 650, -0.06],
     ];
     awningPoints.forEach(([localX, localY, rotation], index) => {
-      const awning = this.add.polygon(
+      const awning = this.add.image(
         origin.x + localX,
         origin.y + localY,
-        [0, 8, 20, 0, 44, 7, 40, 22, 6, 22],
-        index % 2 === 0 ? 0x8b6040 : 0x796447,
-        0.52,
-      ).setRotation(rotation).setDepth(origin.y + localY + 1);
+        ASSETS.props.episode2VillageProps.key,
+        index % 2 === 0 ? 2 : 13,
+      ).setDisplaySize(132, 132)
+        .setOrigin(0.5, 0.92)
+        .setAlpha(0.76)
+        .setRotation(rotation)
+        .setDepth(origin.y + localY + 1);
+      const awningScaleY = awning.scaleY;
       this.tweens.add({
         targets: awning,
         angle: { from: -1.2, to: 1.2 },
-        scaleY: { from: 0.95, to: 1.04 },
+        scaleY: { from: awningScaleY * 0.95, to: awningScaleY * 1.04 },
         duration: 2100 + index * 230,
         yoyo: true,
         repeat: -1,
