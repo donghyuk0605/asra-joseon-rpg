@@ -47,13 +47,35 @@ describe('GameSimulation', () => {
     game.enterDungeon();
     expect(game.region).toBe('dungeon');
     expect(game.dungeonFloor).toBe(1);
-    expect(game.monsters.filter((monster) => monster.region === 'dungeon')).toHaveLength(6);
+    expect(game.monsters.filter((monster) => monster.region === 'dungeon')).toHaveLength(8);
     const floorOneHp = game.monsters.find((monster) => monster.region === 'dungeon')!.maxHp;
     for (let index = 0; index < 9; index += 1) game.advanceDungeonFloor();
     expect(game.dungeonFloor).toBe(10);
     expect(game.dungeonLayout?.pattern).toBe('sanctum');
     expect(game.boss?.maxHp).toBeGreaterThan(floorOneHp);
     expect(game.boss?.name).toContain('광부');
+  });
+
+  it('walks every expanded room pattern from the entrance to the far stair', () => {
+    for (const floor of [1, 2, 3, 4]) {
+      const game = new GameSimulation();
+      advanceTo(game, floor);
+      const layout = game.dungeonLayout!;
+      for (const monster of game.monsters) {
+        if (monster.region === 'dungeon') monster.alive = false;
+      }
+      const origin = REGION_ORIGINS.dungeon;
+      const destination = {
+        x: origin.x + layout.nextStairs.x,
+        y: origin.y + layout.nextStairs.y,
+      };
+      expect(game.moveTo(destination), layout.pattern).not.toBeNull();
+      for (let step = 0; step < 1_600 && game.player.destination; step += 1) game.update(0.05);
+      expect(Math.hypot(
+        game.player.x - destination.x,
+        game.player.y - destination.y,
+      ), layout.pattern).toBeLessThan(32);
+    }
   });
 
   it('returns from the dungeon to the mine pass', () => {
@@ -1649,7 +1671,7 @@ describe('GameSimulation', () => {
 
   it('keeps every regional monster population resident at distinct world coordinates', () => {
     const game = new GameSimulation();
-    expect(game.monsters).toHaveLength(627 + EPISODE2_REGION_IDS.length * 5);
+    expect(game.monsters).toHaveLength(629 + EPISODE2_REGION_IDS.length * 5);
     expect(game.monsters.filter((monster) => monster.region === 'solgogae').every((monster) => monster.x > 0 && monster.y < 900)).toBe(true);
     expect(game.monsters.filter((monster) => monster.region === 'mistwood').every((monster) => monster.x < 0 && monster.y > VILLAGE_TOP)).toBe(true);
     expect(game.monsters.filter((monster) => monster.region === 'yeongwol')).toHaveLength(12);

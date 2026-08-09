@@ -1998,6 +1998,15 @@ export class HuntingScene extends Phaser.Scene {
     }
     if (import.meta.env.DEV) {
       const playtestParams = new URLSearchParams(window.location.search);
+      const requestedDungeonFloor = Number(playtestParams.get('dungeonqa'));
+      if (this.simulation.region === 'dungeon') {
+        this.simulation.enterDungeon();
+        if (Number.isFinite(requestedDungeonFloor) && requestedDungeonFloor >= 1) {
+          while (this.simulation.dungeonFloor < Math.min(9, Math.floor(requestedDungeonFloor))) {
+            this.simulation.advanceDungeonFloor();
+          }
+        }
+      }
       const requestedWeaponId = playtestParams.get('weapon');
       const requestedWeapon = requestedWeaponId && requestedWeaponId in ITEM_CATALOG
         && ITEM_CATALOG[requestedWeaponId as ItemId].slot === 'weapon'
@@ -7792,7 +7801,7 @@ export class HuntingScene extends Phaser.Scene {
       this.dungeonVisuals.push(object);
       return object;
     };
-    const floorMark = add(this.add.text(origin.x + 760, 246, `${layout.title} · ${layout.floor}층`, {
+    const floorMark = add(this.add.text(origin.x + MAP_WIDTH / 2, origin.y + 82, `${layout.title} · ${layout.floor}층`, {
       fontFamily: 'serif', fontSize: '18px', fontStyle: 'bold', color: '#d6b77d',
       stroke: '#21140e', strokeThickness: 5,
     }).setOrigin(0.5).setDepth(250));
@@ -12540,7 +12549,11 @@ export class HuntingScene extends Phaser.Scene {
       }
     }
     camera.setZoom(zoom);
-    camera.setDeadzone(Math.round((width / zoom) * 0.34), Math.round((height / zoom) * 0.28));
+    const dungeonCamera = this.simulation.region === 'dungeon';
+    camera.setDeadzone(
+      Math.round((width / zoom) * (dungeonCamera ? 0.24 : 0.34)),
+      Math.round((height / zoom) * (dungeonCamera ? 0.2 : 0.28)),
+    );
     camera.startFollow(this.playerRoot, true, 0.085, 0.085);
     camera.centerOn(this.simulation.player.x, this.simulation.player.y);
     this.cameraRegion = this.simulation.region;

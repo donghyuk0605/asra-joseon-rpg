@@ -31,7 +31,12 @@ import {
   ulleungRoadCenterAtY,
   ulleungWalkableBoundsAt,
 } from '../world/ulleungContinuity';
-import { generateDungeonFloor, MAX_DUNGEON_FLOOR, type DungeonFloorLayout } from '../world/dungeonGenerator';
+import {
+  DUNGEON_WALKABLE_BOUNDS,
+  generateDungeonFloor,
+  MAX_DUNGEON_FLOOR,
+  type DungeonFloorLayout,
+} from '../world/dungeonGenerator';
 import { bossForFloor } from '../bosses/catalog';
 import { BossCombatController, createBossState } from '../bosses/BossCombatController';
 import { containsPatternPoint } from '../bosses/patternGeometry';
@@ -637,8 +642,8 @@ const REGION_SPAWNS: Record<Exclude<RegionId, 'village'>, Array<[MonsterKind, nu
     ['bamboo-spirit', 500, 780], ['bamboo-spirit', 1150, 785],
   ],
   dungeon: [
-    ['mine-golem', 480, 390], ['mine-golem', 760, 330], ['mine-golem', 1055, 390],
-    ['mine-golem', 500, 590], ['mine-golem', 760, 650], ['mine-golem', 1035, 590],
+    ['mine-golem', 250, 320], ['mine-golem', 510, 265], ['mine-golem', 1026, 265], ['mine-golem', 1286, 320],
+    ['mine-golem', 285, 690], ['mine-golem', 540, 750], ['mine-golem', 996, 750], ['mine-golem', 1251, 690],
   ],
   ulleungdo: [
     // Keep the whole squad on the open courtyard floor. The former upper row
@@ -4091,6 +4096,22 @@ export class GameSimulation {
         adjusted: Math.hypot(destination.x - point.x, destination.y - point.y) > 1,
         routed: true,
       };
+    }
+    if (this.region === 'dungeon'
+      && !this.isTravelSegmentClear(this.player, destination, PLAYER_COLLISION_RADIUS)) {
+      const dungeonRoute = this.buildDungeonTravelRoute(destination);
+      if (dungeonRoute.length) {
+        this.playerRoute = dungeonRoute;
+        this.movementWaypoint = this.playerRoute.shift() ?? destination;
+        this.player.destination = destination;
+        this.routedMovementGoal = destination;
+        return {
+          requested: { ...point },
+          destination: { ...destination },
+          adjusted: Math.hypot(destination.x - point.x, destination.y - point.y) > 1,
+          routed: true,
+        };
+      }
     }
     this.movementWaypoint = destination;
     this.player.destination = destination;
@@ -7695,6 +7716,17 @@ export class GameSimulation {
 
   private clampMonster(monster: MonsterState): void {
     const origin = REGION_ORIGINS[monster.region];
+    if (monster.region === 'dungeon') {
+      monster.x = Math.max(
+        origin.x + DUNGEON_WALKABLE_BOUNDS.left + 10,
+        Math.min(origin.x + DUNGEON_WALKABLE_BOUNDS.right - 10, monster.x),
+      );
+      monster.y = Math.max(
+        origin.y + DUNGEON_WALKABLE_BOUNDS.top + 10,
+        Math.min(origin.y + DUNGEON_WALKABLE_BOUNDS.bottom - 10, monster.y),
+      );
+      return;
+    }
     monster.y = Math.max(origin.y + 235, Math.min(origin.y + 865, monster.y));
     if (isUlleungRegion(monster.region)) {
       const bounds = ulleungWalkableBoundsAt(monster.region, monster.y);
@@ -8789,6 +8821,86 @@ export class GameSimulation {
     return route;
   }
 
+  private buildDungeonTravelRoute(destination: Vec2): Vec2[] {
+    const bodyRadius = PLAYER_COLLISION_RADIUS;
+    const cornerClearance = bodyRadius + 14;
+    const obstacles = this.activeCollisionObstacles();
+    const candidates: Vec2[] = [{ x: this.player.x, y: this.player.y }, destination];
+    for (const obstacle of obstacles) {
+      if (obstacle.type === 'box') {
+        const halfWidth = obstacle.width / 2 + cornerClearance;
+        const halfHeight = obstacle.height / 2 + cornerClearance;
+        candidates.push(
+          { x: obstacle.x - halfWidth, y: obstacle.y - halfHeight },
+          { x: obstacle.x + halfWidth, y: obstacle.y - halfHeight },
+          { x: obstacle.x - halfWidth, y: obstacle.y + halfHeight },
+          { x: obstacle.x + halfWidth, y: obstacle.y + halfHeight },
+        );
+        continue;
+      }
+      const orbit = obstacle.radius + cornerClearance;
+      for (let index = 0; index < 8; index += 1) {
+        const angle = index / 8 * Math.PI * 2;
+        candidates.push({
+          x: obstacle.x + Math.cos(angle) * orbit,
+          y: obstacle.y + Math.sin(angle) * orbit,
+        });
+      }
+    }
+
+    const nodes = candidates
+      .map((point) => this.clampToField(point))
+      .filter((point) => this.isPointClearOfObstacles(point, bodyRadius, obstacles))
+      .filter((point, index, points) => points.findIndex((candidate) =>
+        Math.hypot(candidate.x - point.x, candidate.y - point.y) < 2) === index);
+    const startIndex = nodes.findIndex((point) => Math.hypot(
+      point.x - this.player.x,
+      point.y - this.player.y,
+    ) < 2);
+    const destinationIndex = nodes.findIndex((point) => Math.hypot(
+      point.x - destination.x,
+      point.y - destination.y,
+    ) < 2);
+    if (startIndex < 0 || destinationIndex < 0) return [];
+
+    const distances = nodes.map(() => Number.POSITIVE_INFINITY);
+    const previous = nodes.map(() => -1);
+    const pending = new Set(nodes.map((_point, index) => index));
+    distances[startIndex] = 0;
+    while (pending.size) {
+      let current = -1;
+      let shortest = Number.POSITIVE_INFINITY;
+      for (const index of pending) {
+        if (distances[index] < shortest) {
+          current = index;
+          shortest = distances[index];
+        }
+      }
+      if (current < 0 || !Number.isFinite(shortest)) break;
+      pending.delete(current);
+      if (current === destinationIndex) break;
+      for (const neighbor of pending) {
+        if (!this.isTravelSegmentClear(nodes[current], nodes[neighbor], bodyRadius)) continue;
+        const distance = shortest + Math.hypot(
+          nodes[neighbor].x - nodes[current].x,
+          nodes[neighbor].y - nodes[current].y,
+        );
+        if (distance >= distances[neighbor]) continue;
+        distances[neighbor] = distance;
+        previous[neighbor] = current;
+      }
+    }
+    if (!Number.isFinite(distances[destinationIndex])) return [];
+
+    const route: Vec2[] = [];
+    let cursor = destinationIndex;
+    while (cursor !== startIndex && cursor >= 0) {
+      route.unshift(nodes[cursor]);
+      cursor = previous[cursor];
+    }
+    return cursor === startIndex ? route : [];
+  }
+
   private isRoutePointClear(point: Vec2, bodyRadius: number): boolean {
     return this.isPointClearOfObstacles(point, bodyRadius, this.collisionObstacles());
   }
@@ -9315,9 +9427,16 @@ export class GameSimulation {
       };
     }
     if (point.x > MAP_WIDTH * 2) {
+      const origin = REGION_ORIGINS.dungeon;
       return {
-        x: Math.max(MAP_WIDTH * 2 + 230, Math.min(MAP_WIDTH * 3 - 230, point.x)),
-        y: Math.max(235, Math.min(865, point.y)),
+        x: Math.max(
+          origin.x + DUNGEON_WALKABLE_BOUNDS.left,
+          Math.min(origin.x + DUNGEON_WALKABLE_BOUNDS.right, point.x),
+        ),
+        y: Math.max(
+          origin.y + DUNGEON_WALKABLE_BOUNDS.top,
+          Math.min(origin.y + DUNGEON_WALKABLE_BOUNDS.bottom, point.y),
+        ),
       };
     }
     if (point.x > MAP_WIDTH) {
