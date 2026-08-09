@@ -12,6 +12,13 @@ describe('RPG inventory interaction and raster UI', () => {
     expect(hudSource).not.toContain("addEventListener('dblclick'");
   });
 
+  it('opens the bag on the equipped item until the player chooses another item', () => {
+    expect(hudSource).toContain('private inventorySelectionTouched = false');
+    expect(hudSource).toContain('this.selectedItemId = this.preferredEquippedItemId(this.snapshot)');
+    expect(hudSource).toContain("(['weapon', 'armor', 'charm'] as const)");
+    expect(hudSource).toContain('this.inventorySelectionTouched = true');
+  });
+
   it('ships the generated raster window and mobile touch layout', () => {
     const asset = new URL('../../../public/assets/ui/joseon-rpg-window-v3.png', import.meta.url);
     expect(existsSync(asset)).toBe(true);
@@ -19,6 +26,8 @@ describe('RPG inventory interaction and raster UI', () => {
     expect(styles).toContain('@media (pointer: coarse)');
     expect(styles).toContain('height: 100dvh');
     expect(styles).toContain('touch-action: manipulation');
+    expect(styles).toContain('.bag-filters { flex: 1 1 auto; overflow: hidden; }');
+    expect(styles).toContain('.inventory-sort { flex: 0 0 60px;');
   });
 
   it('uses dedicated raster art for the player portrait and quest order', () => {

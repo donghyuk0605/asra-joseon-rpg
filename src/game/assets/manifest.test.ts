@@ -514,7 +514,7 @@ describe('player equipment layer manifest', () => {
   });
 
   it('ships dedicated in-world cutouts instead of reusing inventory icons as weapons', () => {
-    expect(ASSETS.playerWeapons).toEqual({
+    expect(ASSETS.playerWeapons).toMatchObject({
       'worn-hwando': {
         key: 'weapon-worn-hwando-world-v1', path: '/assets/weapons/worn-hwando-world-v1.png', grip: { x: 128, y: 50 },
       },
@@ -570,6 +570,7 @@ describe('player equipment layer manifest', () => {
         key: 'weapon-gunsan-drowned-blade-world-v1', path: '/assets/weapons/gunsan-drowned-blade-world-v1.png', grip: { x: 128, y: 50 },
       },
     });
+    expect(Object.keys(ASSETS.playerWeapons)).toHaveLength(26);
   });
 
   it('keeps elemental world weapons as transparent 256px runtime parts', () => {

@@ -11,9 +11,9 @@
 | 모듈 조합 지역 | 35개 |
 | 몬스터 종류 / 실제 시각 키 | 61종 / 38개 |
 | 공유 외형 몬스터 | 34종 |
-| 아이템 / 장착 월드 외형 공백 | 60종 / 13종 |
+| 아이템 / 장착 월드 외형 공백 | 60종 / 5종 |
 | 등록된 환경 객체 자산 | 34개 |
-| 배포 자산 | 464개 · 297.0MB |
+| 배포 자산 | 472개 · 297.2MB |
 | 미참조 배포 자산 | 129개 |
 | 동일 내용 중복 | 3묶음 · 50.1KB 회수 가능 |
 | 코드 렌더 도형 / 고정 실물 후보 | 130곳 / 0곳 |
@@ -31,7 +31,7 @@
 | items | 77 | 3.1MB |
 | fx | 4 | 1.2MB |
 | charms | 14 | 863.9KB |
-| weapons | 18 | 303.5KB |
+| weapons | 26 | 495.9KB |
 
 ## 몬스터 외형 재사용 위험
 
@@ -53,18 +53,10 @@
 
 | 아이템 | 슬롯 | 공백 |
 | --- | --- | --- |
-| 북방 초원각궁 (frontier-horn-bow) | weapon | missing-world-weapon |
-| 백화 단궁 (white-birch-bow) | weapon | missing-world-weapon |
-| 철각 전궁 (iron-horn-warbow) | weapon | missing-world-weapon |
-| 천응 뇌궁 (thunderbird-bow) | weapon | missing-world-weapon |
-| 북풍 철각궁 (northwind-warbow) | weapon | missing-world-weapon |
 | 철비늘 변경 전포 (frontier-lamellar-coat) | armor | missing-armor-layer |
-| 경포 해풍각궁 (gangneung-sea-bow) | weapon | missing-world-weapon |
 | 경포 해안정찰 전포 (coastal-scout-coat) | armor | missing-armor-layer |
 | 해주 갈대 망토 (haeju-reed-cape) | armor | missing-armor-layer |
-| 의주 흑각 전궁 (uiju-black-horn-bow) | weapon | missing-world-weapon |
 | 안주 흑찰 전포 (anju-frontier-coat) | armor | missing-armor-layer |
-| 삼척 해풍각궁 (samcheok-seawind-bow) | weapon | missing-world-weapon |
 | 공주 유장 도포 (gongju-scholar-coat) | armor | missing-armor-layer |
 
 ## 고정 실물로 의심되는 코드 도형

@@ -3094,7 +3094,7 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
   .inventory-body {
     position: relative;
     display: block;
-    padding-top: 64px;
+    padding-top: 0;
     background: rgba(7, 10, 8, .94);
   }
   .inventory-mobile-tabs {
@@ -3105,7 +3105,7 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
     display: grid;
     grid-template-columns: repeat(3, minmax(58px, 1fr)) minmax(92px, 1.35fr);
     gap: 4px;
-    margin-top: -64px;
+    margin-top: 0;
     padding: 5px;
     border-bottom: 1px solid #654b2c;
     background: linear-gradient(180deg, rgba(31, 24, 16, .98), rgba(10, 13, 10, .98));
@@ -3128,6 +3128,11 @@ button.hot-slot:hover { border-color: #c6a15c; filter: brightness(1.12); }
   .inventory-mobile-tabs > em { display: grid; grid-template-columns: auto auto; align-content: center; gap: 3px 6px; padding: 4px 6px; border-left: 1px solid #57452a; color: #d8be83; font-style: normal; }
   .inventory-mobile-tabs > em small { color: #777e75; font: 7px var(--ui-font); }
   .inventory-mobile-tabs > em b { font: 700 10px Arial, sans-serif; text-align: right; }
+
+  .bag-toolbar { gap: 5px; }
+  .bag-filters { flex: 1 1 auto; overflow: hidden; }
+  .bag-filters button { flex: 1 1 0; min-width: 0; padding-inline: 3px; }
+  .inventory-sort { flex: 0 0 60px; gap: 3px; padding-inline: 5px; white-space: nowrap; }
 
   .inventory-panel[data-mobile-tab="bag"] .equipment-column,
   .inventory-panel[data-mobile-tab="equipment"] .bag-column,

@@ -668,6 +668,7 @@ export class Hud {
   private skillTreeOpen = false;
   private inventoryReturnFocus: HTMLElement | null = null;
   private selectedItemId: string | null = null;
+  private inventorySelectionTouched = false;
   private inventoryFilter: InventoryFilter = 'all';
   private inventorySort: InventorySort = 'recent';
   private inventoryMobileTab: InventoryMobileTab = 'bag';
@@ -827,6 +828,7 @@ export class Hud {
         this.inventoryFilter = 'weapon';
         this.inventoryMobileTab = 'bag';
         this.selectedItemId = starterWeapon.instanceId;
+        this.inventorySelectionTouched = true;
         this.inventorySignature = '';
         this.toggleInventory(true);
         return;
@@ -1025,8 +1027,12 @@ export class Hud {
       this.inventoryReturnFocus = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
         ? document.activeElement
         : this.root.querySelector<HTMLButtonElement>('[data-action="inventory"]');
-      if (!this.selectedItemId && this.snapshot?.inventory[0]) this.selectedItemId = this.snapshot.inventory[0].instanceId;
       if (this.snapshot) {
+        if (!this.inventorySelectionTouched) {
+          this.selectedItemId = this.preferredEquippedItemId(this.snapshot)
+            ?? this.filteredInventory(this.snapshot.inventory)[0]?.instanceId
+            ?? null;
+        }
         this.inventorySignature = '';
         this.renderInventory(this.snapshot);
       }
@@ -1212,6 +1218,7 @@ export class Hud {
   private selectItem(instanceId: string, source?: HTMLElement): void {
     if (!this.snapshot?.inventory.some((item) => item.instanceId === instanceId)) return;
     this.selectedItemId = instanceId;
+    this.inventorySelectionTouched = true;
     this.inventorySignature = '';
     this.renderInventory(this.snapshot);
     window.requestAnimationFrame(() => {
@@ -1232,7 +1239,10 @@ export class Hud {
     if (!INVENTORY_FILTERS.some((entry) => entry.id === filter)) return;
     this.inventoryFilter = filter;
     const visible = this.filteredInventory(this.snapshot?.inventory ?? []);
-    if (!visible.some((item) => item.instanceId === this.selectedItemId)) this.selectedItemId = visible[0]?.instanceId ?? null;
+    if (!visible.some((item) => item.instanceId === this.selectedItemId)) {
+      this.selectedItemId = visible[0]?.instanceId ?? null;
+      this.inventorySelectionTouched = false;
+    }
     this.inventorySignature = '';
     if (this.snapshot) this.renderInventory(this.snapshot);
   }
@@ -2688,7 +2698,10 @@ export class Hud {
   }
 
   private renderInventory(snapshot: Snapshot): void {
-    if (this.selectedItemId && !snapshot.inventory.some((item) => item.instanceId === this.selectedItemId)) this.selectedItemId = null;
+    if (this.selectedItemId && !snapshot.inventory.some((item) => item.instanceId === this.selectedItemId)) {
+      this.selectedItemId = null;
+      this.inventorySelectionTouched = false;
+    }
     const visibleItems = this.filteredInventory(snapshot.inventory);
     if (!this.selectedItemId && visibleItems[0]) this.selectedItemId = visibleItems[0].instanceId;
     const signature = JSON.stringify([
@@ -2858,6 +2871,14 @@ export class Hud {
       filtered.sort((a, b) => SLOT_ORDER[ITEM_CATALOG[a.item.itemId].slot] - SLOT_ORDER[ITEM_CATALOG[b.item.itemId].slot] || a.index - b.index);
     }
     return filtered.map(({ item }) => item);
+  }
+
+  private preferredEquippedItemId(snapshot: Snapshot): string | null {
+    const visibleIds = new Set(this.filteredInventory(snapshot.inventory).map((item) => item.instanceId));
+    return (['weapon', 'armor', 'charm'] as const)
+      .map((slot) => snapshot.equipment[slot])
+      .find((instanceId): instanceId is string => Boolean(instanceId && visibleIds.has(instanceId)))
+      ?? null;
   }
 
   private equippedDefinition(slot: EquipmentSlot, snapshot: Snapshot) {
@@ -3431,7 +3452,7 @@ export class Hud {
                 <button data-filter="weapon" aria-pressed="false">무기</button>
                 <button data-filter="armor" aria-pressed="false">복장</button>
                 <button data-filter="charm" aria-pressed="false">부적</button>
-                <button data-filter="scroll" aria-pressed="false">주문서</button>
+                <button data-filter="scroll" aria-pressed="false">주문</button>
                 <button data-filter="material" aria-pressed="false">재료</button>
               </div>
               <button class="inventory-sort" data-action="inventory-sort" aria-label="소지품 정렬 방식 변경"><span data-id="inventory-sort-label">획득순</span><i>↕</i></button>

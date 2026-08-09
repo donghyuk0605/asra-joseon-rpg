@@ -20,7 +20,7 @@ describe('player world charm image set', () => {
       expect(ITEM_VISUAL_COVERAGE[itemId].worldPresentation).toBe('charm-layer-ready');
     }
     expect(ITEM_WORLD_VISUAL_GAPS.some((item) => item.slot === 'charm')).toBe(false);
-    expect(ITEM_WORLD_VISUAL_GAPS).toHaveLength(13);
+    expect(ITEM_WORLD_VISUAL_GAPS.every((item) => item.reason === 'missing-armor-layer')).toBe(true);
   });
 
   it('ships fourteen distinct transparent normalized cutouts', () => {

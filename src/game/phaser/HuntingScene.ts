@@ -27,6 +27,7 @@ import {
   weaponImpactColumnForRow,
 } from './playerLayerState';
 import { PLAYER_CHARM_VISUALS, playerCharmAttachmentForFrame } from './playerCharmLayer';
+import { bowAttachmentForFrame } from './playerBowLayer';
 import { resolvePlayerAttackVisual, resolvePlayerMovementVisual } from './playerAttackVisual';
 import { isPointBehindOccluder } from './buildingOcclusion';
 import { monsterScaleForRegion } from './pyongyangSoldierScale';
@@ -424,6 +425,14 @@ const MONSTER_TINT: Partial<Record<MonsterKind, number>> = {
 };
 
 const PLAYER_WEAPON_DISPLAY_SCALE: Partial<Record<ItemId, number>> = {
+  'frontier-horn-bow': 0.68,
+  'white-birch-bow': 0.68,
+  'iron-horn-warbow': 0.68,
+  'thunderbird-bow': 0.68,
+  'northwind-warbow': 0.68,
+  'gangneung-sea-bow': 0.68,
+  'uiju-black-horn-bow': 0.68,
+  'samcheok-seawind-bow': 0.68,
   'bear-claw-gauntlet': 0.45,
   'chiaksan-claw-knife': 0.72,
   'saltfield-ritual-knife': 0.68,
@@ -9440,7 +9449,17 @@ export class HuntingScene extends Phaser.Scene {
     }
     const layers = resolvePlayerLayers(this.simulation.equipment, this.simulation.inventory);
     const facingFrame = directionToFrame(this.simulation.player.facing);
-    const rawFrame = Number(this.playerSprite.frame.name);
+    const requestedFrameQa = import.meta.env.DEV
+      ? Number(new URLSearchParams(window.location.search).get('playerframeqa'))
+      : Number.NaN;
+    const qaFrame = Number.isFinite(requestedFrameQa)
+      ? Phaser.Math.Clamp(Math.floor(requestedFrameQa), 0, 39)
+      : null;
+    if (qaFrame !== null) {
+      this.playerSprite.anims.stop();
+      this.playerSprite.setFrame(qaFrame);
+    }
+    const rawFrame = qaFrame ?? Number(this.playerSprite.frame.name);
     const frameState = playerFrameState(rawFrame, this.playerSprite.flipX, facingFrame.row);
     const frame = frameForPlayerLayer(frameState.row, frameState.column);
     const { row, column, flip } = frameState;
@@ -9460,9 +9479,6 @@ export class HuntingScene extends Phaser.Scene {
     const frontierBow = frontierArcher && this.simulation.isBowEquipped();
     if (frontierBow) {
       this.playerArmorSprite.setVisible(false);
-      this.playerWeaponAura.setVisible(false);
-      this.playerWeaponSprite.setVisible(false);
-      return;
     }
     const armor = this.simulation.getEquippedDefinition('armor');
     const weaponReady = this.playerSprite.texture.key === ASSETS.playerWeaponReadyBody.key
@@ -9497,8 +9513,11 @@ export class HuntingScene extends Phaser.Scene {
       this.playerWeaponSprite.setVisible(false);
       return;
     }
+    const isBow = weapon.weaponClass === 'bow';
     const weaponPose = weaponReady && column >= 4 ? 'attack' : 'carry';
-    const attachment = weaponAttachmentForFrame(row, flip, column, weaponPose);
+    const attachment = isBow
+      ? bowAttachmentForFrame(row, column, flip)
+      : weaponAttachmentForFrame(row, flip, column, weaponPose);
     const displayScale = PLAYER_WEAPON_DISPLAY_SCALE[weapon.id] ?? 1;
     if (attachment.behindBody) {
       this.playerActionRoot.moveBelow(this.playerWeaponAura, this.playerSprite);
@@ -12508,7 +12527,14 @@ export class HuntingScene extends Phaser.Scene {
   private fitCamera(): void {
     const width = this.scale.gameSize.width;
     const height = this.scale.gameSize.height;
-    const zoom = Math.max(width / MAP_WIDTH, height / MAP_HEIGHT);
+    const baseZoom = Math.max(width / MAP_WIDTH, height / MAP_HEIGHT);
+    const requestedQaZoom = import.meta.env.DEV
+      ? Number(new URLSearchParams(window.location.search).get('cameraqa'))
+      : 1;
+    const qaZoom = Number.isFinite(requestedQaZoom)
+      ? Phaser.Math.Clamp(requestedQaZoom, 1, 2.4)
+      : 1;
+    const zoom = baseZoom * qaZoom;
     const camera = this.cameras.main;
     if (isUlleungRegion(this.simulation.region)) {
       camera.setBounds(

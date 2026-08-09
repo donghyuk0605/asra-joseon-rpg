@@ -360,6 +360,30 @@ export const ASSETS = {
     'tiger-pelt-armor': { key: 'joseon-hero-tiger-pelt-weapon-ready-layer-v2', path: '/assets/characters/joseon-hero-tiger-pelt-weapon-ready-layer-v2.webp' },
   },
   playerWeapons: {
+    'frontier-horn-bow': {
+      key: 'weapon-frontier-horn-bow-world-v1', path: '/assets/weapons/frontier-horn-bow-world-v1.png', grip: { x: 128, y: 128 },
+    },
+    'white-birch-bow': {
+      key: 'weapon-white-birch-bow-world-v1', path: '/assets/weapons/white-birch-bow-world-v1.png', grip: { x: 128, y: 128 },
+    },
+    'iron-horn-warbow': {
+      key: 'weapon-iron-horn-warbow-world-v1', path: '/assets/weapons/iron-horn-warbow-world-v1.png', grip: { x: 128, y: 128 },
+    },
+    'thunderbird-bow': {
+      key: 'weapon-thunderbird-bow-world-v1', path: '/assets/weapons/thunderbird-bow-world-v1.png', grip: { x: 128, y: 128 },
+    },
+    'northwind-warbow': {
+      key: 'weapon-northwind-warbow-world-v1', path: '/assets/weapons/northwind-warbow-world-v1.png', grip: { x: 128, y: 128 },
+    },
+    'gangneung-sea-bow': {
+      key: 'weapon-gangneung-sea-bow-world-v1', path: '/assets/weapons/gangneung-sea-bow-world-v1.png', grip: { x: 128, y: 128 },
+    },
+    'uiju-black-horn-bow': {
+      key: 'weapon-uiju-black-horn-bow-world-v1', path: '/assets/weapons/uiju-black-horn-bow-world-v1.png', grip: { x: 128, y: 128 },
+    },
+    'samcheok-seawind-bow': {
+      key: 'weapon-samcheok-seawind-bow-world-v1', path: '/assets/weapons/samcheok-seawind-bow-world-v1.png', grip: { x: 128, y: 128 },
+    },
     'worn-hwando': {
       key: 'weapon-worn-hwando-world-v1', path: '/assets/weapons/worn-hwando-world-v1.png', grip: { x: 128, y: 50 },
     },
