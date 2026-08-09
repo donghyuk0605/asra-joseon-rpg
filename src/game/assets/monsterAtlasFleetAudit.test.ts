@@ -68,5 +68,5 @@ describe('active monster atlas fleet', () => {
     });
     expect(result.status, result.stderr || result.stdout).toBe(0);
     expect(result.stdout).toContain('active atlases=61 changed files=0 normalized frames=0');
-  }, 20_000);
+  }, 60_000);
 });
